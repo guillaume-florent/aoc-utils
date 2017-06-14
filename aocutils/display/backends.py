@@ -29,5 +29,10 @@ def available_backends():
         backends.append("qt-pyqt4")
     except ImportError:
         print("No PyQt4 backend")
+    try:
+        import PyQt5
+        backends.append("qt-pyqt5")
+    except ImportError:
+        print("No PyQt5 backend")
 
     return backends
