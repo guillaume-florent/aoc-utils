@@ -3,7 +3,6 @@
 r"""types.py module of aocutils"""
 
 import sys
-import logging
 import itertools
 
 import OCC.BRepCheck
@@ -14,8 +13,6 @@ import OCC.TopAbs
 import OCC.Geom
 
 import aocutils.exceptions
-
-logger = logging.getLogger(__name__)
 
 PY3 = not (int(sys.version.split('.')[0]) <= 2)
 

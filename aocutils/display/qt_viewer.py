@@ -15,7 +15,8 @@ if using a version earlier than 0.16.5
 
 CSF_GraphicShr
 --------------
-Should be an env variable pointing to TKOpenGl.dll or libTKOpenGl.dll in the dir where OCC python files are
+Should be an env variable pointing to TKOpenGl.dll or libTKOpenGl.dll 
+in the dir where OCC python files are
 
 """
 
@@ -47,7 +48,10 @@ import aocutils.display.color
 
 
 class Qt3dViewer(QtGui.QWidget, object):
-    def __init__(self, parent, viewer_background_color=(100., 100., 100., 250., 250., 250.), show_topology_menu=True):
+    def __init__(self,
+                 parent,
+                 viewer_background_color=(100., 100., 100., 250., 250., 250.),
+                 show_topology_menu=True):
         QtGui.QWidget.__init__(self, parent)
 
         self.viewer = OCC.Display.qtDisplay.qtViewer3d(self)
@@ -67,19 +71,27 @@ class Qt3dViewer(QtGui.QWidget, object):
         max_width = 20
         max_height = 20
 
-        btn_view_left = QtGui.QPushButton(QtGui.QIcon(QtGui.QPixmap("icons/left-16x16.png")), "", self)
+        btn_view_left = QtGui.QPushButton(
+            QtGui.QIcon(QtGui.QPixmap("icons/left-16x16.png")),
+            "",
+            self)
         btn_view_left.setMaximumSize(max_width, max_height)
-        btn_view_right = QtGui.QPushButton(QtGui.QIcon(QtGui.QPixmap("icons/right-16x16.png")), "", self)
+        btn_view_right = QtGui.QPushButton(
+            QtGui.QIcon(QtGui.QPixmap("icons/right-16x16.png")),
+            "",
+            self)
         btn_view_right.setMaximumSize(max_width, max_height)
         btn_view_right.move(max_width, 0)
-        btn_view_top = QtGui.QPushButton(QtGui.QIcon(QtGui.QPixmap("icons/top-16x16.png")), "", self)
+        btn_view_top = QtGui.QPushButton(
+            QtGui.QIcon(QtGui.QPixmap("icons/top-16x16.png")),
+            "",
+            self)
         btn_view_top.setMaximumSize(max_width, max_height)
         btn_view_top.move(2 * max_width, 0)
 
         # hbox.addWidget(btn_view_left, 0, QtCore.Qt.AlignLeft)
         # hbox.addWidget(btn_view_right, 0, QtCore.Qt.AlignLeft)
         # hbox.addWidget(btn_view_top, 0, QtCore.Qt.AlignLeft)
-
 
         vbox = QtGui.QVBoxLayout()
         vbox.setContentsMargins(0, 0, 0, 0)
@@ -102,7 +114,13 @@ class Qt3dViewer(QtGui.QWidget, object):
         """
         return self.viewer._display
 
-    def display_shape(self, shapes, material=None, texture=None, color=None, transparency=None, update=False):
+    def display_shape(self,
+                      shapes,
+                      material=None,
+                      texture=None,
+                      color=None,
+                      transparency=None,
+                      update=False):
         r"""DisplayShape and keep track of displayed shapes
 
         Parameters
@@ -114,8 +132,12 @@ class Qt3dViewer(QtGui.QWidget, object):
         transparency : float between 0 and 1
         update : bool
         """
-        self.viewer_display.DisplayShape(shapes, material=material, texture=texture, color=color,
-                                         transparency=transparency, update=update)
+        self.viewer_display.DisplayShape(shapes,
+                                         material=material,
+                                         texture=texture,
+                                         color=color,
+                                         transparency=transparency,
+                                         update=update)
         if isinstance(shapes, list):
             for shape in shapes:
                 self._shapes.append(shape)
@@ -124,7 +146,8 @@ class Qt3dViewer(QtGui.QWidget, object):
 
 
 def colour_qt_to_occ(qt_colour):
-    r"""Convert a qt colour coded on ints from 0 to 255 to an OCC color coded on floats from 0 to 1
+    r"""Convert a qt colour coded on ints from 0 to 255 to an OCC color coded 
+    on floats from 0 to 1
 
     Parameters
     ----------

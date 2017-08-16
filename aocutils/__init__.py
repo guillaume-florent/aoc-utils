@@ -13,9 +13,9 @@ from __future__ import unicode_literals
 __name__ = "aocutils"
 __description__ = "High level API for PythonOCC "
 
-__version__ = "0.4.2"
+__version__ = "0.4.3"
 __author__ = "Guillaume Florent, Adam Lange, Jelle Feringa, Thomas Paviot"
 __author_email__ = "florentsailing@gmail.com"
 __license__ = 'GPL v3'
-__url__ = "https://github.com/floatingpointstack/aoc-utils"
-__download_url__ = "https://github.com/floatingpointstack/aoc-utils/releases/tag/" + __version__
+__url__ = "https://github.com/guillaume-florent/aoc-utils"
+__download_url__ = "https://github.com/guillaume-florent/aoc-utils/releases/tag/" + __version__

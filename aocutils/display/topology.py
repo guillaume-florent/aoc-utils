@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # coding: utf-8
 
-r"""topology oriented display functions
-"""
+r"""topology oriented display functions"""
 
 import logging
 import time
@@ -20,7 +19,10 @@ import aocutils.brep.wire
 logger = logging.getLogger(__name__)
 
 
-def solids(display, shape, transparency=0., color_sequence=aocutils.display.color.prism_color_sequence):
+def solids(display,
+           shape,
+           transparency=0.,
+           color_sequence=aocutils.display.color.prism_color_sequence):
     r"""Display each solid of shape in a different color
 
     Parameters
@@ -37,14 +39,16 @@ def solids(display, shape, transparency=0., color_sequence=aocutils.display.colo
     ais_context = display.GetContext().GetObject()
 
     for i, solid in enumerate(the_solids):
-        # display.DisplayShape(face, color=aocutils.display.color.prism_color_sequence[i % 8])
         ais_face = OCC.AIS.AIS_Shape(solid)
         ais_face.SetColor(color_sequence[i % len(color_sequence)])
         ais_face.SetTransparency(transparency)
         ais_context.Display(ais_face.GetHandle())
 
 
-def shells(display, shape, transparency=0., color_sequence=aocutils.display.color.prism_color_sequence):
+def shells(display,
+           shape,
+           transparency=0.,
+           color_sequence=aocutils.display.color.prism_color_sequence):
     r"""Display each shell of shape in a different color
 
     Parameters
@@ -61,14 +65,17 @@ def shells(display, shape, transparency=0., color_sequence=aocutils.display.colo
     ais_context = display.GetContext().GetObject()
 
     for i, shell in enumerate(the_shells):
-        # display.DisplayShape(face, color=aocutils.display.color.prism_color_sequence[i % 8])
         ais_face = OCC.AIS.AIS_Shape(shell)
         ais_face.SetColor(color_sequence[i % len(color_sequence)])
         ais_face.SetTransparency(transparency)
         ais_context.Display(ais_face.GetHandle())
 
 
-def faces(display, shape, transparency=0., show_numbers=True, numbers_height=20,
+def faces(display,
+          shape,
+          transparency=0.,
+          show_numbers=True,
+          numbers_height=20,
           color_sequence=aocutils.display.color.prism_color_sequence):
     r"""Display each face of shape in a different color
 
@@ -90,17 +97,22 @@ def faces(display, shape, transparency=0., show_numbers=True, numbers_height=20,
     ais_context = display.GetContext().GetObject()
 
     for i, face in enumerate(the_faces):
-        # display.DisplayShape(face, color=aocutils.display.color.prism_color_sequence[i % 8])
         ais_face = OCC.AIS.AIS_Shape(face)
         ais_face.SetColor(color_sequence[i % len(color_sequence)])
         ais_face.SetTransparency(transparency)
         if show_numbers:
-            display.DisplayMessage(point=aocutils.brep.face.Face(face).midpoint, text_to_write=str(i),
-                                   height=numbers_height, message_color=(0, 0, 0))
+            display.DisplayMessage(point=aocutils.brep.face.Face(face).midpoint,
+                                   text_to_write=str(i),
+                                   height=numbers_height,
+                                   message_color=(0, 0, 0))
         ais_context.Display(ais_face.GetHandle())
 
 
-def edges(display, shape, width=4, show_numbers=True, numbers_height=20,
+def edges(display,
+          shape,
+          width=4,
+          show_numbers=True,
+          numbers_height=20,
           color_sequence=aocutils.display.color.prism_color_sequence):
     r"""Display each edge of shape in a different color
 
@@ -123,17 +135,24 @@ def edges(display, shape, width=4, show_numbers=True, numbers_height=20,
     ais_context = display.GetContext().GetObject()
 
     for i, edge in enumerate(the_edges):
-        # display.DisplayShape(face, color=aocutils.display.color.prism_color_sequence[i % 8])
         ais_edge = OCC.AIS.AIS_Shape(edge)
         ais_edge.SetWidth(width)
         ais_edge.SetColor(color_sequence[i % len(color_sequence)])
         if show_numbers:
-            display.DisplayMessage(point=aocutils.brep.edge.Edge(edge).midpoint, text_to_write=str(i),
-                                   height=numbers_height, message_color=(0, 0, 0))
+            display.DisplayMessage(point=aocutils.brep.edge.Edge(edge).midpoint,
+                                   text_to_write=str(i),
+                                   height=numbers_height,
+                                   message_color=(0, 0, 0))
         ais_context.Display(ais_edge.GetHandle())
 
 
-def wires(display, shape, width=4, show_numbers=True, numbers_height=50, repeat=2, delay=1.,
+def wires(display,
+          shape,
+          width=4,
+          show_numbers=True,
+          numbers_height=50,
+          repeat=2,
+          delay=1.,
           color_sequence=aocutils.display.color.prism_color_sequence):
     r"""Display each edge of shape in a different color
 
@@ -156,8 +175,9 @@ def wires(display, shape, width=4, show_numbers=True, numbers_height=50, repeat=
 
     Notes
     -----
-    Wires may overlap or a wire may cover another because one or more wires use the same edge. This causes the
-    display of wires to be confusing. This is the reason why this function displays each wire in turn.
+    Wires may overlap or a wire may cover another because one or more wires 
+    use the same edge. This causes the display of wires to be confusing. 
+    This is the reason why this function displays each wire in turn.
 
     """
     the_wires = aocutils.topology.Topo(shape, return_iter=False).wires
@@ -176,10 +196,12 @@ def wires(display, shape, width=4, show_numbers=True, numbers_height=50, repeat=
             ais_edge.SetColor(color_sequence[i % len(color_sequence)])
             ais_context.Display(ais_edge.GetHandle())
             if show_numbers:
-                first_edge_of_wire = aocutils.topology.Topo(wire, return_iter=False).edges[0]
+                first_edge_of_wire = \
+                    aocutils.topology.Topo(wire, return_iter=False).edges[0]
                 wrapped_first_edge = aocutils.brep.edge.Edge(first_edge_of_wire)
                 display.DisplayMessage(point=wrapped_first_edge.midpoint,
-                                       text_to_write=str(i), height=numbers_height, message_color=(0, 0, 0),
+                                       text_to_write=str(i),
+                                       height=numbers_height,
+                                       message_color=(0, 0, 0),
                                        update=True)
             time.sleep(delay)  # wait before displaying the next wire
-

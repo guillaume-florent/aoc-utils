@@ -53,7 +53,8 @@ def print_consumed_memory():
     print(msg)
 
 
-initial_memory = rss()
-msg = "Initial memory : %i" % initial_memory
-logger.info(msg)
-print(initial_memory)
+if __name__ == "__main__":
+    initial_memory = rss()
+    msg = "Initial memory : %i" % initial_memory
+    logger.info(msg)
+    print(initial_memory)

@@ -13,18 +13,24 @@ import OCC.Quantity
 logger = logging.getLogger(__name__)
 
 
-def colored_and_transparent(display, object, width=4, color=OCC.Quantity.Quantity_NOC_AQUAMARINE4, transparency=0.5):
+def colored_and_transparent(display,
+                            object_,
+                            width=4,
+                            color=OCC.Quantity.Quantity_NOC_AQUAMARINE4,
+                            transparency=0.5):
     r"""Display an object with color and transparency using AIS
 
     Parameters
     ----------
-    display
-    object
-    color
-    transparency
+    display : OCC Display
+    object_
+    width : int
+        Line width
+    color : OCC.Quantity
+    transparency : float, optional (default is 0.5)
 
     """
-    ais_shp = OCC.AIS.AIS_Shape(object)
+    ais_shp = OCC.AIS.AIS_Shape(object_)
     ais_shp.SetTransparency(transparency)
     ais_shp.SetColor(color)
     ais_shp.SetWidth(width)
@@ -33,7 +39,8 @@ def colored_and_transparent(display, object, width=4, color=OCC.Quantity.Quantit
 
 
 def show(shape, backend=None):
-    r"""Quick and dirty shape display, mostly aimed at quickly looking at a shape during the development workflow
+    r"""Quick and dirty shape display, mostly aimed at quickly looking at a 
+    shape during the development workflow
 
     Parameters
     ----------
@@ -42,9 +49,11 @@ def show(shape, backend=None):
     backend : str
     """
     if backend is None:
-        display, start_display, add_menu, add_function_to_menu = OCC.Display.SimpleGui.init_display()
+        display, start_display, add_menu, add_function_to_menu = \
+            OCC.Display.SimpleGui.init_display()
     else:
-        display, start_display, add_menu, add_function_to_menu = OCC.Display.SimpleGui.init_display(backend)
+        display, start_display, add_menu, add_function_to_menu = \
+            OCC.Display.SimpleGui.init_display(backend)
     display.DisplayShape(shape, update=True)
     display.FitAll()
     display.View_Iso()

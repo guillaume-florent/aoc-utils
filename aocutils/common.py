@@ -1,19 +1,17 @@
 # coding: utf-8
 
-r"""common.py module of occutils
+r"""common.py module of aocutils
 
 Classes
 -------
     AssertIsDone
 
 """
-import logging
-
-logger = logging.getLogger(__name__)
 
 
 class AssertIsDone(object):
-    r"""Raises an assertion error when IsDone() returns false, with the error specified in error_statement
+    r"""Raises an assertion error when IsDone() returns false, 
+    with the error specified in error_statement
 
     This is a context manager.
 

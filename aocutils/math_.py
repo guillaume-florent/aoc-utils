@@ -43,7 +43,8 @@ def smooth_pnts(pnts):
         List of smoothed values
     """
     # TODO : make this work for gp_Pnt or Point
-    # Initial implementation of occutils probably made this possible, even though addition and division implementation
+    # Initial implementation of occutils probably made this possible,
+    # even though addition and division implementation
     # for points was directly on gp_Pnt -> use wrapper instead
     smooth = [pnts[0]]
     for i in range(1, len(pnts)-1):

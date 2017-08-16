@@ -15,9 +15,11 @@ import OCC.Display.SimpleGui
 
 
 def safe_yield():
-    r"""Reimplementation of a function that once existed in OCC.Display.SimpleGui"""
+    r"""Reimplementation of the safe_yield() function 
+    that once existed in OCC.Display.SimpleGui"""
     if OCC.Display.SimpleGui.get_backend() == 'wx':
-        # This function (SafeYield) is similar to `wx.Yield`, except that it disables the
+        # This function (SafeYield) is similar to `wx.Yield`,
+        # except that it disables the
         # user input to all program windows before calling `wx.Yield` and
         # re-enables it again afterwards. If ``win`` is not None, this window
         # will remain enabled, allowing the implementation of some limited user

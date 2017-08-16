@@ -1,7 +1,10 @@
 #!/usr/bin/python
 # coding: utf-8
 
-r"""display/color.py
+r"""display/color.py module
+
+RGB to OCC conversion and sequences definition
+
 """
 
 from __future__ import division
@@ -49,7 +52,8 @@ prism_5 = color(198 / 255, 0, 171 / 255)
 prism_6 = color(1, 158 / 255, 0)
 prism_7 = color(0, 219 / 255, 36 / 255)
 prism_8 = color(174 / 255, 0, 243 / 255)
-prism_color_sequence = [prism_1, prism_2, prism_3, prism_4, prism_5, prism_6, prism_7, prism_8]
+prism_color_sequence = [prism_1, prism_2, prism_3, prism_4, prism_5, prism_6,
+                        prism_7, prism_8]
 
 spectral_1 = color(123 / 255, 0, 140 / 255)
 spectral_2 = color(0, 0, 209 / 255)
@@ -59,7 +63,8 @@ spectral_5 = color(0, 228 / 255, 0)
 spectral_6 = color(224 / 255, 243 / 255, 0)
 spectral_7 = color(1, 117 / 255, 0)
 spectral_8 = color(208 / 255, 0, 0)
-spectral_color_sequence = [spectral_1, spectral_2, spectral_3, spectral_4, spectral_5, spectral_6, spectral_7,
+spectral_color_sequence = [spectral_1, spectral_2, spectral_3, spectral_4,
+                           spectral_5, spectral_6, spectral_7,
                            spectral_8]
 
 gray_1 = color(0, 0, 0)

@@ -16,7 +16,8 @@ import os.path
 
 
 class Texture(object):
-    """This class encapsulates the necessary texture properties: Filename, toScaleU, etc.
+    """This class encapsulates the necessary texture properties: 
+    Filename, toScaleU, etc.
 
     Parameters
     ----------
@@ -88,5 +89,10 @@ class Texture(object):
         tuple
 
         """
-        return (self._filename, self._toScaleU, self._toScaleV, self._toRepeatU, self._toRepeatV, self._originU,
+        return (self._filename,
+                self._toScaleU,
+                self._toScaleV,
+                self._toRepeatU,
+                self._toRepeatV,
+                self._originU,
                 self._originV)
