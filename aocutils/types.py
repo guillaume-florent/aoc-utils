@@ -12,14 +12,17 @@ import OCC.BRep
 import OCC.TopAbs
 import OCC.Geom
 
-import aocutils.exceptions
+from aocutils.exceptions import WrongTopologicalType
 
 PY3 = not (int(sys.version.split('.')[0]) <= 2)
 
 # dictionary used to "cast" a shape to the subclass corresponding to its type
-topo_factory = {OCC.TopAbs.TopAbs_VERTEX: OCC.TopoDS.topods.Vertex,  OCC.TopAbs.TopAbs_EDGE: OCC.TopoDS.topods.Edge,
-                OCC.TopAbs.TopAbs_FACE: OCC.TopoDS.topods.Face, OCC.TopAbs.TopAbs_WIRE: OCC.TopoDS.topods.Wire,
-                OCC.TopAbs.TopAbs_SHELL: OCC.TopoDS.topods.Shell, OCC.TopAbs.TopAbs_SOLID: OCC.TopoDS.topods.Solid,
+topo_factory = {OCC.TopAbs.TopAbs_VERTEX: OCC.TopoDS.topods.Vertex,
+                OCC.TopAbs.TopAbs_EDGE: OCC.TopoDS.topods.Edge,
+                OCC.TopAbs.TopAbs_FACE: OCC.TopoDS.topods.Face,
+                OCC.TopAbs.TopAbs_WIRE: OCC.TopoDS.topods.Wire,
+                OCC.TopAbs.TopAbs_SHELL: OCC.TopoDS.topods.Shell,
+                OCC.TopAbs.TopAbs_SOLID: OCC.TopoDS.topods.Solid,
                 OCC.TopAbs.TopAbs_COMPOUND: OCC.TopoDS.topods.Compound,
                 OCC.TopAbs.TopAbs_COMPSOLID: OCC.TopoDS.topods.CompSolid}
 
@@ -35,34 +38,55 @@ topo_type_class = {OCC.TopAbs.TopAbs_VERTEX: OCC.TopoDS.TopoDS_Vertex,
                    OCC.TopAbs.TopAbs_COMPSOLID: OCC.TopoDS.TopoDS_CompSolid}
 
 
-curve_types_dict = {OCC.GeomAbs.GeomAbs_Line: "line", OCC.GeomAbs.GeomAbs_Circle: "circle",
-                    OCC.GeomAbs.GeomAbs_Ellipse: "ellipse", OCC.GeomAbs.GeomAbs_Hyperbola: "hyperbola",
-                    OCC.GeomAbs.GeomAbs_Parabola: "parabola", OCC.GeomAbs.GeomAbs_BezierCurve: "bezier",
-                    OCC.GeomAbs.GeomAbs_BSplineCurve: "spline", OCC.GeomAbs.GeomAbs_OtherCurve: "other"}
+curve_types_dict = {OCC.GeomAbs.GeomAbs_Line: "line",
+                    OCC.GeomAbs.GeomAbs_Circle: "circle",
+                    OCC.GeomAbs.GeomAbs_Ellipse: "ellipse",
+                    OCC.GeomAbs.GeomAbs_Hyperbola: "hyperbola",
+                    OCC.GeomAbs.GeomAbs_Parabola: "parabola",
+                    OCC.GeomAbs.GeomAbs_BezierCurve: "bezier",
+                    OCC.GeomAbs.GeomAbs_BSplineCurve: "spline",
+                    OCC.GeomAbs.GeomAbs_OtherCurve: "other"}
 
-surface_types_dict = {OCC.GeomAbs.GeomAbs_Plane: "plane", OCC.GeomAbs.GeomAbs_Cylinder: "cylinder",
-                      OCC.GeomAbs.GeomAbs_Cone: "cone",  OCC.GeomAbs.GeomAbs_Sphere: "sphere",
-                      OCC.GeomAbs.GeomAbs_Torus: "torus", OCC.GeomAbs.GeomAbs_BezierSurface: "bezier",
+surface_types_dict = {OCC.GeomAbs.GeomAbs_Plane: "plane",
+                      OCC.GeomAbs.GeomAbs_Cylinder: "cylinder",
+                      OCC.GeomAbs.GeomAbs_Cone: "cone",
+                      OCC.GeomAbs.GeomAbs_Sphere: "sphere",
+                      OCC.GeomAbs.GeomAbs_Torus: "torus",
+                      OCC.GeomAbs.GeomAbs_BezierSurface: "bezier",
                       OCC.GeomAbs.GeomAbs_BSplineSurface: "spline",
                       OCC.GeomAbs.GeomAbs_SurfaceOfRevolution: "revolution",
-                      OCC.GeomAbs.GeomAbs_SurfaceOfExtrusion: "extrusion", OCC.GeomAbs.GeomAbs_OffsetSurface: "offset",
+                      OCC.GeomAbs.GeomAbs_SurfaceOfExtrusion: "extrusion",
+                      OCC.GeomAbs.GeomAbs_OffsetSurface: "offset",
                       OCC.GeomAbs.GeomAbs_OtherSurface: "other"}
 
-state_dict = {OCC.TopAbs.TopAbs_IN: "in", OCC.TopAbs.TopAbs_OUT: "out", OCC.TopAbs.TopAbs_ON: "on",
+state_dict = {OCC.TopAbs.TopAbs_IN: "in",
+              OCC.TopAbs.TopAbs_OUT: "out",
+              OCC.TopAbs.TopAbs_ON: "on",
               OCC.TopAbs.TopAbs_UNKNOWN: "unknown"}
 
-orient_dict = {OCC.TopAbs.TopAbs_FORWARD: "TopAbs_FORWARD", OCC.TopAbs.TopAbs_REVERSED: "TopAbs_REVERSED",
-               OCC.TopAbs.TopAbs_INTERNAL: "TopAbs_INTERNAL", OCC.TopAbs.TopAbs_EXTERNAL: "TopAbs_EXTERNAL"}
+orient_dict = {OCC.TopAbs.TopAbs_FORWARD: "TopAbs_FORWARD",
+               OCC.TopAbs.TopAbs_REVERSED: "TopAbs_REVERSED",
+               OCC.TopAbs.TopAbs_INTERNAL: "TopAbs_INTERNAL",
+               OCC.TopAbs.TopAbs_EXTERNAL: "TopAbs_EXTERNAL"}
 
-topo_types_dict = {OCC.TopAbs.TopAbs_VERTEX: "vertex", OCC.TopAbs.TopAbs_EDGE: "edge", OCC.TopAbs.TopAbs_WIRE: "wire",
-                   OCC.TopAbs.TopAbs_FACE: "face", OCC.TopAbs.TopAbs_SHELL: "shell", OCC.TopAbs.TopAbs_SOLID: "solid",
-                   OCC.TopAbs.TopAbs_COMPSOLID: "compsolid", OCC.TopAbs.TopAbs_COMPOUND: "compound",
+topo_types_dict = {OCC.TopAbs.TopAbs_VERTEX: "vertex",
+                   OCC.TopAbs.TopAbs_EDGE: "edge",
+                   OCC.TopAbs.TopAbs_WIRE: "wire",
+                   OCC.TopAbs.TopAbs_FACE: "face",
+                   OCC.TopAbs.TopAbs_SHELL: "shell",
+                   OCC.TopAbs.TopAbs_SOLID: "solid",
+                   OCC.TopAbs.TopAbs_COMPSOLID: "compsolid",
+                   OCC.TopAbs.TopAbs_COMPOUND: "compound",
                    OCC.TopAbs.TopAbs_SHAPE: "shape"}
 
-geom_types_dict = {OCC.GeomAbs.GeomAbs_Line: "line", OCC.GeomAbs.GeomAbs_Circle: "circle",
-                   OCC.GeomAbs.GeomAbs_Ellipse: "ellipse", OCC.GeomAbs.GeomAbs_Hyperbola: "hyperbola",
-                   OCC.GeomAbs.GeomAbs_Parabola: "parabola", OCC.GeomAbs.GeomAbs_BezierCurve: "beziercurve",
-                   OCC.GeomAbs.GeomAbs_BSplineCurve: "bsplinecurve", OCC.GeomAbs.GeomAbs_OtherCurve: "othercurve"}
+geom_types_dict = {OCC.GeomAbs.GeomAbs_Line: "line",
+                   OCC.GeomAbs.GeomAbs_Circle: "circle",
+                   OCC.GeomAbs.GeomAbs_Ellipse: "ellipse",
+                   OCC.GeomAbs.GeomAbs_Hyperbola: "hyperbola",
+                   OCC.GeomAbs.GeomAbs_Parabola: "parabola",
+                   OCC.GeomAbs.GeomAbs_BezierCurve: "beziercurve",
+                   OCC.GeomAbs.GeomAbs_BSplineCurve: "bsplinecurve",
+                   OCC.GeomAbs.GeomAbs_OtherCurve: "othercurve"}
 
 
 brep_check_dict = {OCC.BRepCheck.BRepCheck_NoError: "NoError",
@@ -170,7 +194,7 @@ geom_lut = BidirDict(geom_types_dict)
 #     if not face.ShapeType() == OCC.TopAbs.TopAbs_FACE:
 #         msg = '%s type is not TopAbs_FACE. Conversion impossible' % str(face)
 #         logger.error(msg)
-#         raise aocutils.exceptions.WrongTopologicalType(msg)
+#         raise WrongTopologicalType(msg)
 #
 #     # BRep_Tool.Surface() signatures
 #     # ------------------------------

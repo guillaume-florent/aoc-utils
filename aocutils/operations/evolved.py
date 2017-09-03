@@ -1,11 +1,10 @@
-#!/usr/bin/python
 # coding: utf-8
 
 r"""operations/evolved.py"""
 
 import OCC.BRepOffsetAPI
 
-import aocutils.common
+from aocutils.common import AssertIsDone
 
 
 def evolved(spine, profile):
@@ -22,6 +21,6 @@ def evolved(spine, profile):
 
     """
     evol = OCC.BRepOffsetAPI.BRepOffsetAPI_MakeEvolved(spine, profile)
-    with aocutils.common.AssertIsDone(evol, 'failed building evolved'):
+    with AssertIsDone(evol, 'failed building evolved'):
         evol.Build()
         return evol.Evolved()

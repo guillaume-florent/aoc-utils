@@ -1,8 +1,6 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""core/edge_make.py
-"""
+r"""Methods to make an edge"""
 
 from __future__ import print_function
 
@@ -25,11 +23,9 @@ import OCC.ShapeAnalysis
 import OCC.BRep
 import OCC.BRepIntCurveSurface
 
-import aocutils.common
-import aocutils.types
-import aocutils.exceptions
-import aocutils.math_
-import aocutils.operations.interpolate
+from aocutils.common import AssertIsDone
+from aocutils.math_ import smooth_pnts
+from aocutils.operations.interpolate import points_to_bspline
 
 logger = logging.getLogger(__name__)
 
@@ -47,10 +43,10 @@ def edge2d(*args):
     OCC.TopoDS.TopoDS_Edge
 
     """
-    edge = OCC.BRepBuilderAPI.BRepBuilderAPI_MakeEdge2d(*args)
-    with aocutils.common.AssertIsDone(edge, 'failed to produce edge'):
-        result = edge.Edge()
-        edge.Delete()
+    edge_ = OCC.BRepBuilderAPI.BRepBuilderAPI_MakeEdge2d(*args)
+    with AssertIsDone(edge_, 'failed to produce edge'):
+        result = edge_.Edge()
+        edge_.Delete()
     return result
 
 
@@ -68,7 +64,7 @@ def edge(*args):
 
     """
     an_edge = OCC.BRepBuilderAPI.BRepBuilderAPI_MakeEdge(*args)
-    with aocutils.common.AssertIsDone(an_edge, 'failed to produce edge'):
+    with AssertIsDone(an_edge, 'failed to produce edge'):
         result = an_edge.Edge()
         an_edge.Delete()
         return result
@@ -110,7 +106,12 @@ def line(pnt1, pnt2):
     return edge(pnt1, pnt2)
 
 
-def geodesic_path(pnt_a, pnt_b, aoc_face, n_segments=20, _tolerance=0.1, n_iter=20):
+def geodesic_path(pnt_a,
+                  pnt_b,
+                  aoc_face,
+                  n_segments=20,
+                  _tolerance=0.1,
+                  n_iter=20):
     r"""
 
     Parameters
@@ -173,10 +174,10 @@ def geodesic_path(pnt_a, pnt_b, aoc_face, n_segments=20, _tolerance=0.1, n_iter=
 
     n = 0
     while True:
-        path = aocutils.math_.smooth_pnts(path)
+        path = smooth_pnts(path)
         path = project_pnts(path)
         newlength = poly_length(path)
         if abs(newlength-length) < _tolerance or n == n_iter:
-            crv = aocutils.operations.interpolate.points_to_bspline(path)
+            crv = points_to_bspline(path)
             return edge(crv)
         n += 1

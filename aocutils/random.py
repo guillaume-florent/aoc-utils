@@ -1,13 +1,7 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""random.py
-
-Summary
--------
-
-Random generation of vectors, colors, materials ...
-This is mostly aimed at examples and demos.
+r"""Random generation of vectors, colors, materials ..., mostly aimed at 
+examples and demos.
 
 """
 
@@ -17,7 +11,7 @@ import numpy as np
 
 import OCC.gp
 
-import aocutils.display.color
+from aocutils.display.color import color
 
 logger = logging.getLogger(__name__)
 
@@ -59,4 +53,4 @@ def random_color():
     OCC.Quantity.Quantity_Color
 
     """
-    return aocutils.display.color.color(np.random.random(), np.random.random(), np.random.random())
+    return color(np.random.random(), np.random.random(), np.random.random())

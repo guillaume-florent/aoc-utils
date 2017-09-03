@@ -1,8 +1,6 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""operations/section
-"""
+r"""Section operation"""
 
 
 import OCC.BRepFill

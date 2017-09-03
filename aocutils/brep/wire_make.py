@@ -1,14 +1,12 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""core/wire_make.py
-"""
+r"""Methods to make wire"""
 
 import functools
 
 import OCC.BRepBuilderAPI
 
-import aocutils.common
+from aocutils.common import AssertIsDone
 
 
 @functools.wraps(OCC.BRepBuilderAPI.BRepBuilderAPI_MakeWire)
@@ -34,7 +32,7 @@ def wire(*args):
 
     a_wire = OCC.BRepBuilderAPI.BRepBuilderAPI_MakeWire(*args)
     a_wire.Build()
-    with aocutils.common.AssertIsDone(a_wire, 'failed to produce wire'):
+    with AssertIsDone(a_wire, 'failed to produce wire'):
         result = a_wire.Wire()
         return result
 
@@ -65,7 +63,7 @@ def polygon(args, closed=False):
         poly.Close()
     poly.Build()
 
-    with aocutils.common.AssertIsDone(poly, 'failed to produce wire'):
+    with AssertIsDone(poly, 'failed to produce wire'):
         result = poly.Wire()
         return result
 
@@ -92,6 +90,6 @@ def closed_polygon(*args):
             poly.Add(pt)
     poly.Build()
     poly.Close()
-    with aocutils.common.AssertIsDone(poly, 'failed to produce wire'):
+    with AssertIsDone(poly, 'failed to produce wire'):
         result = poly.Wire()
         return result

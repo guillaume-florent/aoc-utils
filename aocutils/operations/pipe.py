@@ -1,12 +1,10 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""operations/pipe.py
-"""
+r"""Pipe operation"""
 
 import OCC.BRepOffsetAPI
 
-import aocutils.common
+from aocutils.common import AssertIsDone
 
 
 def pipe(spine, profile):
@@ -23,6 +21,6 @@ def pipe(spine, profile):
 
     """
     a_pipe = OCC.BRepOffsetAPI.BRepOffsetAPI_MakePipe(spine, profile)
-    with aocutils.common.AssertIsDone(a_pipe, 'failed building pipe'):
+    with AssertIsDone(a_pipe, 'failed building pipe'):
         a_pipe.Build()
         return a_pipe.Shape()

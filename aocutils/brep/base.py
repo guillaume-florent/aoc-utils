@@ -1,13 +1,6 @@
 # coding: utf-8
 
-r"""base.py module of aocutils
-
-Summary
--------
-
-BaseObject is inherited by Vertex, Edge, Face, Shell, Solid
-
-"""
+r"""BaseObject is inherited by Vertex, Edge, Face, Shell, Solid"""
 
 import logging
 
@@ -18,14 +11,11 @@ import OCC.Display.SimpleGui
 import OCC.GProp
 import OCC.TopoDS
 
-import aocutils.common
-import aocutils.types
-import aocutils.topology
-import aocutils.analyze.distance
-import aocutils.display.display
-import aocutils.brep.vertex_make
-import aocutils.tolerance
-import aocutils.mesh
+from aocutils.types import topo_types_dict
+from aocutils.topology import Topo, shape_to_topology
+from aocutils.analyze.distance import MinimumDistance
+from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
+from aocutils.mesh import mesh
 
 logger = logging.getLogger(__name__)
 
@@ -36,9 +26,14 @@ class BaseObject(object):
     Parameters
     ----------
     wrapped_instance : TopoDS_Shape or subclass
+    name: str, optional (default is None)
+    tolerance: float, optional (default is OCCUTILS_DEFAULT_TOLERANCE)
 
     """
-    def __init__(self, wrapped_instance, name=None, tolerance=aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE):
+    def __init__(self,
+                 wrapped_instance,
+                 name=None,
+                 tolerance=OCCUTILS_DEFAULT_TOLERANCE):
         self._wrapped_instance = wrapped_instance
         self.name = name
         self.tolerance = tolerance
@@ -69,7 +64,8 @@ class BaseObject(object):
         Returns
         -------
         float or None
-            last division factor used for meshing if is_meshed is True, None if is_meshed is False
+            last division factor used for meshing if is_meshed is True,
+            None if is_meshed is False
 
         """
         return self._mesh_factor
@@ -85,7 +81,7 @@ class BaseObject(object):
         """
         if self.is_meshed is False or self.mesh_factor != factor:
             logger.info("Meshing with factor %s" % str(factor))
-            aocutils.mesh.mesh(self._wrapped_instance, factor=factor)
+            mesh(self._wrapped_instance, factor=factor)
             self._is_meshed = True
             self._mesh_factor = factor
         else:
@@ -133,12 +129,12 @@ class BaseObject(object):
         occutils.topology.Topo
 
         """
-        return aocutils.topology.Topo(self._wrapped_instance)
+        return Topo(self._wrapped_instance)
 
     @property
     def topo_type(self):
         r"""Topological geom_type"""
-        return aocutils.types.topo_types_dict[self._wrapped_instance.ShapeType()]
+        return topo_types_dict[self._wrapped_instance.ShapeType()]
 
     def check(self):
         """Some subclasses may implement this method ... but some may not"""
@@ -177,7 +173,7 @@ class BaseObject(object):
         brep_builder_copy.Perform(self._wrapped_instance)
         # get the class, construct a new instance
         # cast the cp.Shape() to its specific TopoDS topology
-        _copy = self.__class__(aocutils.topology.shape_to_topology(brep_builder_copy.Shape()))
+        _copy = self.__class__(shape_to_topology(brep_builder_copy.Shape()))
         return _copy
 
     def distance(self, other):
@@ -189,11 +185,14 @@ class BaseObject(object):
             The other TopoDS_* object
 
         Returns
-         -------
-        minimum distance, minimum distance points on shp1, minimum distance points on shp2
+        -------
+        tuple
+            minimum distance,
+            minimum distance points on shp1,
+            minimum distance points on shp2
 
         """
-        return aocutils.analyze.distance.MinimumDistance(self._wrapped_instance, other).minimum_distance
+        return MinimumDistance(self._wrapped_instance, other).minimum_distance
 
     def __eq__(self, other):
         return self._wrapped_instance.IsEqual(other)

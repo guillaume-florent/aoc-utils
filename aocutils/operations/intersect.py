@@ -1,20 +1,12 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""
-
-Functions
----------
-from_three_planes
-shape_by_line
-
-"""
+r"""Intersections"""
 
 import OCC.IntAna
 import OCC.IntCurvesFace
 
-import aocutils.common
-import aocutils.tolerance
+from aocutils.common import AssertIsDone
+from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
 
 
 def from_three_planes(plane_a, plane_b, plane_c):
@@ -42,7 +34,10 @@ def from_three_planes(plane_a, plane_b, plane_c):
     return pnt
 
 
-def shape_by_line(topods_shape, line, low_parameter=0.0, hi_parameter=float("+inf")):
+def shape_by_line(topods_shape,
+                  line,
+                  low_parameter=0.0,
+                  hi_parameter=float("+inf")):
     r"""Finds the intersection of a shape and a line
 
     Parameters
@@ -56,15 +51,18 @@ def shape_by_line(topods_shape, line, low_parameter=0.0, hi_parameter=float("+in
 
     Returns
     -------
-    a list with a number of tuples that corresponds to the number of intersections found
-    the tuple contains ( OCC.gp.gp_Pnt, TopoDS_Face, u,v,w ), respectively the intersection point, the intersecting face
+    a list with a number of tuples that corresponds to the 
+    number of intersections found.
+    the tuple contains ( OCC.gp.gp_Pnt, TopoDS_Face, u,v,w ), 
+    respectively the intersection point, the intersecting face
     and the u,v,w parameters of the intersection point
     """
     shape_inter = OCC.IntCurvesFace.IntCurvesFace_ShapeIntersector()
-    shape_inter.Load(topods_shape, aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE)
+    shape_inter.Load(topods_shape, OCCUTILS_DEFAULT_TOLERANCE)
     shape_inter.PerformNearest(line, low_parameter, hi_parameter)
 
-    with aocutils.common.AssertIsDone(shape_inter, "failed to computer shape / line intersection"):
+    with AssertIsDone(shape_inter,
+                      "failed to computer shape / line intersection"):
         return (shape_inter.Pnt(1),
                 shape_inter.Face(1),
                 shape_inter.UParameter(1),

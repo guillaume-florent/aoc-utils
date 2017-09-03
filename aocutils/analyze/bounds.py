@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # coding: utf-8
 
 r"""Bounding box analysis"""
@@ -13,9 +12,9 @@ from OCC.gp import gp_Pnt
 import OCC.TopoDS
 
 from aocutils.brep.face_make import from_points
-import aocutils.geom.point
-import aocutils.tolerance
-import aocutils.exceptions
+from aocutils.geom.point import Point
+from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
+from aocutils.exceptions import WrongTopologicalType
 # import aocutils.brep.base
 # import aocutils.mesh
 from aocutils.operations.boolean import common
@@ -105,17 +104,18 @@ class BoundingBox(AbstractBoundingBox):
 
     Notes
     -----
-    Mesh the shape before instantiating a BoundingBox if required, infinite recursion would be created by calling
-    mesh.py's mesh() method
+    Mesh the shape before instantiating a BoundingBox if required, 
+    infinite recursion would be created by calling mesh.py's mesh() method
 
     """
-    def __init__(self, shape, tol=aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE):
+    def __init__(self, shape, tol=OCCUTILS_DEFAULT_TOLERANCE):
         if isinstance(shape, OCC.TopoDS.TopoDS_Shape) or issubclass(shape.__class__, OCC.TopoDS.TopoDS_Shape):
             self._shape = shape
         else:
-            msg = "Expecting a TopoDS_Shape (or a subclass), got a %s" % str(shape.__class__)
+            msg = "Expecting a TopoDS_Shape (or a subclass), " \
+                  "got a %s" % str(shape.__class__)
             logger.error(msg)
-            raise aocutils.exceptions.WrongTopologicalType(msg)
+            raise WrongTopologicalType(msg)
         # self._shape = shape
         self._tol = tol
         self._bbox = OCC.Bnd.Bnd_Box()
@@ -197,7 +197,8 @@ class BoundingBox(AbstractBoundingBox):
     @property
     def as_tuple(self):
         r"""bounding box as the original tuple"""
-        return self.x_min, self.y_min, self.z_min, self.x_max, self.y_max, self.z_max
+        return (self.x_min, self.y_min, self.z_min,
+                self.x_max, self.y_max, self.z_max)
 
     @property
     def centre(self):
@@ -208,8 +209,8 @@ class BoundingBox(AbstractBoundingBox):
         OCC.gp.gp_Pnt
 
         """
-        return aocutils.geom.point.Point.midpoint(OCC.gp.gp_Pnt(self.x_min, self.y_min, self.z_min),
-                                                  OCC.gp.gp_Pnt(self.x_max, self.y_max, self.z_max))
+        return Point.midpoint(OCC.gp.gp_Pnt(self.x_min, self.y_min, self.z_min),
+                              OCC.gp.gp_Pnt(self.x_max, self.y_max, self.z_max))
 
 
 def build_plane_at_x(x, shape):
@@ -229,10 +230,18 @@ def build_plane_at_x(x, shape):
     """
     bounding_box = BoundingBox(shape)
     extra = 1.
-    p1 = gp_Pnt(float(x), bounding_box.y_max + extra, bounding_box.z_max + extra)
-    p2 = gp_Pnt(float(x), bounding_box.y_min - extra, bounding_box.z_max + extra)
-    p3 = gp_Pnt(float(x), bounding_box.y_min - extra, bounding_box.z_min - extra)
-    p4 = gp_Pnt(float(x), bounding_box.y_max + extra, bounding_box.z_min - extra)
+    p1 = gp_Pnt(float(x),
+                bounding_box.y_max + extra,
+                bounding_box.z_max + extra)
+    p2 = gp_Pnt(float(x),
+                bounding_box.y_min - extra,
+                bounding_box.z_max + extra)
+    p3 = gp_Pnt(float(x),
+                bounding_box.y_min - extra,
+                bounding_box.z_min - extra)
+    p4 = gp_Pnt(float(x),
+                bounding_box.y_max + extra,
+                bounding_box.z_min - extra)
     face = from_points([p1, p2, p3, p4])
     return face
 
@@ -254,10 +263,18 @@ def build_plane_at_y(y, shape):
     """
     bounding_box = BoundingBox(shape)
     extra = 1.
-    p1 = gp_Pnt(bounding_box.x_max + extra, float(y), bounding_box.z_max + extra)
-    p2 = gp_Pnt(bounding_box.x_min - extra, float(y), bounding_box.z_max + extra)
-    p3 = gp_Pnt(bounding_box.x_min - extra, float(y), bounding_box.z_min - extra)
-    p4 = gp_Pnt(bounding_box.x_max + extra, float(y), bounding_box.z_min - extra)
+    p1 = gp_Pnt(bounding_box.x_max + extra,
+                float(y),
+                bounding_box.z_max + extra)
+    p2 = gp_Pnt(bounding_box.x_min - extra,
+                float(y),
+                bounding_box.z_max + extra)
+    p3 = gp_Pnt(bounding_box.x_min - extra,
+                float(y),
+                bounding_box.z_min - extra)
+    p4 = gp_Pnt(bounding_box.x_max + extra,
+                float(y),
+                bounding_box.z_min - extra)
     face = from_points([p1, p2, p3, p4])
     return face
 
@@ -279,10 +296,18 @@ def build_plane_at_z(z, shape):
     """
     bounding_box = BoundingBox(shape)
     extra = 1.
-    p1 = gp_Pnt(bounding_box.x_max + extra, bounding_box.y_max + extra, float(z))
-    p2 = gp_Pnt(bounding_box.x_max + extra, bounding_box.y_min - extra, float(z))
-    p3 = gp_Pnt(bounding_box.x_min - extra, bounding_box.y_min - extra, float(z))
-    p4 = gp_Pnt(bounding_box.x_min - extra, bounding_box.y_max + extra, float(z))
+    p1 = gp_Pnt(bounding_box.x_max + extra,
+                bounding_box.y_max + extra,
+                float(z))
+    p2 = gp_Pnt(bounding_box.x_max + extra,
+                bounding_box.y_min - extra,
+                float(z))
+    p3 = gp_Pnt(bounding_box.x_min - extra,
+                bounding_box.y_min - extra,
+                float(z))
+    p4 = gp_Pnt(bounding_box.x_min - extra,
+                bounding_box.y_max + extra,
+                float(z))
     face = from_points([p1, p2, p3, p4])
     return face
 
@@ -290,7 +315,8 @@ def build_plane_at_z(z, shape):
 def real_bb_position(axis, side, start_position, shape, increment=0.01):
     r"""Workaround for OCC bounding box imprecision.
 
-    The principle is to move a plane (perpendicular to axis) closer and closer until it intersects the shape.
+    The principle is to move a plane (perpendicular to axis) closer and closer 
+    until it intersects the shape.
     The goal is to get a 'sure to intersect' coordinates for another program.
 
     Parameters
@@ -302,19 +328,23 @@ def real_bb_position(axis, side, start_position, shape, increment=0.01):
     start_position : float
     shape : OCC Shape
     increment : float, optional
-        The distance by which the intersection plane is moved to try to intersect the shape
+        The distance by which the intersection plane 
+        is moved to try to intersect the shape
         Default is 0.01
 
     Returns
     -------
     float
-        The value of the position for the specified axis and side ("MIN" or "MAX")
+        The value of the position 
+        for the specified axis and side ("MIN" or "MAX")
 
     """
     assert axis in ["X", "Y", "Z"]
     assert side in ["MIN", "MAX"]
 
-    plane_builders = {"X": build_plane_at_x, "Y": build_plane_at_y, "Z": build_plane_at_z}
+    plane_builders = {"X": build_plane_at_x,
+                      "Y": build_plane_at_y,
+                      "Z": build_plane_at_z}
     plane_builder = plane_builders[axis]
 
     position = start_position
@@ -332,7 +362,8 @@ def real_bb_position(axis, side, start_position, shape, increment=0.01):
             elif side == "MAX":
                 position -= increment
 
-    # Bug correction : make sure the computed bounding box is wider than the shape by a value between 0 and increment
+    # Bug correction : make sure the computed bounding box is wider
+    # than the shape by a value between 0 and increment
     if side == "MIN":
         return position - increment
     elif side == "MAX":
@@ -340,11 +371,13 @@ def real_bb_position(axis, side, start_position, shape, increment=0.01):
 
 
 class BetterBoundingBox(AbstractBoundingBox):
-    r"""A bounding box implementation that yields results that are closer to the truth.
+    r"""A bounding box implementation that yields results 
+    that are closer to the truth.
 
     This implementation is much slower than BoundingBox but more precise.
 
-    The BoundingBox is used as a starting point for a more precise determination of the bounds.
+    The BoundingBox is used as a starting point 
+    for a more precise determination of the bounds.
 
     Parameters
     ----------
@@ -359,15 +392,39 @@ class BetterBoundingBox(AbstractBoundingBox):
         else:
             msg = "Expecting a TopoDS_Shape (or a subclass), got a %s" % str(shape.__class__)
             logger.error(msg)
-            raise aocutils.exceptions.WrongTopologicalType(msg)
+            raise WrongTopologicalType(msg)
         # self._shape = shape
         bb = BoundingBox(self._shape)
-        self._x_min = real_bb_position("X", "MIN", bb.x_min, self._shape, increment=tol)
-        self._x_max = real_bb_position("X", "MAX", bb.x_max, self._shape, increment=tol)
-        self._y_min = real_bb_position("Y", "MIN", bb.y_min, self._shape, increment=tol)
-        self._y_max = real_bb_position("Y", "MAX", bb.y_max, self._shape, increment=tol)
-        self._z_min = real_bb_position("Z", "MIN", bb.z_min, self._shape, increment=tol)
-        self._z_max = real_bb_position("Z", "MAX", bb.z_max, self._shape, increment=tol)
+        self._x_min = real_bb_position("X",
+                                       "MIN",
+                                       bb.x_min,
+                                       self._shape,
+                                       increment=tol)
+        self._x_max = real_bb_position("X",
+                                       "MAX",
+                                       bb.x_max,
+                                       self._shape,
+                                       increment=tol)
+        self._y_min = real_bb_position("Y",
+                                       "MIN",
+                                       bb.y_min,
+                                       self._shape,
+                                       increment=tol)
+        self._y_max = real_bb_position("Y",
+                                       "MAX",
+                                       bb.y_max,
+                                       self._shape,
+                                       increment=tol)
+        self._z_min = real_bb_position("Z",
+                                       "MIN",
+                                       bb.z_min,
+                                       self._shape,
+                                       increment=tol)
+        self._z_max = real_bb_position("Z",
+                                       "MAX",
+                                       bb.z_max,
+                                       self._shape,
+                                       increment=tol)
 
     @property
     def x_min(self):
@@ -432,7 +489,8 @@ class BetterBoundingBox(AbstractBoundingBox):
     @property
     def as_tuple(self):
         r"""bounding box as the original tuple"""
-        return self.x_min, self.y_min, self.z_min, self.x_max, self.y_max, self.z_max
+        return (self.x_min, self.y_min, self.z_min,
+                self.x_max, self.y_max, self.z_max)
 
     @property
     def centre(self):
@@ -443,5 +501,5 @@ class BetterBoundingBox(AbstractBoundingBox):
         OCC.gp.gp_Pnt
 
         """
-        return aocutils.geom.point.Point.midpoint(OCC.gp.gp_Pnt(self.x_min, self.y_min, self.z_min),
-                                                  OCC.gp.gp_Pnt(self.x_max, self.y_max, self.z_max))
+        return Point.midpoint(OCC.gp.gp_Pnt(self.x_min, self.y_min, self.z_min),
+                              OCC.gp.gp_Pnt(self.x_max, self.y_max, self.z_max))

@@ -1,8 +1,6 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""
-"""
+r"""Methods to make a face"""
 
 import logging
 import functools
@@ -27,12 +25,9 @@ import OCC.GeomProjLib
 import OCC.Adaptor3d
 import OCC.gp
 
-# import aocutils.brep.base
-import aocutils.common
-# import aocutils.brep.edge
-import aocutils.brep.wire_make
-# import aocutils.topology
-# import aocutils.exceptions
+
+from aocutils.common import AssertIsDone
+from aocutils.brep.wire_make import closed_polygon
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +46,7 @@ def face(*args):
 
     """
     a_face = OCC.BRepBuilderAPI.BRepBuilderAPI_MakeFace(*args)
-    with aocutils.common.AssertIsDone(a_face, 'failed to produce face'):
+    with AssertIsDone(a_face, 'failed to produce face'):
         result = a_face.Face()
         a_face.Delete()
         return result
@@ -65,7 +60,8 @@ def from_points(points_list):
     points_list : list[OCC.gp.gp_Pnt]
 
     """
-    poly = aocutils.brep.wire_make.closed_polygon(points_list)  # poly is a OCC.TopoDS.TopoDS_Wire
+    # poly is a OCC.TopoDS.TopoDS_Wire
+    poly = closed_polygon(points_list)
     return face(poly)
 
 
@@ -85,8 +81,13 @@ def ruled(edge_a, edge_b):
     return OCC.BRepFill.brepfill_Face(edge_a, edge_b)
 
 
-def plane(center=OCC.gp.gp_Pnt(0, 0, 0), vec_normal=OCC.gp.gp_Vec(0, 0, 1), extent_x_min=-100., extent_x_max=100.,
-          extent_y_min=-100., extent_y_max=100., depth=0.):
+def plane(center=OCC.gp.gp_Pnt(0, 0, 0),
+          vec_normal=OCC.gp.gp_Vec(0, 0, 1),
+          extent_x_min=-100.,
+          extent_x_max=100.,
+          extent_y_min=-100.,
+          extent_y_max=100.,
+          depth=0.):
     r"""Make a plane
 
     Parameters
@@ -114,12 +115,13 @@ def plane(center=OCC.gp.gp_Pnt(0, 0, 0), vec_normal=OCC.gp.gp_Vec(0, 0, 1), exte
 
 
 def n_sided(edges, points, continuity=OCC.GeomAbs.GeomAbs_C0):
-    r"""Builds an n-sided patch, respecting the constraints defined by *edges* and *points*
+    r"""Builds an n-sided patch, respecting the constraints defined 
+    by *edges* and *points*
 
     A simplified call to the BRepFill_Filling class
 
-    It is simplified in the sense that to all constraining edges and points the same level of *continuity*
-    will be applied
+    It is simplified in the sense that to all constraining edges and points 
+    the same level of *continuity* will be applied
 
     Parameters
     ----------
@@ -128,11 +130,14 @@ def n_sided(edges, points, continuity=OCC.GeomAbs.GeomAbs_C0):
     points
         the constraining points
     continuity : GeomAbs_0, 1, 2
-                 GeomAbs_C0 : the surface has to pass by 3D representation of the edge
-                 GeomAbs_G1 : the surface has to pass by 3D representation of the edge and to respect tangency with
-                 the given face
-                 GeomAbs_G2 : the surface has to pass by 3D representation of the edge and to respect tangency and
-                 curvature with the given face.
+                 GeomAbs_C0 : the surface has to pass by 3D representation 
+                              of the edge
+                 GeomAbs_G1 : the surface has to pass by 3D representation 
+                              of the edge and to respect tangency with
+                              the given face
+                 GeomAbs_G2 : the surface has to pass by 3D representation 
+                              of the edge and to respect tangency and
+                              curvature with the given face.
 
     Returns
     -------
@@ -140,7 +145,8 @@ def n_sided(edges, points, continuity=OCC.GeomAbs.GeomAbs_C0):
 
     Notes
     -----
-    It is not required to set constraining points. Just leave the tuple or list empty
+    It is not required to set constraining points.
+    Just leave the tuple or list empty
 
     """
     an_n_sided = OCC.BRepFill.BRepFill_Filling()
@@ -219,6 +225,9 @@ def from_plane(_geom_plane, lower_limit=-1000, upper_limit=1000):
     OCC.TopoDS.TopoDS_Face
 
     """
-    _trim_plane = face(OCC.Geom.Geom_RectangularTrimmedSurface(_geom_plane.GetHandle(), lower_limit, upper_limit,
-                                                               lower_limit, upper_limit).GetHandle())
+    _trim_plane = face(OCC.Geom.Geom_RectangularTrimmedSurface(_geom_plane.GetHandle(),
+                                                               lower_limit,
+                                                               upper_limit,
+                                                               lower_limit,
+                                                               upper_limit).GetHandle())
     return _trim_plane

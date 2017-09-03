@@ -1,8 +1,6 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""
-"""
+r"""Position in 3D space"""
 
 
 class ThreeD(object):

@@ -1,8 +1,6 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""geom/vector.py
-"""
+r"""geom vector"""
 
 from __future__ import division
 
@@ -11,14 +9,14 @@ import logging
 import numpy as np
 import OCC.gp
 
-import aocutils.tolerance
-import aocutils.exceptions
-import aocutils.geom._three_d
+from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
+from aocutils.exceptions import ZeroNormVectorException
+from aocutils.geom._three_d import ThreeD
 
 logger = logging.getLogger(__name__)
 
 
-class Vector(aocutils.geom._three_d.ThreeD):
+class Vector(ThreeD):
     r"""3D vector
 
     Can be constructed from 3 parameters or from a tuple of length 3
@@ -70,7 +68,7 @@ class Vector(aocutils.geom._three_d.ThreeD):
             The other vector used to compute the perpendicular
         """
         if other.norm == 0 or self.norm == 0:
-            raise aocutils.exceptions.ZeroNormVectorException
+            raise ZeroNormVectorException
 
         return Vector.from_tuple(np.cross(self.to_array(), other.to_array()))
 
@@ -86,7 +84,9 @@ class Vector(aocutils.geom._three_d.ThreeD):
         Vector
 
         """
-        return Vector.from_xyz(self.X() + other.X(), self.Y() + other.Y(), self.Z() + other.Z())
+        return Vector.from_xyz(self.X() + other.X(),
+                               self.Y() + other.Y(),
+                               self.Z() + other.Z())
 
     def __sub__(self, other):
         r"""Substract a vector to self
@@ -100,21 +100,25 @@ class Vector(aocutils.geom._three_d.ThreeD):
         Vector
 
         """
-        return Vector.from_xyz(self.X() - other.X(), self.Y() - other.Y(), self.Z() - other.Z())
+        return Vector.from_xyz(self.X() - other.X(),
+                               self.Y() - other.Y(),
+                               self.Z() - other.Z())
 
     def __mul__(self, scalar):
         r"""Multiply a vector by a scalar
 
         Parameters
         ----------
-        scalar_ : float
+        scalar : float
 
         Returns
         -------
         Vector
 
         """
-        return Vector.from_xyz(self.X() * scalar, self.Y() * scalar, self.Z() * scalar)
+        return Vector.from_xyz(self.X() * scalar,
+                               self.Y() * scalar,
+                               self.Z() * scalar)
 
     def __div__(self, scalar):
         r"""Multiply a vector by a scalar
@@ -128,7 +132,9 @@ class Vector(aocutils.geom._three_d.ThreeD):
         Vector
 
         """
-        return Vector.from_xyz(self.X() / scalar, self.Y() / scalar,  self.Z() / scalar)
+        return Vector.from_xyz(self.X() / scalar,
+                               self.Y() / scalar,
+                               self.Z() / scalar)
 
     def __eq__(self, other):
         r"""Is self equal to other?
@@ -143,9 +149,9 @@ class Vector(aocutils.geom._three_d.ThreeD):
 
         """
         if isinstance(other, Vector):
-            return self.gp_vec.IsEqual(other.gp_vec, aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE)
+            return self.gp_vec.IsEqual(other.gp_vec, OCCUTILS_DEFAULT_TOLERANCE)
         elif isinstance(other, OCC.gp.gp_Pnt):
-            return self.gp_vec.IsEqual(other, aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE)
+            return self.gp_vec.IsEqual(other, OCCUTILS_DEFAULT_TOLERANCE)
         else:
             msg = "Incompatible vector geom_type for comparison"
             logger.critical(msg)

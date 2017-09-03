@@ -1,20 +1,14 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""analyze/global_.py
-"""
+r"""Global analysis properties"""
 
 import logging
 
 import OCC.GProp
 import OCC.BRepGProp
 
-import aocutils.tolerance
-import aocutils.analyze.bounds
-import aocutils.types
+from aocutils.types import topo_lut
 from aocutils.exceptions import WrongTopologicalType
-
-import aocutils.tolerance
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +28,7 @@ class GlobalProperties(object):
 
     def __init__(self, shape):
         self.shape = shape
-        self._topo_type = aocutils.types.topo_lut[self.shape.ShapeType()]
+        self._topo_type = topo_lut[self.shape.ShapeType()]
         self._system = None
 
     @property

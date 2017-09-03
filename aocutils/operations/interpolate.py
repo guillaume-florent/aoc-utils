@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # coding: utf-8
 
 r"""Interpolation
@@ -15,7 +14,8 @@ Notes
 -----
 OCC.GeomAPI.GeomAPI_PointsToBSpline
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-This class is used to approximate a BsplineCurve passing through an array of points, with a given Continuity. Describes
+This class is used to approximate a BsplineCurve passing through 
+an array of points, with a given Continuity. Describes
 functions for building a 3D BSpline curve which approximates a set of points.
 A PointsToBSpline object provides a framework for:
 - defining the data of the BSpline curve to be built,
@@ -23,14 +23,20 @@ A PointsToBSpline object provides a framework for:
 
 OCC.GeomAPI.GeomAPI_Interpolate
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-This class is used to interpolate a BsplineCurve passing through an array of points, with a C2 Continuity if tangency
-is not requested at the point. If tangency is requested at the point the continuity will be C1.
-If Perodicity is requested the curve will be closed and the junction will be the first point given.
-The curve will than be only C1 Describes functions for building a constrained 3D BSpline curve.
-The curve is defined by a table of points through which it passes, and if required:
-- by a parallel table of reals which gives the value of the parameter of each point through which the resulting
+This class is used to interpolate a BsplineCurve passing through an 
+array of points, with a C2 Continuity if tangency is not requested at the point.
+If tangency is requested at the point the continuity will be C1.
+If Perodicity is requested the curve will be closed and the junction 
+will be the first point given.
+The curve will than be only C1 Describes functions for building a 
+constrained 3D BSpline curve.
+The curve is defined by a table of points through which it passes, 
+and if required:
+- by a parallel table of reals which gives the value of the parameter 
+  of each point through which the resulting
   BSpline curve passes, and
-- by vectors tangential to these points. An Interpolate object provides a framework for:
+- by vectors tangential to these points. 
+  An Interpolate object provides a framework for:
 - defining the constraints of the BSpline curve,
 - implementing the interpolation algorithm, and
 - consulting the results.
@@ -43,9 +49,9 @@ import OCC.GeomAPI
 import OCC.TColgp
 import OCC.TColStd
 
-import aocutils.exceptions
-import aocutils.tolerance
-import aocutils.collections
+from aocutils.exceptions import InterpolationException
+from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
+from aocutils.collections import tcol_dim_1, point_list_to_tcolgp_array1_of_pnt
 
 logger = logging.getLogger(__name__)
 
@@ -88,7 +94,7 @@ def points_to_bspline(pnts):
     OCC.Geom.Handle_Geom_BSplineCurve
 
     """
-    pnts = aocutils.collections.point_list_to_tcolgp_array1_of_pnt(pnts)
+    pnts = point_list_to_tcolgp_array1_of_pnt(pnts)
     crv = OCC.GeomAPI.GeomAPI_PointsToBSpline(pnts)
     return crv.Curve()
 
@@ -113,7 +119,7 @@ def points_to_bspline(pnts):
 
 
 def points(list_of_points, start_tangent, end_tangent, filter_pts=True,
-           tolerance=aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE):
+           tolerance=OCCUTILS_DEFAULT_TOLERANCE):
     r"""Interpolate points
 
     Parameters
@@ -133,7 +139,7 @@ def points(list_of_points, start_tangent, end_tangent, filter_pts=True,
     if filter_pts:
         list_of_points = filter_points_by_distance(list_of_points)
 
-    fixed_points = aocutils.collections.tcol_dim_1(list_of_points, OCC.TColgp.TColgp_HArray1OfPnt, start_at_one=True)
+    fixed_points = tcol_dim_1(list_of_points, OCC.TColgp.TColgp_HArray1OfPnt, start_at_one=True)
     try:
         interp = OCC.GeomAPI.GeomAPI_Interpolate(fixed_points.GetHandle(), False, tolerance)
         interp.Load(start_tangent, end_tangent, False)
@@ -143,11 +149,11 @@ def points(list_of_points, start_tangent, end_tangent, filter_pts=True,
     except RuntimeError:
         msg = 'Failed to interpolate the shown points'
         logger.error(msg)
-        raise aocutils.exceptions.InterpolationException(msg)
+        raise InterpolationException(msg)
 
 
 def points_vectors(list_of_points, list_of_vectors, vector_mask=None,
-                   tolerance=aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE):
+                   tolerance=OCCUTILS_DEFAULT_TOLERANCE):
     r"""Build a curve from a set of points and vectors the vectors describe the tangent vector
     at the corresponding point
 
@@ -162,7 +168,8 @@ def points_vectors(list_of_points, list_of_vectors, vector_mask=None,
     -------
 
     """
-    # OCC.GeomAPI.GeomAPI_Interpolate is buggy: need to use `fix` in order to get the right points in...
+    # OCC.GeomAPI.GeomAPI_Interpolate is buggy:
+    #                   need to use `fix` in order to get the right points in...
     assert len(list_of_points) == len(list_of_vectors), 'vector and point list not of same length'
 
     if vector_mask is not None:
@@ -170,9 +177,15 @@ def points_vectors(list_of_points, list_of_vectors, vector_mask=None,
     else:
         vector_mask = [True for _ in range(len(list_of_points))]
 
-    fixed_mask = aocutils.collections.tcol_dim_1(vector_mask, OCC.TColStd.TColStd_HArray1OfBoolean, start_at_one=True)
-    fixed_points = aocutils.collections.tcol_dim_1(list_of_points, OCC.TColgp.TColgp_HArray1OfPnt, start_at_one=True)
-    fixed_vectors = aocutils.collections.tcol_dim_1(list_of_vectors, OCC.TColgp.TColgp_Array1OfVec, start_at_one=True)
+    fixed_mask = tcol_dim_1(vector_mask,
+                            OCC.TColStd.TColStd_HArray1OfBoolean,
+                            start_at_one=True)
+    fixed_points = tcol_dim_1(list_of_points,
+                              OCC.TColgp.TColgp_HArray1OfPnt,
+                              start_at_one=True)
+    fixed_vectors = tcol_dim_1(list_of_vectors,
+                               OCC.TColgp.TColgp_Array1OfVec,
+                               start_at_one=True)
 
     try:
         interp = OCC.GeomAPI.GeomAPI_Interpolate(fixed_points.GetHandle(), False, tolerance)
@@ -184,12 +197,15 @@ def points_vectors(list_of_points, list_of_vectors, vector_mask=None,
         # the exception was unclear
         msg = 'Failed to interpolate the points'
         logger.error(msg)
-        raise aocutils.exceptions.InterpolationException(msg)
+        raise InterpolationException(msg)
 
 
-def points_no_tangency(list_of_points, filter_pts=True, closed=False,
-                       tolerance=aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE):
-    r"""OCC.GeomAPI.GeomAPI_Interpolate is buggy: need to use `fix` in order to get the right points in...
+def points_no_tangency(list_of_points,
+                       filter_pts=True,
+                       closed=False,
+                       tolerance=OCCUTILS_DEFAULT_TOLERANCE):
+    r"""OCC.GeomAPI.GeomAPI_Interpolate is buggy: need to use `fix` 
+    in order to get the right points in...
 
     Parameters
     ----------
@@ -206,9 +222,13 @@ def points_no_tangency(list_of_points, filter_pts=True, closed=False,
     if filter_pts:
         list_of_points = filter_points_by_distance(list_of_points)
 
-    fixed_points = aocutils.collections.tcol_dim_1(list_of_points, OCC.TColgp.TColgp_HArray1OfPnt, start_at_one=True)
+    fixed_points = tcol_dim_1(list_of_points,
+                              OCC.TColgp.TColgp_HArray1OfPnt,
+                              start_at_one=True)
     try:
-        interp = OCC.GeomAPI.GeomAPI_Interpolate(fixed_points.GetHandle(), closed, tolerance)
+        interp = OCC.GeomAPI.GeomAPI_Interpolate(fixed_points.GetHandle(),
+                                                 closed,
+                                                 tolerance)
         interp.Perform()
         if interp.IsDone():
             return interp.Curve()
@@ -217,4 +237,4 @@ def points_no_tangency(list_of_points, filter_pts=True, closed=False,
         # the exception was unclear
         msg = 'Failed to interpolate the points'
         logger.error(msg)
-        raise aocutils.exceptions.InterpolationException(msg)
+        raise InterpolationException(msg)

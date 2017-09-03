@@ -1,7 +1,10 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""exceptions module for aocutils"""
+r"""exceptions
+
+All exceptions inherit AocUtilsException
+
+"""
 
 
 class AocUtilsException(Exception):
@@ -20,7 +23,8 @@ class UndefinedPropertyException(AocUtilsException):
 
 
 class ParameterOutOfDomainException(AocUtilsException):
-    r"""A function was invoked with a parameter outside of the object parameter domain"""
+    r"""A function was invoked with a parameter outside 
+    of the object parameter domain"""
     pass
 
 

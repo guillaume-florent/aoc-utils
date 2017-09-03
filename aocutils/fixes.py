@@ -1,13 +1,7 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""fixes module
-
-Summary
--------
-
-Various fixing methods for shapes, faces, tolerance, continuity.
-Curve resampling
+r"""Fixing methods for shapes, faces, tolerance, continuity and 
+curve resampling
 
 """
 
@@ -19,15 +13,16 @@ import OCC.GeomAPI
 import OCC.ShapeFix
 import OCC.ShapeUpgrade
 
-import aocutils.tolerance
-import aocutils.common
-import aocutils.collections
-import aocutils.geom.curve
+from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE, \
+    OCCUTILS_FIXING_TOLERANCE
+from aocutils.common import AssertIsDone
+from aocutils.collections import point_list_to_tcolgp_array1_of_pnt
+from aocutils.geom.curve import Curve
 
 logger = logging.getLogger(__name__)
 
 
-def fix_shape(shp, tolerance=aocutils.tolerance.OCCUTILS_FIXING_TOLERANCE):
+def fix_shape(shp, tolerance=OCCUTILS_FIXING_TOLERANCE):
     r"""Fix a shape
 
     Parameters
@@ -41,7 +36,11 @@ def fix_shape(shp, tolerance=aocutils.tolerance.OCCUTILS_FIXING_TOLERANCE):
 
     """
     fix = OCC.ShapeFix.ShapeFix_Shape(shp)
-    fix.SetFixFreeShellMode(True)  # Returns (modifiable) the mode for applying fixes of ShapeFix_Shell, by default True
+
+    # Returns (modifiable) the mode for applying fixes of ShapeFix_Shell,
+    # by default True
+    fix.SetFixFreeShellMode(True)
+
     sf = fix.FixShellTool().GetObject()
     sf.SetFixOrientationMode(True)
     fix.LimitTolerance(tolerance)
@@ -49,12 +48,15 @@ def fix_shape(shp, tolerance=aocutils.tolerance.OCCUTILS_FIXING_TOLERANCE):
     return fix.Shape()
 
 
-def fix_face(face, tolerance=aocutils.tolerance.OCCUTILS_FIXING_TOLERANCE):
+def fix_face(face, tolerance=OCCUTILS_FIXING_TOLERANCE):
     r"""Fix a face
 
-    This operator allows to perform various fixes on face and its wires: fixes provided by ShapeFix_Wire,
-    fixing orientation of wires, addition of natural bounds, fixing of missing seam edge,
-    and detection and removal of null-area wires.
+    This operator allows to perform various fixes on face and its wires: 
+    - fixes provided by ShapeFix_Wire,
+    - fixing orientation of wires,
+    - addition of natural bounds,
+    - fixing of missing seam edge,
+    - detection and removal of null-area wires.
 
     Parameters
     ----------
@@ -69,7 +71,8 @@ def fix_face(face, tolerance=aocutils.tolerance.OCCUTILS_FIXING_TOLERANCE):
     fix = OCC.ShapeFix.ShapeFix_Face(face)
     fix.SetMaxTolerance(tolerance)
 
-    # Performs all the fixes, depending on modes Function Status returns the status of last call to Perform()
+    # Performs all the fixes, depending on modes
+    # Function Status returns the status of last call to Perform()
     # ShapeExtend_OK : face was OK, nothing done
     # ShapeExtend_DONE1: some wires are fixed
     # ShapeExtend_DONE2: orientation of wires fixed
@@ -84,7 +87,7 @@ def fix_face(face, tolerance=aocutils.tolerance.OCCUTILS_FIXING_TOLERANCE):
     return fix.Face()  # assumes no FixMissingSeam involved
 
 
-def fix_tolerance(shape, tolerance=aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE):
+def fix_tolerance(shape, tolerance=OCCUTILS_DEFAULT_TOLERANCE):
     r"""Sets (enforces) tolerances in a shape to the given value.
 
     Modifies tolerances of sub-shapes (vertices, edges, faces)
@@ -114,16 +117,21 @@ def fix_continuity(edge, continuity=1):
         The upgrade resulting shape
 
     """
-    # ShapeUpgrade_ShapeDivideContinuity : API Tool for converting shapes with C0 geometry into C1 ones
+    # ShapeUpgrade_ShapeDivideContinuity :
+    #     API Tool for converting shapes with C0 geometry into C1 ones
     shape_upgrade = OCC.ShapeUpgrade.ShapeUpgrade_ShapeDivideContinuity(edge)
-    shape_upgrade.SetBoundaryCriterion(eval('OCC.GeomAbs.GeomAbs_C' + str(continuity)))
+    shape_upgrade.SetBoundaryCriterion(eval('OCC.GeomAbs.GeomAbs_C' +
+                                            str(continuity)))
     shape_upgrade.Perform()
     return shape_upgrade.Result()
 
 
-def resample_curve_with_uniform_deflection(curve, deflection=0.5, degree_min=3, degree_max=8,
-                                           continuity=OCC.GeomAbs.GeomAbs_C2,
-                                           tolerance=aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE):
+def resample_curve_uniform_deflection(curve,
+                                      deflection=0.5,
+                                      degree_min=3,
+                                      degree_max=8,
+                                      continuity=OCC.GeomAbs.GeomAbs_C2,
+                                      tolerance=OCCUTILS_DEFAULT_TOLERANCE):
     r"""Fits a bspline through the samples on curve
 
     Parameters
@@ -142,12 +150,17 @@ def resample_curve_with_uniform_deflection(curve, deflection=0.5, degree_min=3, 
 
     """
     # crv = aocutils.convert.adapt.to_adaptor_3d(curve)
-    crv = aocutils.geom.curve.Curve(curve).to_adaptor_3d()
+    crv = Curve(curve).to_adaptor_3d()
     defl = OCC.GCPnts.GCPnts_UniformDeflection(crv, deflection)
-    with aocutils.common.AssertIsDone(defl, 'failed to compute UniformDeflection'):
+    with AssertIsDone(defl, 'failed to compute UniformDeflection'):
         logger.info('Number of points : %i' % defl.NbPoints())
     sampled_pnts = [defl.Value(i) for i in range(1, defl.NbPoints())]
+
     resampled_curve = OCC.GeomAPI.GeomAPI_PointsToBSpline(
-        aocutils.collections.point_list_to_tcolgp_array1_of_pnt(sampled_pnts), degree_min, degree_max, continuity,
+        point_list_to_tcolgp_array1_of_pnt(sampled_pnts),
+        degree_min,
+        degree_max,
+        continuity,
         tolerance)
+
     return resampled_curve.Curve().GetObject()

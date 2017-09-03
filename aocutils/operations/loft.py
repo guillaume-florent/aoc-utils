@@ -1,8 +1,6 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""operations/loft.py
-"""
+r"""Loft operation"""
 
 import logging
 
@@ -10,15 +8,18 @@ import OCC.BRepOffsetAPI
 import OCC.GeomAbs
 import OCC.TopoDS
 
-import aocutils.common
-import aocutils.topology
-import aocutils.tolerance
+from aocutils.common import AssertIsDone
+from aocutils.topology import shape_to_topology
+from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
 
 logger = logging.getLogger(__name__)
 
 
-def loft(elements, ruled=False, tolerance=aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE,
-         continuity=OCC.GeomAbs.GeomAbs_C2, check_compatibility=True):
+def loft(elements,
+         ruled=False,
+         tolerance=OCCUTILS_DEFAULT_TOLERANCE,
+         continuity=OCC.GeomAbs.GeomAbs_C2,
+         check_compatibility=True):
     r"""Loft
 
     Parameters
@@ -49,6 +50,6 @@ def loft(elements, ruled=False, tolerance=aocutils.tolerance.OCCUTILS_DEFAULT_TO
     sections.CheckCompatibility(check_compatibility)
     sections.SetContinuity(continuity)
     sections.Build()
-    with aocutils.common.AssertIsDone(sections, 'failed lofting'):
+    with AssertIsDone(sections, 'failed lofting'):
         # te = occutils.topology.shape_to_topology()
-        return aocutils.topology.shape_to_topology(sections.Shape())
+        return shape_to_topology(sections.Shape())

@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # coding: utf-8
 
 r"""core/compound_make.py
@@ -8,7 +7,8 @@ import OCC.TopoDS
 
 
 def compound(topo):
-    r"""Accumulate a bunch of TopoDS_* in list `topo` to a OCC.TopoDS.TopoDS_Compound
+    r"""Accumulate a bunch of TopoDS_* in list `topo` 
+    to a OCC.TopoDS.TopoDS_Compound
 
     Parameters
     ----------

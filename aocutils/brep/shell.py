@@ -1,7 +1,6 @@
 # coding: utf-8
 
-r"""shell module of occutils
-"""
+r"""shell module of aocutils"""
 
 import logging
 
@@ -10,15 +9,14 @@ import OCC.TopoDS
 import OCC.ShapeAnalysis
 import OCC.BRepCheck
 
-import aocutils.topology
-import aocutils.brep.base
-import aocutils.analyze.global_
-import aocutils.exceptions
+from aocutils.topology import Topo
+from aocutils.brep.base import BaseObject
+from aocutils.exceptions import WrongTopologicalType
 
 logger = logging.getLogger(__name__)
 
 
-class Shell(aocutils.brep.base.BaseObject):
+class Shell(BaseObject):
     r"""Shell class
 
     Parameters
@@ -32,11 +30,11 @@ class Shell(aocutils.brep.base.BaseObject):
         if not isinstance(topods_shell, OCC.TopoDS.TopoDS_Shell):
             msg = 'need a TopoDS_Shell, got a %s' % topods_shell.__class__
             logger.critical(msg)
-            raise aocutils.exceptions.WrongTopologicalType(msg)
+            raise WrongTopologicalType(msg)
 
         assert not topods_shell.IsNull()
 
-        aocutils.brep.base.BaseObject.__init__(self, topods_shell, 'shell')
+        BaseObject.__init__(self, topods_shell, 'shell')
 
         Shell._n += 1
 
@@ -81,17 +79,17 @@ class Shell(aocutils.brep.base.BaseObject):
         ss = OCC.ShapeAnalysis.ShapeAnalysis_Shell()
         ss.LoadShells(self._wrapped_instance)
         if ss.HasFreeEdges():
-            bad_edges = [e for e in aocutils.topology.Topo(ss.BadEdges()).edges()]
+            bad_edges = [e for e in Topo(ss.BadEdges()).edges()]
         return bad_edges
 
     def faces(self):
         r"""Faces of the shell"""
-        return aocutils.topology.Topo(self._wrapped_instance, return_iter=True).faces()
+        return Topo(self._wrapped_instance, return_iter=True).faces()
 
     def wires(self):
         r"""Wires of the shell"""
-        return aocutils.topology.Topo(self._wrapped_instance, return_iter=True).wires()
+        return Topo(self._wrapped_instance, return_iter=True).wires()
 
     def edges(self):
         r"""Edges of the shell"""
-        return aocutils.topology.Topo(self._wrapped_instance, return_iter=True).edges()
+        return Topo(self._wrapped_instance, return_iter=True).edges()

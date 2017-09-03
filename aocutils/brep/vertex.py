@@ -1,27 +1,7 @@
 # coding: utf-8
 
-r"""vertex module of occutils
+r"""vertex module of aocutils"""
 
-Classes
--------
-Vertex
-    check()
-    _update()
-    from_pnt() (static)
-    x
-    y
-    z
-    xyz
-    __repr__
-    as_vec
-    as_dir
-    as_xyz
-    as_pnt
-    as_2d
-
-    """
-
-# import functools
 import logging
 
 import OCC.BRep
@@ -32,9 +12,8 @@ import OCC.TopExp
 import OCC.ShapeBuild
 import OCC.BRepCheck
 
-import aocutils.exceptions
 from aocutils.brep.base import BaseObject
-import aocutils.brep.vertex_make
+from aocutils.brep.vertex_make import vertex
 
 logger = logging.getLogger(__name__)
 
@@ -52,8 +31,9 @@ class Vertex(BaseObject):
 
     def __init__(self, x, y, z):
         self._pnt = OCC.gp.gp_Pnt(x, y, z)
-        aocutils.brep.base.BaseObject.__init__(self, aocutils.brep.vertex_make.vertex(self._pnt),
-                                               name='Vertex #{0}'.format(self._n))
+        BaseObject.__init__(self,
+                            vertex(self._pnt),
+                            name='Vertex #{0}'.format(self._n))
 
         Vertex._n += 1
 
@@ -85,7 +65,7 @@ class Vertex(BaseObject):
         # TODO: perhaps should take an argument until which topological level
         # topological entities bound to the vertex should be updated too...
         reshape = OCC.ShapeBuild.ShapeBuild_ReShape()
-        reshape.Replace(self._wrapped_instance, aocutils.brep.vertex_make.vertex(self._pnt))
+        reshape.Replace(self._wrapped_instance, vertex(self._pnt))
 
     @property
     def x(self):

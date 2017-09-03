@@ -1,12 +1,10 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""distance
-"""
+r"""distance"""
 
 import OCC.BRepExtrema
 
-import aocutils.common
+from aocutils.common import AssertIsDone
 
 
 class MinimumDistance(object):
@@ -19,15 +17,18 @@ class MinimumDistance(object):
 
     """
     def __init__(self, shape_1, shape_2):
-        dist_shape_shape = OCC.BRepExtrema.BRepExtrema_DistShapeShape(shape_1, shape_2)
+        dist_shape_shape = OCC.BRepExtrema.BRepExtrema_DistShapeShape(shape_1,
+                                                                      shape_2)
         dist_shape_shape.Perform()
 
-        with aocutils.common.AssertIsDone(dist_shape_shape, 'Failed computing minimum distances'):
+        with AssertIsDone(dist_shape_shape,
+                          'Failed computing minimum distances'):
             self._min_dist = dist_shape_shape.Value()
             self._points_pairs = list()
             self._nb_solutions = dist_shape_shape.NbSolution()
             for i in range(1, dist_shape_shape.NbSolution() + 1):
-                self._points_pairs.append((dist_shape_shape.PointOnShape1(i), dist_shape_shape.PointOnShape2(i)))
+                self._points_pairs.append((dist_shape_shape.PointOnShape1(i),
+                                           dist_shape_shape.PointOnShape2(i)))
 
     @property
     def minimum_distance(self):

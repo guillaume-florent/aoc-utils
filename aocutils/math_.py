@@ -1,13 +1,6 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""math_.py
-
-Summary
--------
-Mathematical utilities
-
-"""
+r"""Mathematical utilities"""
 
 
 def roundlist(li, n_decimals=3):

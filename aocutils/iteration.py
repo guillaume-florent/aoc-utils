@@ -11,8 +11,8 @@ This module helps looping through topology
 
 import OCC.BRep
 
-import aocutils.topology
-import aocutils.brep.edge
+from aocutils.topology import Topo, WireExplorer
+from aocutils.brep.edge import Edge
 
 
 class EdgePairsFromWire(object):
@@ -27,7 +27,7 @@ class EdgePairsFromWire(object):
         self.wire = wire
         self.edge_pairs = list()
         self.prev_edge = None
-        self.wire_explorer = aocutils.topology.WireExplorer(self.wire).ordered_edges()
+        self.wire_explorer = WireExplorer(self.wire).ordered_edges()
         self.number_of_edges = self.wire_explorer.__length_hint__()
         self.previous_edge = None
         self.current_edge = None
@@ -63,7 +63,8 @@ class EdgePairsFromWire(object):
 
 
 class LoopWirePairs(object):
-    r"""For looping through consecutive wires assures that the returned edge pairs are ordered
+    r"""For looping through consecutive wires assures 
+    that the returned edge pairs are ordered
 
     Parameters
     ----------
@@ -74,16 +75,16 @@ class LoopWirePairs(object):
     def __init__(self, wire_a, wire_b):
         self.wireA = wire_a
         self.wireB = wire_b
-        self.wire_explorer_a = aocutils.topology.WireExplorer(self.wireA)
-        self.wire_explorer_b = aocutils.topology.WireExplorer(self.wireB)
-        self.topo_a = aocutils.topology.Topo(self.wireA)
-        self.topo_b = aocutils.topology.Topo(self.wireB)
+        self.wire_explorer_a = WireExplorer(self.wireA)
+        self.wire_explorer_b = WireExplorer(self.wireB)
+        self.topo_a = Topo(self.wireA)
+        self.topo_b = Topo(self.wireB)
         self.brep_tool = OCC.BRep.BRep_Tool()
         self.vertices_a = [v for v in self.wire_explorer_a.ordered_vertices()]
         self.vertices_b = [v for v in self.wire_explorer_b.ordered_vertices()]
 
-        self.edges_a = [v for v in aocutils.topology.WireExplorer(wire_a).ordered_edges()]
-        self.edges_b = [v for v in aocutils.topology.WireExplorer(wire_b).ordered_edges()]
+        self.edges_a = [v for v in WireExplorer(wire_a).ordered_edges()]
+        self.edges_b = [v for v in WireExplorer(wire_b).ordered_edges()]
 
         self.pnts_b = [self.brep_tool.Pnt(v) for v in self.vertices_b]
         self.number_of_vertices = len(self.vertices_a)
@@ -120,8 +121,8 @@ class LoopWirePairs(object):
         closest = self.closest_point(vert)
         edges_a = self.topo_a.edges_from_vertex(vert)
         edges_b = self.topo_b.edges_from_vertex(closest)
-        edge_a1, edge_a2 = aocutils.brep.edge.Edge(edges_a.next()), aocutils.brep.edge.Edge(edges_a.next())
-        edge_b1, edge_b2 = aocutils.brep.edge.Edge(edges_b.next()), aocutils.brep.edge.Edge(edges_b.next())
+        edge_a1, edge_a2 = Edge(edges_a.next()), Edge(edges_a.next())
+        edge_b1, edge_b2 = Edge(edges_b.next()), Edge(edges_b.next())
         mp_a = edge_a1.mid_point()[1]
         self.index += 1
 

@@ -1,19 +1,20 @@
 # coding: utf-8
 
-r"""common.py module of aocutils
-
-Classes
--------
-    AssertIsDone
-
-"""
+r"""functions and classes common to all modules"""
 
 
 class AssertIsDone(object):
-    r"""Raises an assertion error when IsDone() returns false, 
+    r"""Raises an assertion error when IsDone() returns False, 
     with the error specified in error_statement
 
     This is a context manager.
+    
+    Parameters
+    ----------
+    to_check : object
+        The object to check. Must have an IsDone() function.
+    error_statement: str
+        Error explanation
 
     """
     def __init__(self, to_check, error_statement):

@@ -1,12 +1,10 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""operations/extrude.py
-"""
+r"""Extrusion operation"""
 
 import OCC.BRepPrimAPI
 
-import aocutils.common
+from aocutils.common import AssertIsDone
 
 
 def extrude(profile, vec):
@@ -23,6 +21,6 @@ def extrude(profile, vec):
 
     """
     pri = OCC.BRepPrimAPI.BRepPrimAPI_MakePrism(profile, vec, True)
-    with aocutils.common.AssertIsDone(pri, 'failed building prism'):
+    with AssertIsDone(pri, 'failed building prism'):
         pri.Build()
         return pri.Shape()

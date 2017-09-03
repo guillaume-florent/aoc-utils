@@ -1,8 +1,6 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""geometry/surface.py
-"""
+r"""geom surface"""
 
 import logging
 
@@ -51,13 +49,22 @@ class Surface(object):
         """
         if len(edges) == 4:
             spl1, spl2, spl3, spl4 = edges
-            srf = OCC.GeomFill.GeomFill_BSplineCurves(spl1, spl2, spl3, spl4, OCC.GeomFill.GeomFill_StretchStyle)
+            srf = OCC.GeomFill.GeomFill_BSplineCurves(spl1,
+                                                      spl2,
+                                                      spl3,
+                                                      spl4,
+                                                      OCC.GeomFill.GeomFill_StretchStyle)
         elif len(edges) == 3:
             spl1, spl2, spl3 = edges
-            srf = OCC.GeomFill.GeomFill_BSplineCurves(spl1, spl2, spl3, OCC.GeomFill.GeomFill_StretchStyle)
+            srf = OCC.GeomFill.GeomFill_BSplineCurves(spl1,
+                                                      spl2,
+                                                      spl3,
+                                                      OCC.GeomFill.GeomFill_StretchStyle)
         elif len(edges) == 2:
             spl1, spl2 = edges
-            srf = OCC.GeomFill.GeomFill_BSplineCurves(spl1, spl2, OCC.GeomFill.GeomFill_StretchStyle)
+            srf = OCC.GeomFill.GeomFill_BSplineCurves(spl1,
+                                                      spl2,
+                                                      OCC.GeomFill.GeomFill_StretchStyle)
         else:
             msg = 'give 2,3 or 4 curves'
             logger.critical(msg)

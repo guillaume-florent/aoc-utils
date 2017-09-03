@@ -1,15 +1,7 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""
-
-Functions
----------
-translate
-scale_uniform
-mirror_pnt_dir
-mirror_axe2
-rotate
+r"""Transformations: translate, scale_uniform, mirror_pnt_dir, mirror_axe2,
+rotate ....
 
 """
 
@@ -19,8 +11,8 @@ import OCC.BRepBuilderAPI
 import OCC.gp
 import OCC.TopoDS
 
-import aocutils.common
-import aocutils.topology
+from aocutils.common import AssertIsDone
+from aocutils.topology import shape_to_topology
 
 
 def translate(brep_or_iterable, vec, copy=False):
@@ -46,7 +38,7 @@ def translate(brep_or_iterable, vec, copy=False):
     if issubclass(brep_or_iterable.__class__, OCC.TopoDS.TopoDS_Shape):
         brep_transform = OCC.BRepBuilderAPI.BRepBuilderAPI_Transform(brep_or_iterable, gp_trsf, copy)
         brep_transform.Build()
-        return aocutils.topology.shape_to_topology(brep_transform.Shape())
+        return shape_to_topology(brep_transform.Shape())
     else:
         return [translate(brep_or_iterable, vec, copy) for _ in brep_or_iterable]
 
@@ -70,9 +62,9 @@ def rotate(brep, axe, degree, copy=False):
     gp_trsf = OCC.gp.gp_Trsf()
     gp_trsf.SetRotation(axe, math.radians(degree))
     brep_transform = OCC.BRepBuilderAPI.BRepBuilderAPI_Transform(brep, gp_trsf, copy)
-    with aocutils.common.AssertIsDone(brep_transform, 'could not produce rotation'):
+    with AssertIsDone(brep_transform, 'could not produce rotation'):
         brep_transform.Build()
-        return aocutils.topology.shape_to_topology(brep_transform.Shape())
+        return shape_to_topology(brep_transform.Shape())
 
 
 def scale_uniform(brep, pnt, factor, copy=False):
@@ -119,7 +111,7 @@ def mirror_pnt_dir(brep, pnt, direction, copy=False):
     trns = OCC.gp.gp_Trsf()
     trns.SetMirror(OCC.gp.gp_Ax1(pnt, direction))
     brep_trns = OCC.BRepBuilderAPI.BRepBuilderAPI_Transform(brep, trns, copy)
-    with aocutils.common.AssertIsDone(brep_trns, 'could not produce mirror'):
+    with AssertIsDone(brep_trns, 'could not produce mirror'):
         brep_trns.Build()
         return brep_trns.Shape()
 
@@ -141,6 +133,6 @@ def mirror_axe2(brep, axe2, copy=False):
     trns = OCC.gp.gp_Trsf()
     trns.SetMirror(axe2)
     brep_trns = OCC.BRepBuilderAPI.BRepBuilderAPI_Transform(brep, trns, copy)
-    with aocutils.common.AssertIsDone(brep_trns, 'could not produce mirror'):
+    with AssertIsDone(brep_trns, 'could not produce mirror'):
         brep_trns.Build()
         return brep_trns.Shape()

@@ -1,14 +1,12 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""operations/sew.py
-"""
+r"""Sewing operation"""
 
 import logging
 
 import OCC.BRepBuilderAPI
 
-import aocutils.topology
+from aocutils.topology import shape_to_topology
 
 logger = logging.getLogger(__name__)
 
@@ -39,4 +37,4 @@ def sew_shapes(shapes, tolerance=1e-3):
     logger.info('%i free edges' % sew.NbFreeEdges())
     logger.info('%i multiple edges:' % sew.NbMultipleEdges())
 
-    return aocutils.topology.shape_to_topology(sew.SewedShape())
+    return shape_to_topology(sew.SewedShape())

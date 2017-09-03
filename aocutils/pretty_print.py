@@ -1,13 +1,6 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""pretty_print.py
-
-Summary
--------
-Pretty printing of various elements
-
-"""
+r"""Pretty printing of various OCC entities"""
 
 import math
 
@@ -65,8 +58,8 @@ def gp_vec_print(vec):
     x = vec.X()
     y = vec.Y()
     z = vec.Z()
-    magn = vec.Magnitude()
-    return '< gp_Vec: {0}, {1}, {2}, magnitude: {3} >'.format(x, y, z, magn)
+    mag = vec.Magnitude()
+    return '< gp_Vec: {0}, {1}, {2}, magnitude: {3} >'.format(x, y, z, mag)
 
 
 def gp_ax1_print(ax1):
@@ -106,8 +99,9 @@ def gp_trsf_print(trsf):
     a, b, c, d = _f(1)
     e, f, g, h = _f(2)
     i, j, k, l = _f(3)
-    return "< gp_Trsf:\n {a:.3f}, {b:.3f}, {c:.3f}, {d:.3f}\n {e:.3f}, {f:.3f}, {g:.3f}, {h:.3f}\n {i:.3f}, {j:.3f}, " \
-           "{k:.3f}, {l:.3f} >".format(**vars())
+    return "< gp_Trsf:\n {a:.3f}, {b:.3f}, {c:.3f}, {d:.3f}\n " \
+           "{e:.3f}, {f:.3f}, {g:.3f}, {h:.3f}\n " \
+           "{i:.3f}, {j:.3f}, {k:.3f}, {l:.3f} >".format(**vars())
 
 
 def gp_quat_print(quat):
@@ -147,7 +141,10 @@ def dump_topology(shape, level=0):
     s = shape.ShapeType()
     if s == OCC.TopAbs.TopAbs_VERTEX:
         pnt = brep_tool.Pnt(OCC.TopoDS.topods_Vertex(shape))
-        print(".." * level + "<Vertex %i: %s %s %s>" % (hash(shape), pnt.X(), pnt.Y(), pnt.Z()))
+        print(".." * level + "<Vertex %i: %s %s %s>" % (hash(shape),
+                                                        pnt.X(),
+                                                        pnt.Y(),
+                                                        pnt.Z()))
     else:
         print(".." * level + shape_type_string(shape))
         # print(shape_type_string(shape))
@@ -169,6 +166,7 @@ def shape_type_string(shape):
     -------
     str
         Readable shape geom_type description and hash value e.g. Solid: 3617953
+
     """
     st = shape.ShapeType()
     s = "?"

@@ -1,17 +1,6 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""collections module
-
-Functions
----------
-to_string
-to_tcol_
-tcol_dim_1
-point_list_to_tcolgp_array1_of_pnt
-point2d_list_to_tcolgp_array1_of_pnt2d
-
-"""
+r"""OCC collections utilities and conversions"""
 
 import OCC.TColgp
 import OCC.TCollection

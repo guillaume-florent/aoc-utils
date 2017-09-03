@@ -1,12 +1,7 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""
-This modules makes the construction of geometry a little easier with the help of the GEOM library.
-
-Functions
----------
-splitter
+r"""This modules makes the construction of geometry a little easier 
+with the help of the GEOM library.
 
 """
 

@@ -1,23 +1,15 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""
-
-Functions
----------
-point_on_curve
-point_on_plane
-edge_onto_plane
-
-"""
+r"""Projection operations"""
 
 import OCC.GeomAPI
 import OCC.GeomProjLib
 import OCC.ProjLib
 import OCC.TopoDS
 
+# TODO : wrong name
 import aocutils.convert.adapt
-import aocutils.brep.edge_make
+from aocutils.brep.edge_make import edge
 
 
 def point_on_curve(crv, pnt):
@@ -74,6 +66,8 @@ def edge_on_plane(edg, plane):
         TopoDS_Edge projected on the plane
 
     """
-    proj = OCC.GeomProjLib.geomprojlib_ProjectOnPlane(edg.adaptor.Curve().Curve(), plane.GetHandle(),
-                                                      plane.Axis().Direction(), 1)
-    return aocutils.brep.edge_make.edge(proj)
+    proj = OCC.GeomProjLib.geomprojlib_ProjectOnPlane(edg.adaptor.Curve().Curve(),
+                                                      plane.GetHandle(),
+                                                      plane.Axis().Direction(),
+                                                      1)
+    return edge(proj)

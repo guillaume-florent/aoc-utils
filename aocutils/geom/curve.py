@@ -1,8 +1,6 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""
-"""
+r"""geom curve"""
 
 import logging
 
@@ -13,10 +11,10 @@ import OCC.BRepAdaptor
 import OCC.GeomAbs
 import OCC.GeomConvert
 
-import aocutils.common
-import aocutils.tolerance
-import aocutils.brep.edge_make
-import aocutils.exceptions
+from aocutils.common import AssertIsDone
+from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
+from aocutils.brep.edge_make import edge
+from aocutils.exceptions import WrongTopologicalType
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +27,7 @@ class Curve(object):
         if not issubclass(curve.__class__, OCC.Geom.Geom_Curve):
             msg = 'Curve.__init__() needs a Geom_Curve or a subclass, got a %s' % curve.__class__
             logger.critical(msg)
-            raise aocutils.exceptions.WrongTopologicalType(msg)
+            raise WrongTopologicalType(msg)
         self._curve = curve
 
     @classmethod
@@ -57,10 +55,13 @@ class Curve(object):
         return self._curve.GetHandle()
 
     def to_edge(self):
-        return aocutils.brep.edge_make.edge(self.handle)
+        return edge(self.handle)
 
-    def to_bspline(self, tolerance=aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE, continuity=OCC.GeomAbs.GeomAbs_C1,
-                   sections=300, degree=12):
+    def to_bspline(self,
+                   tolerance=OCCUTILS_DEFAULT_TOLERANCE,
+                   continuity=OCC.GeomAbs.GeomAbs_C1,
+                   sections=300,
+                   degree=12):
         r"""Convert a curve to a bspline
 
         Parameters
@@ -76,16 +77,16 @@ class Curve(object):
         Handle< Geom_BSplineCurve >
 
         """
-        approx_curve = OCC.GeomConvert.GeomConvert_ApproxCurve(self.handle, tolerance, continuity, sections, degree)
-        with aocutils.common.AssertIsDone(approx_curve, 'could not compute bspline from curve'):
+        approx_curve = OCC.GeomConvert.GeomConvert_ApproxCurve(self.handle,
+                                                               tolerance,
+                                                               continuity,
+                                                               sections,
+                                                               degree)
+        with AssertIsDone(approx_curve, 'could not compute bspline from curve'):
             return approx_curve.Curve()
 
     def to_adaptor_3d(self):
         r"""Abstract curve like geom_type into an adaptor3d
-
-        Parameters
-        ----------
-        curve : Geom_Curve
 
         Returns
         -------

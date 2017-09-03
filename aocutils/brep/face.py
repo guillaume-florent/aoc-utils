@@ -1,10 +1,8 @@
 # coding: utf-8
 
-r"""face.py module of occutils
-"""
+r"""face.py module of aocutils"""
 
 import logging
-# import functools
 
 import OCC.BRepBuilderAPI
 import OCC.BRep
@@ -26,36 +24,37 @@ import OCC.Adaptor3d
 import OCC.gp
 import OCC.BRepCheck
 
-import aocutils.brep.base
-import aocutils.common
-import aocutils.brep.edge
-import aocutils.topology
-import aocutils.exceptions
-import aocutils.tolerance
-import aocutils.types
+from aocutils.brep.base import BaseObject
+from aocutils.brep.edge import Edge
+from aocutils.topology import WireExplorer
+from aocutils.exceptions import WrongTopologicalType, \
+    ParameterOutOfDomainException, TangentException
+from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
+from aocutils.types import surface_lut
 
 logger = logging.getLogger(__name__)
 
 
-class Face(aocutils.brep.base.BaseObject):
+class Face(BaseObject):
     r"""High level surface API
     object is a Face if part of a Solid
     otherwise the same methods do apply, apart from the topology obviously
 
     Parameters
     ----------
-    face
+    topods_face
 
     """
     def __init__(self, topods_face):
         if not isinstance(topods_face, OCC.TopoDS.TopoDS_Face):
             msg = 'need a TopoDS_Face, got a %s' % topods_face.__class__
             logger.critical(msg)
-            raise aocutils.exceptions.WrongTopologicalType(msg)
+            raise WrongTopologicalType(msg)
 
-        assert not topods_face.IsNull()
+        if topods_face.IsNull():
+            raise ValueError("topods_face should not be Null")
 
-        aocutils.brep.base.BaseObject.__init__(self, topods_face, 'face')
+        BaseObject.__init__(self, topods_face, 'face')
 
         self._surface_handle = None
         self._adaptor = None
@@ -170,7 +169,8 @@ class Face(aocutils.brep.base.BaseObject):
 
     @staticmethod
     def _continuities():
-        return ["GeomAbs_C0", "GeomAbs_G1", "GeomAbs_C1", "GeomAbs_G2", "GeomAbs_C2", "GeomAbs_C3", "GeomAbs_CN"]
+        return ["GeomAbs_C0", "GeomAbs_G1", "GeomAbs_C1", "GeomAbs_G2",
+                "GeomAbs_C2", "GeomAbs_C3", "GeomAbs_CN"]
 
     @property
     def u_continuity(self):
@@ -222,7 +222,8 @@ class Face(aocutils.brep.base.BaseObject):
         return self.domain[3]
 
     def _midpoint(self):
-        """u, v parameters at the mid point of the face, and its corresponding gp_Pnt
+        """u, v parameters at the mid point of the face, 
+        and its corresponding gp_Pnt
 
         Returns
         -------
@@ -321,7 +322,7 @@ class Face(aocutils.brep.base.BaseObject):
         # sa.GetBoxUF()
         return sa.IsUClosed(), sa.IsVClosed()
 
-    def is_planar(self, tol=aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE):
+    def is_planar(self, tol=OCCUTILS_DEFAULT_TOLERANCE):
         """Checks if the surface is planar within a tolerance
 
         Parameters
@@ -404,7 +405,7 @@ class Face(aocutils.brep.base.BaseObject):
         if not self.domain[0] <= u <= self.domain[1]:
             msg = "Parameter u is outside of domain ranging from %s to %s" % (str(self.domain[0]), str(self.domain[0]))
             logger.error(msg)
-            raise aocutils.exceptions.ParameterOutOfDomainException(msg)
+            raise ParameterOutOfDomainException(msg)
         else:
             pass
 
@@ -412,7 +413,7 @@ class Face(aocutils.brep.base.BaseObject):
         if not self.domain[2] <= v <= self.domain[3]:
             msg = "Parameter v is outside of domain ranging from %s to %s" % (str(self.domain[2]), str(self.domain[3]))
             logger.error(msg)
-            raise aocutils.exceptions.ParameterOutOfDomainException(msg)
+            raise ParameterOutOfDomainException(msg)
         else:
             pass
 
@@ -477,8 +478,9 @@ class Face(aocutils.brep.base.BaseObject):
 #    project curve, point on face
 # ===========================================================================
 
-    def project_vertex(self, pnt, tol=aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE):
-        r"""Projects self with a point, curve, edge, face, solid method wraps dealing with the various topologies
+    def project_vertex(self, pnt, tol=OCCUTILS_DEFAULT_TOLERANCE):
+        r"""Projects self with a point, curve, edge, face, solid method 
+        wraps dealing with the various topologies
 
         Parameters
         ----------
@@ -493,7 +495,9 @@ class Face(aocutils.brep.base.BaseObject):
         if isinstance(pnt, OCC.TopoDS.TopoDS_Vertex):
             pnt = OCC.BRep.BRep_Tool.Pnt(pnt)
 
-        proj = OCC.GeomAPI.GeomAPI_ProjectPointOnSurf(pnt, self.surface_handle, tol)
+        proj = OCC.GeomAPI.GeomAPI_ProjectPointOnSurf(pnt,
+                                                      self.surface_handle,
+                                                      tol)
         # uv = proj.LowerDistanceParameters()
         proj_pnt = proj.NearestPoint()
 
@@ -520,8 +524,10 @@ class Face(aocutils.brep.base.BaseObject):
                                                                                                               other)
                 other = OCC.BRep.BRep_Tool.Curve(other, lbound, ubound).GetObject()
 
-                # Project (const Handle< Geom_Curve > &C, const Handle< Geom_Surface > &S)
-                return OCC.GeomProjLib.geomprojlib.Project(other, self.surface_handle)
+                # Project (const Handle< Geom_Curve > &C,
+                #          const Handle< Geom_Surface > &S)
+                return OCC.GeomProjLib.geomprojlib.Project(other,
+                                                           self.surface_handle)
 
     def project_edge(self, edg):
         r"""Project edge
@@ -537,7 +543,7 @@ class Face(aocutils.brep.base.BaseObject):
         """
         if hasattr(edg, 'adaptor'):
             return self.project_curve(self.adaptor)
-        return self.project_curve(aocutils.brep.edge.Edge(edg).adaptor())
+        return self.project_curve(Edge(edg).adaptor())
 
     def iso_curve(self, u_or_v, param):
         r"""Get the iso curve from a u,v + parameter
@@ -558,9 +564,12 @@ class Face(aocutils.brep.base.BaseObject):
         elif u_or_v == "v":
             self._check_v_in_domain(param)
         else:
-            self._check_v_in_domain(param)  # if u_or_v is not "u", it is assumed to be "v"
+            # if u_or_v is not "u", it is assumed to be "v"
+            self._check_v_in_domain(param)
         uv = 0 if u_or_v == 'u' else 1
-        return OCC.Adaptor3d.Adaptor3d_IsoCurve(self.adaptor_handle.GetHandle(), uv, param)
+        return OCC.Adaptor3d.Adaptor3d_IsoCurve(self.adaptor_handle.GetHandle(),
+                                                uv,
+                                                param)
 
     @property
     def edges(self):
@@ -571,12 +580,13 @@ class Face(aocutils.brep.base.BaseObject):
         list[occutils.brep.edge.Edge]
 
         """
-        return [aocutils.brep.edge.Edge(i)
-                for i in aocutils.topology.WireExplorer(next(self.topo.wires)).ordered_edges]
+        return [Edge(i)
+                for i in WireExplorer(next(self.topo.wires)).ordered_edges]
 
     def local_props(self, u, v):
         r"""Curvature at the u parameter
-        the local_props object can be returned too using curvatureType == curvatureType
+        the local_props object can be returned too 
+        using curvatureType == curvatureType
         curvatureTypes are:
             gaussian
             minimum
@@ -596,7 +606,11 @@ class Face(aocutils.brep.base.BaseObject):
         """
         self._check_u_in_domain(u)
         self._check_v_in_domain(v)
-        _local_props = OCC.GeomLProp.GeomLProp_SLProps(self.surface_handle, u, v, 1, 1e-6)
+        _local_props = OCC.GeomLProp.GeomLProp_SLProps(self.surface_handle,
+                                                       u,
+                                                       v,
+                                                       1,
+                                                       1e-6)
 
         _domain = self.domain
         if u in _domain or v in _domain:
@@ -734,11 +748,16 @@ class Face(aocutils.brep.base.BaseObject):
         curv = self.local_props(u, v)
         if curv.IsTangentUDefined() and curv.IsTangentVDefined():
             curv.TangentU(du), curv.TangentV(dv)
-            return OCC.gp.gp_Vec(du.X(), du.Y(), du.Z()), OCC.gp.gp_Vec(dv.X(), dv.Y(), dv.Z())
+            return (OCC.gp.gp_Vec(du.X(),
+                                  du.Y(),
+                                  du.Z()),
+                   OCC.gp.gp_Vec(dv.X(),
+                                 dv.Y(),
+                                 dv.Z()))
         else:
             msg = 'Tangent not defined in U or V'
             logger.error(msg)
-            raise aocutils.exceptions.TangentException(msg)
+            raise TangentException(msg)
 
     def radius(self, u, v):
         r"""Radius at u
@@ -771,7 +790,7 @@ class Face(aocutils.brep.base.BaseObject):
     @property
     def geom_type(self):
         r"""Geometrical geom_type"""
-        return aocutils.types.surface_lut[self.adaptor.GetType()]
+        return surface_lut[self.adaptor.GetType()]
 
     def __repr__(self):
         return self.name

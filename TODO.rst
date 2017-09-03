@@ -7,6 +7,12 @@ General
 -> Coverage
 it is a library, easy on logging (debug for almost everything, info if very important)
 
+Get rid of asserts
+
+OCC imports
+
+Tolerance management.
+
 tests
 -----
 *_make.py

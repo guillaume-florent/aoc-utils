@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # coding: utf-8
 
 r"""Boolean operations"""
@@ -7,8 +6,7 @@ import logging
 
 import OCC.BRepAlgoAPI
 
-import aocutils.exceptions
-import aocutils.tolerance
+from aocutils.exceptions import BooleanCommonException, BooleanCutException
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +42,7 @@ def common(shape_1, shape_2):
         except KeyError:
             msg = "Unknown error : %s" % str(algo_common.ErrorStatus())
         logger.error(msg)
-        raise aocutils.exceptions.BooleanCommonException()
+        raise BooleanCommonException()
     else:
         logger.debug('BRepAlgoAPI_Common status: {status}'.format(status=_error[algo_common.ErrorStatus()]))
 
@@ -65,7 +63,8 @@ def cut(shape_to_cut_from, cutting_shape):
 
     """
     try:
-        brep_cut = OCC.BRepAlgoAPI.BRepAlgoAPI_Cut(shape_to_cut_from, cutting_shape)
+        brep_cut = OCC.BRepAlgoAPI.BRepAlgoAPI_Cut(shape_to_cut_from,
+                                                   cutting_shape)
         logger.info('Can work ? : %s' % str(brep_cut.BuilderCanWork()))
         _error = {0: '- Ok',
                   1: '- The Object is created but Nothing is Done',
@@ -84,7 +83,7 @@ def cut(shape_to_cut_from, cutting_shape):
     except:
         msg = "Failed to boolean cut"
         logger.error(msg)
-        raise aocutils.exceptions.BooleanCutException(msg)
+        raise BooleanCutException(msg)
 
 
 def fuse(shape_to_cut_from, joining_shape):

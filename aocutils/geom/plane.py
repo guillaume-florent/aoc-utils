@@ -1,8 +1,6 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""geometry/plane.py
-"""
+r"""geom plane"""
 
 import logging
 
@@ -11,12 +9,11 @@ import OCC.GeomPlate
 import OCC.gp
 import OCC.TColgp
 
-import aocutils.exceptions
-import aocutils.common
-import aocutils.brep.vertex
-import aocutils.convert.collections
-import aocutils.topology
-import aocutils.geom.vector
+from aocutils.exceptions import FindPlaneException
+from aocutils.brep.vertex import Vertex
+from aocutils.collections import to_tcol_
+from aocutils.topology import Topo
+from aocutils.geom.vector import Vector
 
 
 logger = logging.getLogger(__name__)
@@ -54,11 +51,11 @@ class Plane(object):
             else:
                 msg = 'Plane not found in %s' % shape
                 logger.error(msg)
-                raise aocutils.exceptions.FindPlaneException(msg)
+                raise FindPlaneException(msg)
         except:
             msg = 'Could not find plane in %s' % shape
             logger.error(msg)
-            raise aocutils.exceptions.FindPlaneException(msg)
+            raise FindPlaneException(msg)
 
     @classmethod
     def through_face_vertices(cls, _face):
@@ -73,14 +70,14 @@ class Plane(object):
         Geom_Plane
 
         """
-        uvs_from_vertices = [_face.project_vertex(aocutils.brep.vertex.Vertex.to_pnt(i))
-                             for i in aocutils.topology.Topo(_face).vertices()]
+        uvs_from_vertices = [_face.project_vertex(Vertex.to_pnt(i))
+                             for i in Topo(_face).vertices()]
         normals = [OCC.gp.gp_Vec(_face.DiffGeom.normal(*uv[0])) for uv in uvs_from_vertices]
         points = [i[1] for i in uvs_from_vertices]
 
         NORMALS = OCC.TColgp.TColgp_SequenceOfVec()
         [NORMALS.Append(i) for i in normals]
-        POINTS = aocutils.convert.collections.to_tcol_(points, OCC.TColgp.TColgp_HArray1OfPnt)
+        POINTS = to_tcol_(points, OCC.TColgp.TColgp_HArray1OfPnt)
 
         pl = OCC.GeomPlate.GeomPlate_BuildAveragePlane(NORMALS, POINTS).Plane().GetObject()
         vec = OCC.gp.gp_Vec(pl.Location(), _face.GlobalProperties.centre())
@@ -102,4 +99,4 @@ class Plane(object):
 
         """
         trns = OCC.gp.gp_Vec(self._geom_plane.Axis().Direction())
-        return aocutils.geom.vector.Vector(trns.Normalized() * vec_length)
+        return Vector(trns.Normalized() * vec_length)

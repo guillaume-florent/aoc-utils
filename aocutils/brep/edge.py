@@ -1,12 +1,10 @@
 # coding: utf-8
 
-r"""edge module of aocutils
-"""
+r"""edge module of aocutils"""
 
 from __future__ import print_function
 
 import logging
-# import functools
 
 import OCC.BRepAdaptor
 import OCC.BRepBuilderAPI
@@ -25,23 +23,23 @@ import OCC.BRep
 import OCC.BRepIntCurveSurface
 import OCC.BRepCheck
 
-import aocutils.analyze.distance
-import aocutils.brep.base
-import aocutils.brep.edge_make
-import aocutils.common
-import aocutils.brep.vertex
-import aocutils.types
-import aocutils.exceptions
-import aocutils.math_
-import aocutils.operations.interpolate
-import aocutils.fixes
-import aocutils.tolerance
-import aocutils.display.display
+from aocutils.analyze.distance import MinimumDistance
+from aocutils.brep.base import BaseObject
+from aocutils.brep.edge_make import edge
+from aocutils.common import AssertIsDone
+from aocutils.brep.vertex import Vertex
+from aocutils.types import geom_lut
+from aocutils.exceptions import WrongTopologicalType,\
+    ParameterOutOfDomainException, UniformAbscissaException, \
+    UndefinedPropertyException
+from aocutils.fixes import fix_continuity
+from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
+from aocutils.display.display import show
 
 logger = logging.getLogger(__name__)
 
 
-class Edge(aocutils.brep.base.BaseObject):
+class Edge(BaseObject):
     r"""Wrapper for OCC.TopoDS.TopoDS_Edge
 
     Parameters
@@ -53,10 +51,12 @@ class Edge(aocutils.brep.base.BaseObject):
         if not isinstance(topods_edge, OCC.TopoDS.TopoDS_Edge):
             msg = 'Need a OCC.TopoDS.TopoDS_Edge, got a %s' % topods_edge.__class__
             logger.critical(msg)
-            raise aocutils.exceptions.WrongTopologicalType(msg)
-        assert not topods_edge.IsNull()
+            raise WrongTopologicalType(msg)
 
-        aocutils.brep.base.BaseObject.__init__(self, topods_edge, name='edge')
+        if topods_edge.IsNull():
+            raise ValueError("topods_edge should no be Null")
+
+        BaseObject.__init__(self, topods_edge, name='edge')
 
         self._adaptor = None
         self._brep_local_props = None
@@ -131,10 +131,16 @@ class Edge(aocutils.brep.base.BaseObject):
         Returns
         -------
         int
-            enum GeomAbs_Shape {GeomAbs_C0, GeomAbs_G1, GeomAbs_C1, GeomAbs_G2, GeomAbs_C2, GeomAbs_C3, GeomAbs_CN}
+            enum GeomAbs_Shape {GeomAbs_C0, GeomAbs_G1, GeomAbs_C1, GeomAbs_G2,
+                                GeomAbs_C2, GeomAbs_C3, GeomAbs_CN}
 
         """
-        continuities = ["GeomAbs_C0", "GeomAbs_G1", "GeomAbs_C1", "GeomAbs_G2", "GeomAbs_C2", "GeomAbs_C3",
+        continuities = ["GeomAbs_C0",
+                        "GeomAbs_G1",
+                        "GeomAbs_C1",
+                        "GeomAbs_G2",
+                        "GeomAbs_C2",
+                        "GeomAbs_C3",
                         "GeomAbs_CN"]
         return continuities[self.adaptor.Continuity()]
 
@@ -150,7 +156,8 @@ class Edge(aocutils.brep.base.BaseObject):
         if 'line' in self.geom_type:
             return 1
         elif 'curve' in self.geom_type:
-            # TODO : degenerated edge of sphere (degenerated to a point) has an 'othercurve' geom type
+            # TODO : degenerated edge of sphere (degenerated to a point)
+            #        has an 'othercurve' geom type
             return self.adaptor.Degree()
         else:
             return 2  # hyperbola, parabola, circle
@@ -273,7 +280,7 @@ class Edge(aocutils.brep.base.BaseObject):
 
 
         """
-        return aocutils.types.geom_lut[self.adaptor.Curve().GetType()]
+        return geom_lut[self.adaptor.Curve().GetType()]
 
     def pcurve(self, face):
         r"""2d parametric spline that lies on the surface of the face
@@ -289,7 +296,8 @@ class Edge(aocutils.brep.base.BaseObject):
         v
 
         """
-        crv, u, v = OCC.BRep.BRep_Tool().CurveOnSurface(self._wrapped_instance, face)
+        crv, u, v = OCC.BRep.BRep_Tool().CurveOnSurface(self._wrapped_instance,
+                                                        face)
         return crv.GetObject(), u, v
 
     @property
@@ -313,7 +321,9 @@ class Edge(aocutils.brep.base.BaseObject):
 
         """
         if self._brep_local_props is None:
-            self._brep_local_props = OCC.BRepLProp.BRepLProp_CLProps(self.adaptor, 2, self.tolerance)
+            self._brep_local_props = OCC.BRepLProp.BRepLProp_CLProps(self.adaptor,
+                                                                     2,
+                                                                     self.tolerance)
         return self._brep_local_props
 
     @property
@@ -336,10 +346,14 @@ class Edge(aocutils.brep.base.BaseObject):
     def domain_end(self):
         return self.domain[1]
 
-    def length(self, lbound=None, ubound=None, tolerance=aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE):
+    def length(self,
+               lbound=None,
+               ubound=None,
+               tolerance=OCCUTILS_DEFAULT_TOLERANCE):
         r"""Curve length
 
-        If either lbound | ubound | both are given, than the length of the curve will be measured over that interval
+        If either lbound | ubound | both are given, thae the length 
+        of the curve will be measured over that interval
 
         Parameters
         ----------
@@ -357,16 +371,19 @@ class Edge(aocutils.brep.base.BaseObject):
         if _min < self.adaptor.FirstParameter():
             msg = 'the lbound argument is < to the first parameter of the curve: %s' % self.adaptor.FirstParameter()
             logger.error(msg)
-            raise aocutils.exceptions.ParameterOutOfDomainException(msg)
+            raise ParameterOutOfDomainException(msg)
 
         if _max > self.adaptor.LastParameter():
             msg = 'the ubound argument is > to the last parameter of the curve: %s' % self.adaptor.LastParameter()
             logger.error(msg)
-            raise aocutils.exceptions.ParameterOutOfDomainException(msg)
+            raise ParameterOutOfDomainException(msg)
 
         lbound = _min if lbound is None else lbound
         ubound = _max if ubound is None else ubound
-        return OCC.GCPnts.GCPnts_AbscissaPoint().Length(self.adaptor, lbound, ubound, tolerance)
+        return OCC.GCPnts.GCPnts_AbscissaPoint().Length(self.adaptor,
+                                                        lbound,
+                                                        ubound,
+                                                        tolerance)
 
     def trim(self, lbound, ubound):
         r"""Trim the curve
@@ -382,8 +399,10 @@ class Edge(aocutils.brep.base.BaseObject):
 
         """
         a, b = sorted([lbound, ubound])
-        trimmed_curve = OCC.Geom.Geom_TrimmedCurve(self.adaptor.Curve().Curve(), a, b).GetHandle()
-        return Edge(aocutils.brep.edge_make.edge(trimmed_curve))
+        trimmed_curve = OCC.Geom.Geom_TrimmedCurve(self.adaptor.Curve().Curve(),
+                                                   a,
+                                                   b).GetHandle()
+        return Edge(edge(trimmed_curve))
 
     def extend_by_point(self, pnt, continuity=3, after=True):
         r"""Extends the curve to point
@@ -399,7 +418,8 @@ class Edge(aocutils.brep.base.BaseObject):
         """
         if self.continuity > 3:
             raise ValueError('to extend you self.curve should be <= 3, is %s' % self.degree)
-        # return OCC.GeomLib.geomlib.ExtendCurveToPoint(self.curve, pnt, continuity, after)
+        # return OCC.GeomLib.geomlib.ExtendCurveToPoint(self.curve,
+        #                                               pnt, continuity, after)
         OCC.GeomLib.geomlib.ExtendCurveToPoint(self.curve, pnt, continuity, after)
 
     def closest(self, other):
@@ -415,7 +435,7 @@ class Edge(aocutils.brep.base.BaseObject):
             The minimal distance
 
         """
-        return aocutils.analyze.distance.MinimumDistance(self._wrapped_instance, other).minimum_distance
+        return MinimumDistance(self._wrapped_instance, other).minimum_distance
 
     def project_vertex(self, pnt_or_vertex):
         r"""Returns the closest orthogonal project on pnt on edge
@@ -430,10 +450,12 @@ class Edge(aocutils.brep.base.BaseObject):
 
         """
         if isinstance(pnt_or_vertex, OCC.TopoDS.TopoDS_Vertex):
-            pnt_or_vertex = aocutils.brep.vertex.Vertex.to_pnt(pnt_or_vertex)
+            pnt_or_vertex = Vertex.to_pnt(pnt_or_vertex)
 
-        project_point_on_curve = OCC.GeomAPI.GeomAPI_ProjectPointOnCurve(pnt_or_vertex, self.curve_handle)
-        return project_point_on_curve.LowerDistanceParameter(), project_point_on_curve.NearestPoint()
+        project_point_on_curve = OCC.GeomAPI.GeomAPI_ProjectPointOnCurve(pnt_or_vertex,
+                                                                         self.curve_handle)
+        return (project_point_on_curve.LowerDistanceParameter(),
+                project_point_on_curve.NearestPoint())
 
     def distance_on_curve(self, distance, close_parameter, estimate_parameter):
         r"""Returns the parameter if there is a parameter on the curve with a distance length from u
@@ -454,9 +476,12 @@ class Edge(aocutils.brep.base.BaseObject):
         OutOfBoundary
             if no such parameter exists
         """
-        abscissa_point = OCC.GCPnts.GCPnts_AbscissaPoint(self.adaptor, distance, close_parameter, estimate_parameter,
+        abscissa_point = OCC.GCPnts.GCPnts_AbscissaPoint(self.adaptor,
+                                                         distance,
+                                                         close_parameter,
+                                                         estimate_parameter,
                                                          1e-5)
-        with aocutils.common.AssertIsDone(abscissa_point, 'could not compute distance on curve'):
+        with AssertIsDone(abscissa_point, 'could not compute distance on curve'):
             return abscissa_point.Parameter()
 
     @property
@@ -485,7 +510,8 @@ class Edge(aocutils.brep.base.BaseObject):
         return (_min + _max) / 2.
 
     def divide_by_number_of_points(self, n_pts, lbound=None, ubound=None):
-        r"""Nested list of parameters and points on the edge at the requested interval [(param, gp_Pnt),...]
+        r"""Nested list of parameters and points on the edge 
+        at the requested interval [(param, gp_Pnt),...]
 
         Parameters
         ----------
@@ -509,7 +535,10 @@ class Edge(aocutils.brep.base.BaseObject):
             n_pts = 2
 
         try:
-            npts = OCC.GCPnts.GCPnts_UniformAbscissa(self.adaptor, n_pts, _lbound, _ubound)
+            npts = OCC.GCPnts.GCPnts_UniformAbscissa(self.adaptor,
+                                                     n_pts,
+                                                     _lbound,
+                                                     _ubound)
         except:
             logger.warning("OCC.GCPnts.GCPnts_UniformAbscissa failed")
 
@@ -523,7 +552,7 @@ class Edge(aocutils.brep.base.BaseObject):
         else:
             msg = 'GCPnts_UniformAbscissa is not done'
             logger.error(msg)
-            raise aocutils.exceptions.UniformAbscissaException(msg)
+            raise UniformAbscissaException(msg)
 
     def first_vertex(self):
         """First vertex
@@ -573,10 +602,12 @@ class Edge(aocutils.brep.base.BaseObject):
 
         """
         if self.is_line():
-            first, last = list(map(aocutils.brep.vertex.Vertex.to_pnt, [self.first_vertex(), self.last_vertex()]))
+            first, last = list(map(Vertex.to_pnt,
+                                   [self.first_vertex(), self.last_vertex()]))
             return OCC.gp.gp_Vec(first, last)
         else:
-            msg = "edge is not a line, hence no meaningful vector can be returned"
+            msg = "edge is not a line, " \
+                  "hence no meaningful vector can be returned"
             logger.error(msg)
             raise ValueError(msg)
 
@@ -584,7 +615,7 @@ class Edge(aocutils.brep.base.BaseObject):
         if not self.domain[0] <= u <= self.domain[1]:
             msg = "Parameter is outside of domain ranging from %s to %s" % (str(self.domain[0]), str(self.domain[0]))
             logger.error(msg)
-            raise aocutils.exceptions.ParameterOutOfDomainException(msg)
+            raise ParameterOutOfDomainException(msg)
         else:
             pass
 
@@ -615,7 +646,7 @@ class Edge(aocutils.brep.base.BaseObject):
         OCC.TopoDS.TopoDS_Shape
 
         """
-        return aocutils.fixes.fix_continuity(self._wrapped_instance, continuity)
+        return fix_continuity(self._wrapped_instance, continuity)
 
     def continuity_from_faces(self, f1, f2):
         r"""Continuity along self for 2 faces
@@ -655,7 +686,8 @@ class Edge(aocutils.brep.base.BaseObject):
         Returns
         -------
         bool
-            True if the edge has two pcurves on one surface ( in the case of a sphere for example... )
+            True if the edge has two pcurves on one surface
+            (in the case of a sphere for example... )
         """
         sae = OCC.ShapeAnalysis.ShapeAnalysis_Edge()
         return sae.IsSeam(self._wrapped_instance, face)
@@ -723,7 +755,7 @@ class Edge(aocutils.brep.base.BaseObject):
         except RuntimeError:
             msg = "Undefined radius for the edge"
             logger.error(msg)
-            raise aocutils.exceptions.UndefinedPropertyException(msg)
+            raise UndefinedPropertyException(msg)
 
     def curvature(self, u):
         r"""Curvature at u
@@ -743,7 +775,8 @@ class Edge(aocutils.brep.base.BaseObject):
 
     def tangent(self, u):
         r"""sets or gets ( iff vector ) the tangency at the u parameter
-        tangency can be constrained so when setting the tangency, you're constraining it in fact
+        tangency can be constrained so when setting the tangency, 
+        you're constraining it in fact
 
         Parameters
         ----------
@@ -852,7 +885,7 @@ class Edge(aocutils.brep.base.BaseObject):
         http://www.opencascade.org/org/forum/thread_1125/
 
         """
-        aocutils.display.display.show(self._wrapped_instance, "wx")
+        show(self._wrapped_instance, "wx")
 
     # @property
     # def geom_type(self):

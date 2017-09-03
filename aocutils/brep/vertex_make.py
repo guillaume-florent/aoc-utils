@@ -1,8 +1,6 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""core/vertex_make.py
-"""
+r"""Methods to make a vertex"""
 
 import functools
 import logging
@@ -13,9 +11,8 @@ import OCC.TopoDS
 import OCC.TopExp
 import OCC.ShapeBuild
 
-import aocutils.common
-import aocutils.exceptions
-import aocutils.brep.base
+from aocutils.common import AssertIsDone
+from aocutils.exceptions import NoCommonVertexException
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +31,7 @@ def vertex(*args):
 
     """
     vert = OCC.BRepBuilderAPI.BRepBuilderAPI_MakeVertex(*args)
-    with aocutils.common.AssertIsDone(vert, 'failed to produce vertex'):
+    with AssertIsDone(vert, 'failed to produce vertex'):
         result = vert.Vertex()
         vert.Delete()
         return result
@@ -60,4 +57,4 @@ def common_vertex(edg1, edg2):
     else:
         msg = "No common vertex found"
         logger.error(msg)
-        raise aocutils.exceptions.NoCommonVertexException(msg)
+        raise NoCommonVertexException(msg)
