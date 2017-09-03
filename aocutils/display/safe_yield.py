@@ -1,13 +1,6 @@
-#!/usr/bin/python
 # coding: utf-8
 
-r"""safe_yield.py
-
-Functions
----------
-safe_yield()
-
-"""
+r"""safe_yield.py"""
 
 from __future__ import print_function
 

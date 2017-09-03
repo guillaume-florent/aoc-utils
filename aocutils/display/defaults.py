@@ -1,16 +1,14 @@
-#!/usr/bin/python
 # coding: utf-8
 
 r"""default display options"""
 
 from __future__ import division
 
-import aocutils.display.backends
-import aocutils.display.color
+from aocutils.display.backends import available_backends
 
 backend = "wx"
 
-if backend not in aocutils.display.backends.available_backends():
+if backend not in available_backends():
     msg = "%s backend is not available" % backend
     # CORRECTED BUG : topology imports defaults (this file) and logger.error
     # is called before logging.basicConfig -> the logging format is not used

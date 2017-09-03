@@ -1,15 +1,6 @@
 # coding: utf-8
 
-r"""texture.py module of occutils
-
-Classes
--------
-    Texture
-        texture_scale()
-        texture_repeat()
-        texture_origin()
-
-"""
+r"""texture.py module of aocutils"""
 
 import os
 import os.path

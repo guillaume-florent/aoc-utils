@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # coding: utf-8
 
 r"""3D viewer as a wx Panel"""
@@ -13,8 +13,8 @@ import OCC.Display.wxDisplay
 import OCC.Quantity
 import OCC.AIS
 
-import aocutils.display.color
-import aocutils.display.topology
+from aocutils.display.color import color
+from aocutils.display.topology import solids, shells, faces, edges, wires
 
 
 class Wx3dViewer(wx.Panel):
@@ -60,9 +60,10 @@ class Wx3dViewer(wx.Panel):
         btn_view_fitall = self.create_bitmap_button(self.tools_panel,
                                                     "icons/fitall-16x16.png",
                                                     "Fit all")
-        btn_view_wireframe = self.create_bitmap_button(self.tools_panel,
-                                                       "icons/wireframe-16x16.png",
-                                                       "Wireframe")
+        btn_view_wireframe = self.create_bitmap_button(
+            self.tools_panel,
+            "icons/wireframe-16x16.png",
+            "Wireframe")
         btn_view_hlr = self.create_bitmap_button(self.tools_panel,
                                                  "icons/hlr-16x16.png",
                                                  "Hidden Line Removal")
@@ -71,16 +72,18 @@ class Wx3dViewer(wx.Panel):
                                                     "Shaded")
 
         # background colour
-        colour_select = wx.lib.colourselect.ColourSelect(self.tools_panel,
-                                                         -1,
-                                                         colour=viewer_background_color,
-                                                         size=(32, 16))
+        colour_select = wx.lib.colourselect.ColourSelect(
+            self.tools_panel,
+            -1,
+            colour=viewer_background_color,
+            size=(32, 16))
         colour_select.SetToolTip(wx.ToolTip("Background colour"))
 
         # export image
-        btn_export_image = self.create_bitmap_button(self.tools_panel,
-                                                     "icons/export_image-16x16.png",
-                                                     "Export to image")
+        btn_export_image = self.create_bitmap_button(
+            self.tools_panel,
+            "icons/export_image-16x16.png",
+            "Export to image")
 
         self.Bind(wx.EVT_BUTTON, self.on_view_left, btn_view_left)
         self.Bind(wx.EVT_BUTTON, self.on_view_right, btn_view_right)
@@ -119,21 +122,29 @@ class Wx3dViewer(wx.Panel):
         tools_sizer.Add(btn_export_image, 0, wx.ALL, 0)
 
         if show_topology_menu:
-            btn_topology_solid = self.create_bitmap_button(self.tools_panel,
-                                                           "icons/topology_solids-16x16.png",
-                                                           "Topology - Solids")
-            btn_topology_shells = self.create_bitmap_button(self.tools_panel,
-                                                            "icons/topology_shells-16x16.png",
-                                                            "Topology - Shells")
-            btn_topology_faces = self.create_bitmap_button(self.tools_panel,
-                                                           "icons/topology_faces-16x16.png",
-                                                           "Topology - Faces")
-            btn_topology_edges = self.create_bitmap_button(self.tools_panel,
-                                                           "icons/topology_edges-16x16.png",
-                                                           "Topology - Edges")
-            btn_topology_wires = self.create_bitmap_button(self.tools_panel,
-                                                           "icons/topology_wires-16x16.png",
-                                                           "Topology - Wires")
+            btn_topology_solid = self.create_bitmap_button(
+                self.tools_panel,
+                "icons/topology_solids-16x16.png",
+                "Topology - Solids")
+
+            btn_topology_shells = self.create_bitmap_button(
+                self.tools_panel,
+                "icons/topology_shells-16x16.png",
+                "Topology - Shells")
+
+            btn_topology_faces = self.create_bitmap_button(
+                self.tools_panel,
+                "icons/topology_faces-16x16.png",
+                "Topology - Faces")
+
+            btn_topology_edges = self.create_bitmap_button(
+                self.tools_panel,
+                "icons/topology_edges-16x16.png",
+                "Topology - Edges")
+            btn_topology_wires = self.create_bitmap_button(
+                self.tools_panel,
+                "icons/topology_wires-16x16.png",
+                "Topology - Wires")
 
             self.Bind(wx.EVT_BUTTON,
                       self.on_topology_solids,
@@ -141,7 +152,7 @@ class Wx3dViewer(wx.Panel):
             self.Bind(wx.EVT_BUTTON,
                       self.on_topology_shells,
                       btn_topology_shells)
-            self.Bind(wx.EVT_BUTTON,self.on_topology_faces, btn_topology_faces)
+            self.Bind(wx.EVT_BUTTON, self.on_topology_faces, btn_topology_faces)
             self.Bind(wx.EVT_BUTTON, self.on_topology_edges, btn_topology_edges)
             self.Bind(wx.EVT_BUTTON, self.on_topology_wires, btn_topology_wires)
 
@@ -176,7 +187,8 @@ class Wx3dViewer(wx.Panel):
         btn = wx.lib.buttons.GenBitmapButton(parent,
                                              wx.ID_ANY,
                                              img,
-                                             size=(img.GetWidth(), img.GetHeight()))
+                                             size=(img.GetWidth(),
+                                                   img.GetHeight()))
         btn.SetToolTip(wx.ToolTip(tooltip_str))
         return btn
 
@@ -197,7 +209,7 @@ class Wx3dViewer(wx.Panel):
                       shapes,
                       material=None,
                       texture=None,
-                      color=None,
+                      color_=None,
                       transparency=None,
                       update=False,
                       topology=True):
@@ -208,7 +220,7 @@ class Wx3dViewer(wx.Panel):
         shapes : list of OCC Shapes or single OCC Shape
         material
         texture
-        color
+        color_
         transparency : float between 0 and 1
         update : bool
         topology : bool
@@ -216,7 +228,7 @@ class Wx3dViewer(wx.Panel):
         self.viewer_display.DisplayShape(shapes,
                                          material=material,
                                          texture=texture,
-                                         color=color,
+                                         color=color_,
                                          transparency=transparency,
                                          update=update)
         if topology:
@@ -228,7 +240,7 @@ class Wx3dViewer(wx.Panel):
 
     def display_colored_shape(self,
                               shapes,
-                              color='YELLOW',
+                              color_='YELLOW',
                               update=False,
                               topology=True):
         r"""DisplayColoredShape and keep track of displayed shapes
@@ -236,12 +248,12 @@ class Wx3dViewer(wx.Panel):
         Parameters
         ----------
         shapes : list of OCC Shapes or single OCC Shape
-        color
+        color_
         update : bool
         topology : bool
 
         """
-        self.viewer_display.DisplayColoredShape(shapes, color, update)
+        self.viewer_display.DisplayColoredShape(shapes, color_, update)
         if topology:
             if isinstance(shapes, list):
                 for shape in shapes:
@@ -251,7 +263,7 @@ class Wx3dViewer(wx.Panel):
 
     def display_ais_shape(self,
                           shapes,
-                          color=OCC.Quantity.Quantity_NOC_MATRABLUE,
+                          color_=OCC.Quantity.Quantity_NOC_MATRABLUE,
                           transparency=0.8,
                           topology=True):
         r"""Display shapes using AIS and keep track of displayed shapes
@@ -259,15 +271,15 @@ class Wx3dViewer(wx.Panel):
         Parameters
         ----------
         shapes : list of OCC Shapes or single OCC Shape
-        color : OCC.Quantity
+        color_ : OCC.Quantity
         transparency : bool
         topology : bool
 
         """
-        def display_ais(shape):
-            ais_shp = OCC.AIS.AIS_Shape(shape)
+        def display_ais(shape_):
+            ais_shp = OCC.AIS.AIS_Shape(shape_)
             ais_shp.SetTransparency(transparency)
-            ais_shp.SetColor(color)
+            ais_shp.SetColor(color_)
             ais_context = self.viewer_display.GetContext().GetObject()
             ais_context.Display(ais_shp.GetHandle())
 
@@ -398,9 +410,7 @@ class Wx3dViewer(wx.Panel):
                            viewer_background_color=self.background_color,
                            show_topology_menu=False)
         for shape in self._shapes:
-            aocutils.display.topology.solids(panel.viewer_display,
-                                             shape,
-                                             transparency=0.5)
+            solids(panel.viewer_display, shape, transparency=0.5)
         dialog.ShowModal()
 
     def on_topology_shells(self, event):
@@ -410,9 +420,7 @@ class Wx3dViewer(wx.Panel):
                            viewer_background_color=self.background_color,
                            show_topology_menu=False)
         for shape in self._shapes:
-            aocutils.display.topology.shells(panel.viewer_display,
-                                             shape,
-                                             transparency=0.5)
+            shells(panel.viewer_display, shape, transparency=0.5)
         dialog.ShowModal()
 
     def on_topology_faces(self, event):
@@ -422,9 +430,7 @@ class Wx3dViewer(wx.Panel):
                            viewer_background_color=self.background_color,
                            show_topology_menu=False)
         for shape in self._shapes:
-            aocutils.display.topology.faces(panel.viewer_display,
-                                            shape,
-                                            transparency=0.5)
+            faces(panel.viewer_display, shape, transparency=0.5)
         dialog.ShowModal()
 
     def on_topology_edges(self, event):
@@ -435,7 +441,7 @@ class Wx3dViewer(wx.Panel):
                            show_topology_menu=False)
 
         for shape in self._shapes:
-            aocutils.display.topology.edges(panel.viewer_display, shape)
+            edges(panel.viewer_display, shape)
         dialog.ShowModal()
 
     def on_topology_wires(self, event):
@@ -454,7 +460,7 @@ class Wx3dViewer(wx.Panel):
         # cannot show model after displaying
         dialog.Show()
         for shape in self._shapes:
-            aocutils.display.topology.wires(panel.viewer_display, shape)
+            wires(panel.viewer_display, shape)
             self.Refresh()
         # dialog.ShowModal()
 
@@ -469,7 +475,7 @@ def colour_wx_to_occ(wx_colour):
 
     """
     r, g, b = wx_colour  # 255
-    return aocutils.display.color.color(r / 255., g / 255., b / 255.)  # 1
+    return color(r / 255., g / 255., b / 255.)  # 1
 
 
 if __name__ == "__main__":

@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # coding: utf-8
 
 r"""
@@ -30,7 +29,7 @@ from PyQt4 import QtCore, QtGui, QtOpenGL
 
 import OCC.Display.qtDisplay
 
-import aocutils.display.color
+from aocutils.display.color import color
 
 
 # class PicButton(QtGui.QAbstractButton):
@@ -155,7 +154,7 @@ def colour_qt_to_occ(qt_colour):
 
     """
     r, g, b = qt_colour  # 255
-    return aocutils.display.color.color(r / 255., g / 255., b / 255.)  # 1
+    return color(r / 255., g / 255., b / 255.)  # 1
 
 
 if __name__ == '__main__':
