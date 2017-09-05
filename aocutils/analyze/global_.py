@@ -4,8 +4,9 @@ r"""Global analysis properties"""
 
 import logging
 
-import OCC.GProp
-import OCC.BRepGProp
+from OCC.GProp import GProp_GProps
+from OCC.BRepGProp import brepgprop_LinearProperties, \
+    brepgprop_SurfaceProperties, brepgprop_VolumeProperties
 
 from aocutils.types import topo_lut
 from aocutils.exceptions import WrongTopologicalType
@@ -49,14 +50,14 @@ class GlobalProperties(object):
         OCC.GProp.GProp_GProps
 
         """
-        self._system = OCC.GProp.GProp_GProps()
+        self._system = GProp_GProps()
 
         if self._topo_type in GlobalProperties.surfacic_types:
-            OCC.BRepGProp.brepgprop_SurfaceProperties(self.shape, self._system)
+            brepgprop_SurfaceProperties(self.shape, self._system)
         elif self._topo_type in GlobalProperties.linear_types:
-            OCC.BRepGProp.brepgprop_LinearProperties(self.shape, self._system)
+            brepgprop_LinearProperties(self.shape, self._system)
         elif self._topo_type in GlobalProperties.volumic_types:
-            OCC.BRepGProp.brepgprop_VolumeProperties(self.shape, self._system)
+            brepgprop_VolumeProperties(self.shape, self._system)
         else:
             msg = "ShapeType is not linear, surfacic or volumic"
             logger.error(msg)

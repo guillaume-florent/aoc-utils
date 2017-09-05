@@ -2,9 +2,13 @@
 
 r"""distance"""
 
-import OCC.BRepExtrema
+import logging
+
+from OCC.BRepExtrema import BRepExtrema_DistShapeShape
 
 from aocutils.common import AssertIsDone
+
+logger = logging.getLogger(__name__)
 
 
 class MinimumDistance(object):
@@ -17,8 +21,7 @@ class MinimumDistance(object):
 
     """
     def __init__(self, shape_1, shape_2):
-        dist_shape_shape = OCC.BRepExtrema.BRepExtrema_DistShapeShape(shape_1,
-                                                                      shape_2)
+        dist_shape_shape = BRepExtrema_DistShapeShape(shape_1, shape_2)
         dist_shape_shape.Perform()
 
         with AssertIsDone(dist_shape_shape,
@@ -48,7 +51,12 @@ class MinimumDistance(object):
         Returns
         -------
         list[tuple[OCC.gp.gp_Pnt]]"""
-        assert self._nb_solutions == len(self._points_pairs)
+        if self._nb_solutions != len(self._points_pairs):
+            msg = "Number of solutions and number of point pairs " \
+                  "should be equal"
+            logger.error(msg)
+            raise RuntimeError(msg)
+        # assert self._nb_solutions == len(self._points_pairs)
         return self._points_pairs
 
     @property
@@ -60,5 +68,10 @@ class MinimumDistance(object):
         int
 
         """
-        assert self._nb_solutions == len(self._points_pairs)
+        if self._nb_solutions != len(self._points_pairs):
+            msg = "Number of solutions and number of point pairs " \
+                  "should be equal"
+            logger.error(msg)
+            raise RuntimeError(msg)
+        # assert self._nb_solutions == len(self._points_pairs)
         return self._nb_solutions

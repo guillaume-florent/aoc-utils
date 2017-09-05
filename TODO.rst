@@ -1,3 +1,11 @@
+BUGS
+====
+
+- 1 test related to analyze/bounds.py BetterBoundingBox not passing ( test_better_bounds_complex_shape())
+
+
+EVOLUTIONS & ENHANCEMENTS
+=========================
 
 General
 -------

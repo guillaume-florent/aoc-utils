@@ -5,18 +5,15 @@ r"""Bounding box analysis"""
 import abc
 import logging
 
-import OCC.Bnd
-import OCC.BRepBndLib
-import OCC.gp
+from OCC.Bnd import Bnd_Box
+from OCC.BRepBndLib import brepbndlib_Add
 from OCC.gp import gp_Pnt
-import OCC.TopoDS
+from OCC.TopoDS import TopoDS_Shape
 
 from aocutils.brep.face_make import from_points
 from aocutils.geom.point import Point
 from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
 from aocutils.exceptions import WrongTopologicalType
-# import aocutils.brep.base
-# import aocutils.mesh
 from aocutils.operations.boolean import common
 from aocutils.topology import Topo
 
@@ -109,7 +106,8 @@ class BoundingBox(AbstractBoundingBox):
 
     """
     def __init__(self, shape, tol=OCCUTILS_DEFAULT_TOLERANCE):
-        if isinstance(shape, OCC.TopoDS.TopoDS_Shape) or issubclass(shape.__class__, OCC.TopoDS.TopoDS_Shape):
+        if isinstance(shape, TopoDS_Shape) or issubclass(shape.__class__,
+                                                         TopoDS_Shape):
             self._shape = shape
         else:
             msg = "Expecting a TopoDS_Shape (or a subclass), " \
@@ -118,9 +116,9 @@ class BoundingBox(AbstractBoundingBox):
             raise WrongTopologicalType(msg)
         # self._shape = shape
         self._tol = tol
-        self._bbox = OCC.Bnd.Bnd_Box()
+        self._bbox = Bnd_Box()
         self._bbox.SetGap(tol)
-        OCC.BRepBndLib.brepbndlib_Add(self._shape, self._bbox)
+        brepbndlib_Add(self._shape, self._bbox)
         self._x_min, self._y_min, self._z_min, self._x_max, self._y_max, self._z_max = self._bbox.Get()
 
     @property
@@ -206,11 +204,11 @@ class BoundingBox(AbstractBoundingBox):
 
         Returns
         -------
-        OCC.gp.gp_Pnt
+        gp_Pnt
 
         """
-        return Point.midpoint(OCC.gp.gp_Pnt(self.x_min, self.y_min, self.z_min),
-                              OCC.gp.gp_Pnt(self.x_max, self.y_max, self.z_max))
+        return Point.midpoint(gp_Pnt(self.x_min, self.y_min, self.z_min),
+                              gp_Pnt(self.x_max, self.y_max, self.z_max))
 
 
 def build_plane_at_x(x, shape):
@@ -339,8 +337,10 @@ def real_bb_position(axis, side, start_position, shape, increment=0.01):
         for the specified axis and side ("MIN" or "MAX")
 
     """
-    assert axis in ["X", "Y", "Z"]
-    assert side in ["MIN", "MAX"]
+    if axis not in ["X", "Y", "Z"]:
+        raise ValueError("axis must be 'X', 'Y' or 'Z'")
+    if side not in ["MIN", "MAX"]:
+        raise ValueError("side must be 'MIN' or 'MAX'")
 
     plane_builders = {"X": build_plane_at_x,
                       "Y": build_plane_at_y,
@@ -378,6 +378,22 @@ class BetterBoundingBox(AbstractBoundingBox):
 
     The BoundingBox is used as a starting point 
     for a more precise determination of the bounds.
+    
+    Notes
+    -----
+    The OCC bounding box is always wider or equal to the real bounding box.
+    Hence the need for a workaround.
+    The bounding box workaround is useful for complex shapes,
+    not for simple primitives like sphere, box ...
+    
+    Potential improvements
+    ----------------------
+    The algorithm could be faster by using dichotomy rather than linear movement
+    of the plane that is tested for intersection with the shape
+    The improvement would be useful if this workaround is to be used 
+    in waterline
+    When used to generate hull offsets, BetterBoundingBox is slow when the 
+    increment is smaller than 10e-2 but we can live with it in the meantime
 
     Parameters
     ----------
@@ -387,7 +403,8 @@ class BetterBoundingBox(AbstractBoundingBox):
 
     """
     def __init__(self, shape, tol=0.01):
-        if isinstance(shape, OCC.TopoDS.TopoDS_Shape) or issubclass(shape.__class__, OCC.TopoDS.TopoDS_Shape):
+        if isinstance(shape, TopoDS_Shape) or issubclass(shape.__class__,
+                                                         TopoDS_Shape):
             self._shape = shape
         else:
             msg = "Expecting a TopoDS_Shape (or a subclass), got a %s" % str(shape.__class__)
@@ -501,5 +518,5 @@ class BetterBoundingBox(AbstractBoundingBox):
         OCC.gp.gp_Pnt
 
         """
-        return Point.midpoint(OCC.gp.gp_Pnt(self.x_min, self.y_min, self.z_min),
-                              OCC.gp.gp_Pnt(self.x_max, self.y_max, self.z_max))
+        return Point.midpoint(gp_Pnt(self.x_min, self.y_min, self.z_min),
+                              gp_Pnt(self.x_max, self.y_max, self.z_max))

@@ -4,8 +4,8 @@ r"""Inclusion of points in bounding box and in solid"""
 
 import logging
 
-import OCC.BRepClass3d
-import OCC.TopAbs
+from OCC.BRepClass3d import BRepClass3d_SolidClassifier
+from OCC.TopAbs import TopAbs_ON, TopAbs_OUT, TopAbs_IN
 
 from aocutils.analyze.bounds import BoundingBox
 from aocutils.types import topo_lut
@@ -58,13 +58,11 @@ def point_in_solid(shape, pnt, tolerance=OCCUTILS_DEFAULT_TOLERANCE):
         logger.error(msg)
         raise WrongTopologicalType(msg)
 
-    _in_solid = OCC.BRepClass3d.BRepClass3d_SolidClassifier(shape,
-                                                            pnt,
-                                                            tolerance)
+    _in_solid = BRepClass3d_SolidClassifier(shape, pnt, tolerance)
     logger.info('State : %s' % str(_in_solid.State()))
-    if _in_solid.State() == OCC.TopAbs.TopAbs_ON:
+    if _in_solid.State() == TopAbs_ON:
         return None
-    if _in_solid.State() == OCC.TopAbs.TopAbs_OUT:
+    if _in_solid.State() == TopAbs_OUT:
         return False
-    if _in_solid.State() == OCC.TopAbs.TopAbs_IN:
+    if _in_solid.State() == TopAbs_IN:
         return True
