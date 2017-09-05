@@ -18,7 +18,8 @@ from aocutils.brep.edge_make import line
 from aocutils.brep.wire_make import wire
 from aocutils.brep.face_make import face
 
-from aocutils.analyze.bounds import BoundingBox, BetterBoundingBox
+from aocutils.analyze.bounds import BoundingBox, BetterBoundingBox, \
+    stl_bounding_box
 from aocutils.analyze.distance import MinimumDistance
 from aocutils.analyze.global_ import GlobalProperties
 from aocutils.analyze.inclusion import point_in_boundingbox, point_in_solid
@@ -282,3 +283,36 @@ def test_inclusion():
                                                sphere_radius - 1.,
                                                sphere_radius - 1.)) is False
     assert point_in_solid(sphere_shell, gp_Pnt(sphere_radius, 0, 0)) is None
+
+
+def test_stl_bounding_box():
+    r"""Test the computation of the STL bounding box"""
+    bb_ascii = stl_bounding_box("test_files/board.stl")
+    bb_binary = stl_bounding_box("test_files/board_binary.stl")
+    tolerance = 1e-8
+
+    # Known values
+    assert bb_ascii == ((0.12775, 0.21175),
+                        (-0.00252084, 0.00252084),
+                        (0.01, 0.31))
+
+    # Test the bounding box is the same for the ascii and the binary files
+    # that describe the same geometry
+    x_ascii, y_ascii, z_ascii = bb_ascii
+    x_min_ascii, x_max_ascii = x_ascii
+    y_min_ascii, y_max_ascii = y_ascii
+    z_min_ascii, z_max_ascii = z_ascii
+
+    x_binary, y_binary, z_binary = bb_binary
+    x_min_binary, x_max_binary = x_binary
+    y_min_binary, y_max_binary = y_binary
+    z_min_binary, z_max_binary = z_binary
+
+    assert x_min_ascii - tolerance <= x_min_binary <= x_min_ascii + tolerance
+    assert x_max_ascii - tolerance <= x_max_binary <= x_max_ascii + tolerance
+
+    assert y_min_ascii - tolerance <= y_min_binary <= y_min_ascii + tolerance
+    assert y_max_ascii - tolerance <= y_max_binary <= y_max_ascii + tolerance
+
+    assert z_min_ascii - tolerance <= z_min_binary <= z_min_ascii + tolerance
+    assert z_max_ascii - tolerance <= z_max_binary <= z_max_ascii + tolerance
