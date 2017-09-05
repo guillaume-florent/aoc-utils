@@ -4,11 +4,15 @@ r"""Bounding box analysis"""
 
 import abc
 import logging
+import re
+import struct
 
 from OCC.Bnd import Bnd_Box
 from OCC.BRepBndLib import brepbndlib_Add
 from OCC.gp import gp_Pnt
 from OCC.TopoDS import TopoDS_Shape
+
+from corelib.core.files import is_binary
 
 from aocutils.brep.face_make import from_points
 from aocutils.geom.point import Point
@@ -407,7 +411,8 @@ class BetterBoundingBox(AbstractBoundingBox):
                                                          TopoDS_Shape):
             self._shape = shape
         else:
-            msg = "Expecting a TopoDS_Shape (or a subclass), got a %s" % str(shape.__class__)
+            msg = "Expecting a TopoDS_Shape (or a subclass), " \
+                  "got a %s" % str(shape.__class__)
             logger.error(msg)
             raise WrongTopologicalType(msg)
         # self._shape = shape
@@ -520,3 +525,90 @@ class BetterBoundingBox(AbstractBoundingBox):
         """
         return Point.midpoint(gp_Pnt(self.x_min, self.y_min, self.z_min),
                               gp_Pnt(self.x_max, self.y_max, self.z_max))
+
+
+def stl_bounding_box(path_to_stl):
+    """Reads an ascii or binary STL file to determine its bounding box
+
+    Parameters
+    ----------
+    path_to_stl : str
+        Path to the stl file
+
+    References
+    ----------
+    http://stackoverflow.com/questions/7566825/python-parsing-binary-stl-file
+    http://sukhbinder.wordpress.com/2013/11/28/
+                              binary-stl-file-reader-in-python-powered-by-numpy/
+    """
+
+    xmin, xmax = 1e12, -1e12
+    ymin, ymax = 1e12, -1e12
+    zmin, zmax = 1e12, -1e12
+
+    binary = is_binary(path_to_stl)
+
+    if binary:
+
+        def unpack(fi, sig, l):
+            s = fi.read(l)
+            return struct.unpack(sig, s)
+
+        f = open(path_to_stl, 'rb')
+
+        logger.info('Reading binary stl file : %s' % path_to_stl)
+
+        f.seek(f.tell() + 80)  # read header
+        l = struct.unpack("@i", f.read(4))[0]
+
+        try:
+            while True:
+                n = unpack(f, "<3f", 12)
+                p1 = unpack(f, "<3f", 12)
+                p2 = unpack(f, "<3f", 12)
+                p3 = unpack(f, "<3f", 12)
+                b = unpack(f, "<h", 2)
+                numbers = [tuple(p1), tuple(p2), tuple(p3)]
+                for number in numbers:
+                    x, y, z = number[0], number[1], number[2]
+                    if x < xmin:
+                        xmin = x
+                    if x > xmax:
+                        xmax = x
+                    if y < ymin:
+                        ymin = y
+                    if y > ymax:
+                        ymax = y
+                    if z < zmin:
+                        zmin = z
+                    if z > zmax:
+                        zmax = z
+        except struct.error as e:
+            logger.info('Finished reading binary stl file')
+
+    else:
+        lines = open(path_to_stl, 'r').readlines()
+
+        logger.info('Reading ascii stl file : %s' % path_to_stl)
+
+        for line in lines:
+            if 'vertex' in line:
+                # split the cleaned up line
+                s = re.sub(' +', ' ', line.strip()).split(' ')
+                x, y, z = float(s[1]), float(s[2]), float(s[3])
+                if x < xmin:
+                    xmin = x
+                if x > xmax:
+                    xmax = x
+                if y < ymin:
+                    ymin = y
+                if y > ymax:
+                    ymax = y
+                if z < zmin:
+                    zmin = z
+                if z > zmax:
+                    zmax = z
+
+        logger.info('Finished reading ascii stl file')
+
+    return (xmin, xmax), (ymin, ymax), (zmin, zmax)
