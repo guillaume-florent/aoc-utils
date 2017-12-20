@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 def solids(display,
            shape,
            transparency=0.,
-           color_sequence=prism_color_sequence):
+           color_sequence=None):
     r"""Display each solid of shape in a different color
 
     Parameters
@@ -31,6 +31,8 @@ def solids(display,
     color_sequence : aocutils.display.color.*_sequence
 
     """
+    if color_sequence is None:
+        color_sequence = prism_color_sequence
     the_solids = Topo(shape, return_iter=False).solids
     logger.info("%i solid(s) to display" % len(the_solids))
     ais_context = display.GetContext().GetObject()
@@ -45,7 +47,7 @@ def solids(display,
 def shells(display,
            shape,
            transparency=0.,
-           color_sequence=prism_color_sequence):
+           color_sequence=None):
     r"""Display each shell of shape in a different color
 
     Parameters
@@ -57,6 +59,8 @@ def shells(display,
     color_sequence : aocutils.display.color.*_sequence
 
     """
+    if color_sequence is None:
+        color_sequence = prism_color_sequence
     the_shells = Topo(shape, return_iter=False).shells
     logger.info("%i shell(s) to display" % len(the_shells))
     ais_context = display.GetContext().GetObject()
@@ -73,7 +77,7 @@ def faces(display,
           transparency=0.,
           show_numbers=True,
           numbers_height=20,
-          color_sequence=prism_color_sequence):
+          color_sequence=None):
     r"""Display each face of shape in a different color
 
     Parameters
@@ -89,6 +93,8 @@ def faces(display,
     color_sequence : aocutils.display.color.*_sequence
 
     """
+    if color_sequence is None:
+        color_sequence = prism_color_sequence
     the_faces = Topo(shape, return_iter=False).faces
     logger.info("%i face(s) to display" % len(the_faces))
     ais_context = display.GetContext().GetObject()
@@ -110,7 +116,7 @@ def edges(display,
           width=4,
           show_numbers=True,
           numbers_height=20,
-          color_sequence=prism_color_sequence):
+          color_sequence=None):
     r"""Display each edge of shape in a different color
 
     Parameters
@@ -127,6 +133,8 @@ def edges(display,
     color_sequence : aocutils.display.color.*_sequence
 
     """
+    if color_sequence is None:
+        color_sequence = prism_color_sequence
     the_edges = Topo(shape, return_iter=False).edges
     logger.info("%i edges(s) to display" % len(the_edges))
     ais_context = display.GetContext().GetObject()
@@ -150,7 +158,7 @@ def wires(display,
           numbers_height=50,
           repeat=2,
           delay=1.,
-          color_sequence=prism_color_sequence):
+          color_sequence=None):
     r"""Display each edge of shape in a different color
 
     Parameters
@@ -172,11 +180,13 @@ def wires(display,
 
     Notes
     -----
-    Wires may overlap or a wire may cover another because one or more wires 
-    use the same edge. This causes the display of wires to be confusing. 
+    Wires may overlap or a wire may cover another because one or more wires
+    use the same edge. This causes the display of wires to be confusing.
     This is the reason why this function displays each wire in turn.
 
     """
+    if color_sequence is None:
+        color_sequence = prism_color_sequence
     the_wires = Topo(shape, return_iter=False).wires
     logger.info("%i wire(s) to display" % len(the_wires))
     ais_context = display.GetContext().GetObject()

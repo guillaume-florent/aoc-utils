@@ -12,7 +12,7 @@ import OCC.BRep
 import OCC.TopAbs
 import OCC.Geom
 
-from aocutils.exceptions import WrongTopologicalType
+# from aocutils.exceptions import WrongTopologicalType
 
 PY3 = not (int(sys.version.split('.')[0]) <= 2)
 
@@ -126,7 +126,7 @@ brep_check_dict = {OCC.BRepCheck.BRepCheck_NoError: "NoError",
 
 
 class BidirDict(dict):
-    """Bi-directional dictionnary
+    """Bi-directional dictionary
 
     Parameters
     ----------
@@ -135,7 +135,8 @@ class BidirDict(dict):
 
     Raises
     ------
-    KeyError if a duplicate value exists (as values must also be able to behave as keys)
+    KeyError if a duplicate value exists (as values must 
+    also be able to behave as keys)
 
     """
     def __init__(self, iterable=(), **kwargs):

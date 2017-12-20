@@ -1,8 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # coding: utf-8
 
-r"""pretty_print examples
-"""
+r"""pretty_print examples"""
 
 
 from __future__ import print_function
@@ -20,8 +19,8 @@ print(aocutils.pretty_print.gp_pnt_print(point))
 vec = OCC.gp.gp_Vec(1, 2, 3)
 print(aocutils.pretty_print.gp_vec_print(vec))
 
-dir = OCC.gp.gp_Dir(1, 2, 3)
-ax1 = OCC.gp.gp_Ax1(point, dir)
+direction = OCC.gp.gp_Dir(1, 2, 3)
+ax1 = OCC.gp.gp_Ax1(point, direction)
 print(aocutils.pretty_print.gp_ax1_print(ax1))
 
 

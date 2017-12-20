@@ -23,7 +23,7 @@ class UndefinedPropertyException(AocUtilsException):
 
 
 class ParameterOutOfDomainException(AocUtilsException):
-    r"""A function was invoked with a parameter outside 
+    r"""A function was invoked with a parameter outside
     of the object parameter domain"""
     pass
 

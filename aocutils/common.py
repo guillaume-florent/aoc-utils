@@ -4,7 +4,7 @@ r"""functions and classes common to all modules"""
 
 
 class AssertIsDone(object):
-    r"""Raises an assertion error when IsDone() returns False, 
+    r"""Raises an assertion error when IsDone() returns False,
     with the error specified in error_statement
 
     This is a context manager.

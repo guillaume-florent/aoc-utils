@@ -115,12 +115,12 @@ def plane(center=OCC.gp.gp_Pnt(0, 0, 0),
 
 
 def n_sided(edges, points, continuity=OCC.GeomAbs.GeomAbs_C0):
-    r"""Builds an n-sided patch, respecting the constraints defined 
+    r"""Builds an n-sided patch, respecting the constraints defined
     by *edges* and *points*
 
     A simplified call to the BRepFill_Filling class
 
-    It is simplified in the sense that to all constraining edges and points 
+    It is simplified in the sense that to all constraining edges and points
     the same level of *continuity* will be applied
 
     Parameters
@@ -130,12 +130,12 @@ def n_sided(edges, points, continuity=OCC.GeomAbs.GeomAbs_C0):
     points
         the constraining points
     continuity : GeomAbs_0, 1, 2
-                 GeomAbs_C0 : the surface has to pass by 3D representation 
+                 GeomAbs_C0 : the surface has to pass by 3D representation
                               of the edge
-                 GeomAbs_G1 : the surface has to pass by 3D representation 
+                 GeomAbs_G1 : the surface has to pass by 3D representation
                               of the edge and to respect tangency with
                               the given face
-                 GeomAbs_G2 : the surface has to pass by 3D representation 
+                 GeomAbs_G2 : the surface has to pass by 3D representation
                               of the edge and to respect tangency and
                               curvature with the given face.
 

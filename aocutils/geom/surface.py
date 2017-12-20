@@ -19,8 +19,7 @@ class Surface(object):
     def from_handle(cls, handle):
         r"""Create the Surface object from a surface handle"""
         # TODO : check handle type
-        obj = cls()
-        obj._surface = handle.GetObject()
+        obj = cls(handle.GetObject())
         return obj
 
     @property

@@ -8,7 +8,7 @@ import OCC.Display.SimpleGui
 
 
 def safe_yield():
-    r"""Reimplementation of the safe_yield() function 
+    r"""Reimplementation of the safe_yield() function
     that once existed in OCC.Display.SimpleGui"""
     if OCC.Display.SimpleGui.get_backend() == 'wx':
         # This function (SafeYield) is similar to `wx.Yield`,

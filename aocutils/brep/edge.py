@@ -16,7 +16,6 @@ import OCC.gp
 import OCC.GeomLProp
 import OCC.BRepLProp
 import OCC.GeomLib
-import OCC.GCPnts
 import OCC.GeomAPI
 import OCC.ShapeAnalysis
 import OCC.BRep
@@ -539,7 +538,7 @@ class Edge(BaseObject):
                                                      n_pts,
                                                      _lbound,
                                                      _ubound)
-        except:
+        except:  # TODO : specify exceptions
             logger.warning("OCC.GCPnts.GCPnts_UniformAbscissa failed")
 
         if npts.IsDone():

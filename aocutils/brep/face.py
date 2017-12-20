@@ -543,7 +543,7 @@ class Face(BaseObject):
         """
         if hasattr(edg, 'adaptor'):
             return self.project_curve(self.adaptor)
-        return self.project_curve(Edge(edg).adaptor())
+        return self.project_curve(Edge(edg).adaptor)
 
     def iso_curve(self, u_or_v, param):
         r"""Get the iso curve from a u,v + parameter
@@ -751,9 +751,9 @@ class Face(BaseObject):
             return (OCC.gp.gp_Vec(du.X(),
                                   du.Y(),
                                   du.Z()),
-                   OCC.gp.gp_Vec(dv.X(),
-                                 dv.Y(),
-                                 dv.Z()))
+                    OCC.gp.gp_Vec(dv.X(),
+                                  dv.Y(),
+                                  dv.Z()))
         else:
             msg = 'Tangent not defined in U or V'
             logger.error(msg)

@@ -27,18 +27,20 @@ class EdgePairsFromWire(object):
         self.wire = wire
         self.edge_pairs = list()
         self.prev_edge = None
-        self.wire_explorer = WireExplorer(self.wire).ordered_edges()
+        self.wire_explorer = WireExplorer(self.wire).ordered_edges
         self.number_of_edges = self.wire_explorer.__length_hint__()
         self.previous_edge = None
         self.current_edge = None
         self.first_edge = None
         self.index = 0
 
-    def next(self):
-        r"""next() method to make EdgePairsFromWire an iterable
+    def __next__(self):
+        r"""__next__() method to make EdgePairsFromWire an iterable
 
         Returns
         -------
+        list
+            List of 2 edges
 
         """
         if self.index == 0:
@@ -61,6 +63,9 @@ class EdgePairsFromWire(object):
     def __iter__(self):
         return self
 
+    # 2 / 3 compatibility
+    next = __next__
+
 
 class LoopWirePairs(object):
     r"""For looping through consecutive wires assures 
@@ -80,11 +85,11 @@ class LoopWirePairs(object):
         self.topo_a = Topo(self.wireA)
         self.topo_b = Topo(self.wireB)
         self.brep_tool = OCC.BRep.BRep_Tool()
-        self.vertices_a = [v for v in self.wire_explorer_a.ordered_vertices()]
-        self.vertices_b = [v for v in self.wire_explorer_b.ordered_vertices()]
+        self.vertices_a = [v for v in self.wire_explorer_a.ordered_vertices]
+        self.vertices_b = [v for v in self.wire_explorer_b.ordered_vertices]
 
-        self.edges_a = [v for v in WireExplorer(wire_a).ordered_edges()]
-        self.edges_b = [v for v in WireExplorer(wire_b).ordered_edges()]
+        self.edges_a = [v for v in WireExplorer(wire_a).ordered_edges]
+        self.edges_b = [v for v in WireExplorer(wire_b).ordered_edges]
 
         self.pnts_b = [self.brep_tool.Pnt(v) for v in self.vertices_b]
         self.number_of_vertices = len(self.vertices_a)
@@ -107,7 +112,7 @@ class LoopWirePairs(object):
         indx_max_dist = distances.index(min(distances))
         return self.vertices_b[indx_max_dist]
 
-    def next(self):
+    def __next__(self):
         r"""next() method to make LoopWirePairs an iterable
 
         Returns
@@ -133,3 +138,6 @@ class LoopWirePairs(object):
 
     def __iter__(self):
         return self
+
+    # 2 / 3 compatibility
+    next = __next__

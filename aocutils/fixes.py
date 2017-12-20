@@ -6,6 +6,7 @@ curve resampling
 """
 
 import logging
+import ast
 
 import OCC.GCPnts
 import OCC.GeomAbs
@@ -51,7 +52,7 @@ def fix_shape(shp, tolerance=OCCUTILS_FIXING_TOLERANCE):
 def fix_face(face, tolerance=OCCUTILS_FIXING_TOLERANCE):
     r"""Fix a face
 
-    This operator allows to perform various fixes on face and its wires: 
+    This operator allows to perform various fixes on face and its wires:
     - fixes provided by ShapeFix_Wire,
     - fixing orientation of wires,
     - addition of natural bounds,
@@ -120,8 +121,8 @@ def fix_continuity(edge, continuity=1):
     # ShapeUpgrade_ShapeDivideContinuity :
     #     API Tool for converting shapes with C0 geometry into C1 ones
     shape_upgrade = OCC.ShapeUpgrade.ShapeUpgrade_ShapeDivideContinuity(edge)
-    shape_upgrade.SetBoundaryCriterion(eval('OCC.GeomAbs.GeomAbs_C' +
-                                            str(continuity)))
+    continuity_constant = 'OCC.GeomAbs.GeomAbs_C' + str(continuity)
+    shape_upgrade.SetBoundaryCriterion(ast.literal_eval(continuity_constant))
     shape_upgrade.Perform()
     return shape_upgrade.Result()
 

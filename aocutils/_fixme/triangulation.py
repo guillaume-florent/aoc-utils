@@ -1,8 +1,6 @@
 # coding=utf-8
 
-r"""
-Triangulation
-"""
+r"""Triangulation"""
 
 from __future__ import print_function
 
@@ -43,6 +41,9 @@ def vertices_faces_from_shape(shape, deflection=0.1):
     print('number of mesh vertices, edges, triangles representing the BREP:', n_vert, n_edge, n_face)
     tris = [fd.Triangle(i) for i in range(1, fd.NbTriangles())]
     verts = [fd.Vertex(i) for i in range(1, fd.NbVertices())]
+
+    print(tris)
+    print(verts)
 
 
 if __name__ == '__main__':

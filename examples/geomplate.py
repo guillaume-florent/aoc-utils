@@ -28,7 +28,6 @@ import OCC.IGESControl
 import OCC.IFSelect
 import OCC.Display.SimpleGui
 import OCC.TopoDS
-import OCC.BRep
 import OCC.GeomAbs
 
 import aocutils.brep.wire_make
@@ -73,7 +72,7 @@ class IGESImporter(object):
             nbr = a_reader.NbRootsForTransfer()
             a_reader.PrintCheckTransfer(failsonly, OCC.IFSelect.IFSelect_ItemsByEntity)
             # ok = a_reader.TransferRoots()
-            for n in range(1, nbr + 1):
+            for _ in range(1, nbr + 1):
                 self.nbs = a_reader.NbShapes()
                 if self.nbs == 0:
                     # The program stops !!!! Why ?
@@ -298,7 +297,7 @@ def solve_radius(event=None):
     poly = aocutils.brep.wire_make.closed_polygon([p1, p2, p3, p4])
     for i in scipy.arange(0.1, 3., 0.2).tolist():
         radius_constrained_surface = RadiusConstrainedSurface(display, poly, p5, i)
-        face = radius_constrained_surface.solve()
+        _ = radius_constrained_surface.solve()
         print('Goal: %s radius: %s' % (i, radius_constrained_surface.curr_radius))
         time.sleep(0.5)
 

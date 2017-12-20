@@ -48,10 +48,10 @@ def show(shape, backend=None):
     backend : str
     """
     if backend is None:
-        display, start_display, add_menu, add_function_to_menu = \
+        display, start_display, _, _ = \
             OCC.Display.SimpleGui.init_display()
     else:
-        display, start_display, add_menu, add_function_to_menu = \
+        display, start_display, _, _ = \
             OCC.Display.SimpleGui.init_display(backend)
     display.DisplayShape(shape, update=True)
     display.FitAll()

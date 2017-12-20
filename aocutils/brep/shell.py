@@ -79,17 +79,17 @@ class Shell(BaseObject):
         ss = OCC.ShapeAnalysis.ShapeAnalysis_Shell()
         ss.LoadShells(self._wrapped_instance)
         if ss.HasFreeEdges():
-            bad_edges = [e for e in Topo(ss.BadEdges()).edges()]
+            bad_edges = [e for e in Topo(ss.BadEdges()).edges]
         return bad_edges
 
     def faces(self):
         r"""Faces of the shell"""
-        return Topo(self._wrapped_instance, return_iter=True).faces()
+        return Topo(self._wrapped_instance, return_iter=True).faces
 
     def wires(self):
         r"""Wires of the shell"""
-        return Topo(self._wrapped_instance, return_iter=True).wires()
+        return Topo(self._wrapped_instance, return_iter=True).wires
 
     def edges(self):
         r"""Edges of the shell"""
-        return Topo(self._wrapped_instance, return_iter=True).edges()
+        return Topo(self._wrapped_instance, return_iter=True).edges

@@ -330,14 +330,14 @@ def real_bb_position(axis, side, start_position, shape, increment=0.01):
     start_position : float
     shape : OCC Shape
     increment : float, optional
-        The distance by which the intersection plane 
+        The distance by which the intersection plane
         is moved to try to intersect the shape
         Default is 0.01
 
     Returns
     -------
     float
-        The value of the position 
+        The value of the position
         for the specified axis and side ("MIN" or "MAX")
 
     """
@@ -563,11 +563,13 @@ def stl_bounding_box(path_to_stl):
 
         try:
             while True:
-                n = unpack(f, "<3f", 12)
+                # n = unpack(f, "<3f", 12)
+                _ = unpack(f, "<3f", 12)
                 p1 = unpack(f, "<3f", 12)
                 p2 = unpack(f, "<3f", 12)
                 p3 = unpack(f, "<3f", 12)
-                b = unpack(f, "<h", 2)
+                # b = unpack(f, "<h", 2)
+                _ = unpack(f, "<h", 2)
                 numbers = [tuple(p1), tuple(p2), tuple(p3)]
                 for number in numbers:
                     x, y, z = number[0], number[1], number[2]
@@ -583,7 +585,8 @@ def stl_bounding_box(path_to_stl):
                         zmin = z
                     if z > zmax:
                         zmax = z
-        except struct.error as e:
+        # except struct.error as e:
+        except struct.error:
             logger.info('Finished reading binary stl file')
 
     else:

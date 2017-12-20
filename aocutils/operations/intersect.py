@@ -96,7 +96,8 @@ def _intersect_shape_by_line(topods_shape,
     # shape_inter.PerformNearest(line, low_parameter, hi_parameter)
     shape_inter.Perform(line, low_parameter, hi_parameter)
 
-    with AssertIsDone(shape_inter, "failed to computer shape / line intersection"):
+    with AssertIsDone(shape_inter, "failed to computer shape / line "
+                                   "intersection"):
         points = list()
 
         # Bug correction (some intersection points were missed)
@@ -108,10 +109,10 @@ def _intersect_shape_by_line(topods_shape,
 
 
 def intersect_shape_by_half_line(topods_shape, x, y, z, vx, vy, vz):
-    r"""Intersect shape by half line starting at (x, y, z) 
+    r"""Intersect shape by half line starting at (x, y, z)
     in the direction (vx, vy, vz)
 
-    This function tries to have a more intuitive interface than 
+    This function tries to have a more intuitive interface than
     intersect_shape_by_line()
 
     Parameters
@@ -132,8 +133,8 @@ def intersect_shape_by_half_line(topods_shape, x, y, z, vx, vy, vz):
 
     Returns
     -------
-    a list of gp_Pnt, ordered in natural order going from the point where the half line starts and following
-    the direction
+    a list of gp_Pnt, ordered in natural order going from the point where
+    the half line starts and following the direction
 
     """
     return _intersect_shape_by_line(topods_shape,

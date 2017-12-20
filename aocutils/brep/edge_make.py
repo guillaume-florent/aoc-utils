@@ -121,7 +121,7 @@ def geodesic_path(pnt_a,
     pnt_b
         point to move towards
     aoc_face
-        oacutils.brep.face.Face on which `edgA` and `edgB` lie
+        aocutils.brep.face.Face on which `edgA` and `edgB` lie
     n_segments : int
         the number of segments the geodesic is built from
     _tolerance : float
@@ -134,8 +134,10 @@ def geodesic_path(pnt_a,
     TopoDS_Edge
 
     """
-    uv_a, srf_pnt_a = aoc_face.project_vertex(pnt_a)
-    uv_b, srf_pnt_b = aoc_face.project_vertex(pnt_b)
+    # uv_a, srf_pnt_a = aoc_face.project_vertex(pnt_a)
+    # uv_b, srf_pnt_b = aoc_face.project_vertex(pnt_b)
+    uv_a, _ = aoc_face.project_vertex(pnt_a)
+    uv_b, _ = aoc_face.project_vertex(pnt_b)
 
     path = []
     for i in range(n_segments):

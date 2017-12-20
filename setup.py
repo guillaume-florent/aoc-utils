@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# coding: utf-8**
+# coding: utf-8
 
 """setuptools based setup module for aocutils
 
@@ -31,7 +31,7 @@ Notes
 """
 
 # Always prefer setuptools over distutils
-from setuptools import setup, find_packages
+from setuptools import setup
 # To use a consistent encoding
 from codecs import open
 from os import path

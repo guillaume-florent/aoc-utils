@@ -71,7 +71,7 @@ class Plane(object):
 
         """
         uvs_from_vertices = [_face.project_vertex(Vertex.to_pnt(i))
-                             for i in Topo(_face).vertices()]
+                             for i in Topo(_face).vertices]
         normals = [OCC.gp.gp_Vec(_face.DiffGeom.normal(*uv[0])) for uv in uvs_from_vertices]
         points = [i[1] for i in uvs_from_vertices]
 

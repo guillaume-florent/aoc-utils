@@ -1,8 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # coding: utf-8
 
-r"""
-"""
+r"""Types example"""
 
 from __future__ import print_function
 
@@ -20,7 +19,7 @@ print(type(box))
 print(aocutils.types.topo_lut[box.ShapeType()])
 
 
-solid = aocutils.topology.Topo(box).solids()[0]
+solid = aocutils.topology.Topo(box).solids[0]
 print(type(solid))
 wrapped_solid = aocutils.brep.solid.Solid(solid)
 print(type(wrapped_solid))

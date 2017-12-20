@@ -447,7 +447,7 @@ class Wx3dViewer(wx.Panel):
     def on_topology_wires(self, event):
         r"""Display another viewer with wires topology
 
-        This one is trickier because of the way wires 
+        This one is trickier because of the way wires
         are displayed (alternating display)
         Cannot show modal
 

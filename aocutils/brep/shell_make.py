@@ -51,8 +51,9 @@ def shell_from_faces(list_of_faces):
     Parameters
     ----------
     list_of_faces : list[OCC.TopoDS.TopoDS_Face]
-                 or list[OCC.TopoDS.TopoDS_Shape] where 
-                                             the shapes have a TopAbs_FACE type
+                    or
+                    list[OCC.TopoDS.TopoDS_Shape] where the shapes
+                    have a TopAbs_FACE type
 
     Returns
     -------
