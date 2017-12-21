@@ -121,8 +121,8 @@ def fix_continuity(edge, continuity=1):
     # ShapeUpgrade_ShapeDivideContinuity :
     #     API Tool for converting shapes with C0 geometry into C1 ones
     shape_upgrade = OCC.ShapeUpgrade.ShapeUpgrade_ShapeDivideContinuity(edge)
-    continuity_constant = 'OCC.GeomAbs.GeomAbs_C' + str(continuity)
-    shape_upgrade.SetBoundaryCriterion(ast.literal_eval(continuity_constant))
+    continuity_constant = eval('OCC.GeomAbs.GeomAbs_C' + str(continuity))
+    shape_upgrade.SetBoundaryCriterion(continuity_constant)
     shape_upgrade.Perform()
     return shape_upgrade.Result()
 
