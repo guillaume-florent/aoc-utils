@@ -81,7 +81,7 @@ def gp_ax1_print(ax1):
     dy = ax1.Direction().Y()
     dz = ax1.Direction().Z()
     s = "< gp_Ax1: location: {px}, {py}, {pz}, direction: {dx}, {dy}, {dz} >"
-    return s.format(px, py, pz, dx, dy, dz)
+    return s.format(px=px, py=py, pz=pz, dx=dx, dy=dy, dz=dz)
 
 
 def gp_trsf_print(trsf):
@@ -102,9 +102,9 @@ def gp_trsf_print(trsf):
     i, j, k, l = _f(3)
     return "< gp_Trsf:\n {a:.3f}, {b:.3f}, {c:.3f}, {d:.3f}\n " \
            "{e:.3f}, {f:.3f}, {g:.3f}, {h:.3f}\n " \
-           "{i:.3f}, {j:.3f}, {k:.3f}, {l:.3f} >".format(a, b, c, d,
-                                                         e, f, g, h,
-                                                         i, j, k, l)
+           "{i:.3f}, {j:.3f}, {k:.3f}, {l:.3f} >".format(a=a, b=b, c=c, d=d,
+                                                         e=e, f=f, g=g, h=h,
+                                                         i=i, j=j, k=k, l=l)
 
 
 def gp_quat_print(quat):
@@ -124,7 +124,7 @@ def gp_quat_print(quat):
     angle = math.degrees(quat.GetVectorAndAngle(vec))
     s = "< gp_Quaternion: w:{w}, x:{x}, y:{y}, z:{z} >\n" \
         "vector:{vec} angle:{angle}"
-    return s.format(w, x, y, z, vec, angle)
+    return s.format(w=w, x=x, y=y, z=z, vec=vec, angle=angle)
 
 
 def dump_topology(shape, level=0):

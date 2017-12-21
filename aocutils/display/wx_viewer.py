@@ -466,7 +466,7 @@ class Wx3dViewer(wx.Panel):
 
 
 def colour_wx_to_occ(wx_colour):
-    r"""Convert a wx colour coded on ints from 0 to 255 to an 
+    r"""Convert a wx colour coded on ints from 0 to 255 to an
     OCC color coded on floats from 0 to 1
 
     Parameters

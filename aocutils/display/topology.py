@@ -195,7 +195,8 @@ def wires(display,
     display.DisplayShape(shape)
     display.FitAll()
 
-    for n in range(repeat):
+    # for n in range(repeat):
+    for _ in range(repeat):
         for i, wire in enumerate(the_wires):
             display.EraseAll()
             ais_edge = OCC.AIS.AIS_Shape(wire)

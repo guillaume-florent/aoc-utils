@@ -135,7 +135,7 @@ class BidirDict(dict):
 
     Raises
     ------
-    KeyError if a duplicate value exists (as values must 
+    KeyError if a duplicate value exists (as values must
     also be able to behave as keys)
 
     """

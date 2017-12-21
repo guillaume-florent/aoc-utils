@@ -14,7 +14,7 @@ if using a version earlier than 0.16.5
 
 CSF_GraphicShr
 --------------
-Should be an env variable pointing to TKOpenGl.dll or libTKOpenGl.dll 
+Should be an env variable pointing to TKOpenGl.dll or libTKOpenGl.dll
 in the dir where OCC python files are
 
 """
@@ -145,7 +145,7 @@ class Qt3dViewer(QtGui.QWidget, object):
 
 
 def colour_qt_to_occ(qt_colour):
-    r"""Convert a qt colour coded on ints from 0 to 255 to an OCC color coded 
+    r"""Convert a qt colour coded on ints from 0 to 255 to an OCC color coded
     on floats from 0 to 1
 
     Parameters

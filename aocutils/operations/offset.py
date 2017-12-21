@@ -22,7 +22,7 @@ def offset_shape(shape_to_offset,
                  intersection=False,
                  selfintersection=False,
                  join_type=OCC.GeomAbs.GeomAbs_Arc):
-    r"""Builds an offset shell from a shape construct 
+    r"""Builds an offset shell from a shape construct
     an offset version of the shape
 
     Parameters
@@ -78,7 +78,7 @@ def offset(wire_or_face,
     altitude : float
         move the offset shape to altitude from the normal of the wire or face
     join_type
-        the geom_type of offset you want can be one of 
+        the geom_type of offset you want can be one of
         OCC.GeomAbs.GeomAbs_Arc, OCC.GeomAbs.GeomAbs_Tangent,
         OCC.GeomAbs.GeomAbs_Intersection
 

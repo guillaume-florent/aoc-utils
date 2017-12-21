@@ -15,7 +15,7 @@ A PointsToBSpline object provides a framework for:
 
 OCC.GeomAPI.GeomAPI_Interpolate
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-This class is used to interpolate a BsplineCurve passing through an 
+This class is used to interpolate a BsplineCurve passing through an
 array of points, with a C2 Continuity if tangency is not requested at the point.
 If tangency is requested at the point the continuity will be C1.
 If Perodicity is requested the curve will be closed and the junction
@@ -49,7 +49,7 @@ logger = logging.getLogger(__name__)
 
 
 def filter_points_by_distance(list_of_point, distance=0.1):
-    r"""Get rid of those point that lie within tolerance of a 
+    r"""Get rid of those point that lie within tolerance of a
     consecutive series of points
 
     Parameters
@@ -206,7 +206,7 @@ def points_no_tangency(list_of_points,
                        filter_pts=True,
                        closed=False,
                        tolerance=OCCUTILS_DEFAULT_TOLERANCE):
-    r"""OCC.GeomAPI.GeomAPI_Interpolate is buggy: need to use `fix` 
+    r"""OCC.GeomAPI.GeomAPI_Interpolate is buggy: need to use `fix`
     in order to get the right points in...
 
     Parameters

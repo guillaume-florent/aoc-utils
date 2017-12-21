@@ -17,7 +17,6 @@ import OCC.gp
 import OCC.GeomLProp
 import OCC.BRepLProp
 import OCC.GeomLib
-import OCC.GCPnts
 import OCC.GeomAPI
 import OCC.ShapeAnalysis
 import OCC.BRep

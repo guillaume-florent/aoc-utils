@@ -52,11 +52,12 @@ def shape_by_line(topods_shape,
 
     Returns
     -------
-    a list with a number of tuples that corresponds to the 
+    a list with a number of tuples that corresponds to the
     number of intersections found.
-    the tuple contains ( OCC.gp.gp_Pnt, TopoDS_Face, u,v,w ), 
+    the tuple contains ( OCC.gp.gp_Pnt, TopoDS_Face, u,v,w ),
     respectively the intersection point, the intersecting face
     and the u,v,w parameters of the intersection point
+
     """
     shape_inter = IntCurvesFace_ShapeIntersector()
     shape_inter.Load(topods_shape, OCCUTILS_DEFAULT_TOLERANCE)

@@ -68,7 +68,7 @@ class EdgePairsFromWire(object):
 
 
 class LoopWirePairs(object):
-    r"""For looping through consecutive wires assures 
+    r"""For looping through consecutive wires assures
     that the returned edge pairs are ordered
 
     Parameters

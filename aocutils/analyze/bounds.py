@@ -105,7 +105,7 @@ class BoundingBox(AbstractBoundingBox):
 
     Notes
     -----
-    Mesh the shape before instantiating a BoundingBox if required, 
+    Mesh the shape before instantiating a BoundingBox if required,
     infinite recursion would be created by calling mesh.py's mesh() method
 
     """
@@ -317,7 +317,7 @@ def build_plane_at_z(z, shape):
 def real_bb_position(axis, side, start_position, shape, increment=0.01):
     r"""Workaround for OCC bounding box imprecision.
 
-    The principle is to move a plane (perpendicular to axis) closer and closer 
+    The principle is to move a plane (perpendicular to axis) closer and closer
     until it intersects the shape.
     The goal is to get a 'sure to intersect' coordinates for another program.
 
@@ -375,14 +375,14 @@ def real_bb_position(axis, side, start_position, shape, increment=0.01):
 
 
 class BetterBoundingBox(AbstractBoundingBox):
-    r"""A bounding box implementation that yields results 
+    r"""A bounding box implementation that yields results
     that are closer to the truth.
 
     This implementation is much slower than BoundingBox but more precise.
 
-    The BoundingBox is used as a starting point 
+    The BoundingBox is used as a starting point
     for a more precise determination of the bounds.
-    
+
     Notes
     -----
     The OCC bounding box is always wider or equal to the real bounding box.
@@ -394,9 +394,9 @@ class BetterBoundingBox(AbstractBoundingBox):
     ----------------------
     The algorithm could be faster by using dichotomy rather than linear movement
     of the plane that is tested for intersection with the shape
-    The improvement would be useful if this workaround is to be used 
+    The improvement would be useful if this workaround is to be used
     in waterline
-    When used to generate hull offsets, BetterBoundingBox is slow when the 
+    When used to generate hull offsets, BetterBoundingBox is slow when the
     increment is smaller than 10e-2 but we can live with it in the meantime
 
     Parameters
@@ -559,7 +559,8 @@ def stl_bounding_box(path_to_stl):
         logger.info('Reading binary stl file : %s' % path_to_stl)
 
         f.seek(f.tell() + 80)  # read header
-        l = struct.unpack("@i", f.read(4))[0]
+        # l = struct.unpack("@i", f.read(4))[0]
+        _ = struct.unpack("@i", f.read(4))[0]
 
         try:
             while True:

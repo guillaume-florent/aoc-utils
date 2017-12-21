@@ -1,6 +1,6 @@
 # coding: utf-8
 
-r"""Fixing methods for shapes, faces, tolerance, continuity and 
+r"""Fixing methods for shapes, faces, tolerance, continuity and
 curve resampling
 
 """

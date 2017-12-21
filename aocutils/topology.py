@@ -102,7 +102,7 @@ class Topo(object):
     r"""Topology traversal.
 
     Implements topology traversal from any TopoDS_Shape.
-    The Topo class lets you find how various topological entities are connected 
+    The Topo class lets you find how various topological entities are connected
     from one to another
     find the faces connected to an edge
     find the vertices this edge is made from
@@ -112,18 +112,18 @@ class Topo(object):
     Notes
     -----
 
-    When traversing TopoDS_Wire entities, its advised to use 
+    When traversing TopoDS_Wire entities, its advised to use
     the specialized WireExplorer class,
     which will return the vertices / edges in the expected order
 
-    For instance, a cube has 24 edges, 4 edges for each of 6 faces 
-    that results in 48 vertices,  while there are only 8 vertices that 
+    For instance, a cube has 24 edges, 4 edges for each of 6 faces
+    that results in 48 vertices,  while there are only 8 vertices that
     have a unique geometric coordinate.
 
-    In certain cases ( computing a graph from the topology ) its preferable 
-    to return topological entities that share similar geometry, though differ 
+    In certain cases ( computing a graph from the topology ) its preferable
+    to return topological entities that share similar geometry, though differ
     in orientation by setting the ``_ignore_orientation`` variable
-    to True, in case of a cube, just 12 edges and only 8 vertices will be 
+    to True, in case of a cube, just 12 edges and only 8 vertices will be
     returned
 
     See Also
@@ -408,7 +408,7 @@ class Topo(object):
                                   topological_entity):
         """Mapping of shapes to ancestors
 
-        If you want to know how many edges a faces has:  
+        If you want to know how many edges a faces has:
             _map_shapes_ancestors(self, TopAbs_EDGE, TopAbs_FACE, edg)
         will return the edges a faces has.
 

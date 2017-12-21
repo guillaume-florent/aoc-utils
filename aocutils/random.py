@@ -1,6 +1,6 @@
 # coding: utf-8
 
-r"""Random generation of vectors, colors, materials ..., mostly aimed at 
+r"""Random generation of vectors, colors, materials ..., mostly aimed at
 examples and demos.
 
 """

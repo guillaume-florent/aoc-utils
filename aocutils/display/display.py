@@ -38,7 +38,7 @@ def colored_and_transparent(display,
 
 
 def show(shape, backend=None):
-    r"""Quick and dirty shape display, mostly aimed at quickly looking at a 
+    r"""Quick and dirty shape display, mostly aimed at quickly looking at a
     shape during the development workflow
 
     Parameters

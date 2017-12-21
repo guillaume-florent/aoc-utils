@@ -8,7 +8,7 @@ class AssertIsDone(object):
     with the error specified in error_statement
 
     This is a context manager.
-    
+
     Parameters
     ----------
     to_check : object

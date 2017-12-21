@@ -34,7 +34,7 @@ def mesh(shape, factor=4000., use_min_dim=False):
     use_min_dim : bool (optional)
         Use minimum bounding box dimension to compute the linear deflection.
         The default is False (i.e. use max dimension)
-        This is useful for long and thin objects where using the max dimension 
+        This is useful for long and thin objects where using the max dimension
         would result in a very coarse linear deflection in the other directions.
 
     """

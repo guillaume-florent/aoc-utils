@@ -76,7 +76,9 @@ class Plane(object):
         points = [i[1] for i in uvs_from_vertices]
 
         NORMALS = OCC.TColgp.TColgp_SequenceOfVec()
-        [NORMALS.Append(i) for i in normals]
+        # [NORMALS.Append(i) for i in normals]
+        for i in normals:
+            NORMALS.Append(i)
         POINTS = to_tcol_(points, OCC.TColgp.TColgp_HArray1OfPnt)
 
         pl = OCC.GeomPlate.GeomPlate_BuildAveragePlane(NORMALS, POINTS).Plane().GetObject()

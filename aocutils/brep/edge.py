@@ -351,7 +351,7 @@ class Edge(BaseObject):
                tolerance=OCCUTILS_DEFAULT_TOLERANCE):
         r"""Curve length
 
-        If either lbound | ubound | both are given, thae the length 
+        If either lbound | ubound | both are given, then the length
         of the curve will be measured over that interval
 
         Parameters
@@ -509,7 +509,7 @@ class Edge(BaseObject):
         return (_min + _max) / 2.
 
     def divide_by_number_of_points(self, n_pts, lbound=None, ubound=None):
-        r"""Nested list of parameters and points on the edge 
+        r"""Nested list of parameters and points on the edge
         at the requested interval [(param, gp_Pnt),...]
 
         Parameters
@@ -774,7 +774,7 @@ class Edge(BaseObject):
 
     def tangent(self, u):
         r"""sets or gets ( iff vector ) the tangency at the u parameter
-        tangency can be constrained so when setting the tangency, 
+        tangency can be constrained so when setting the tangency,
         you're constraining it in fact
 
         Parameters

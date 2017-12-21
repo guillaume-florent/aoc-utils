@@ -50,7 +50,7 @@ def solid(*args):
 
 def oriented_box(v_corner, v_x, v_y, v_z):
     r"""Produces an oriented box
-    oriented meaning here that the x,y,z axis do not have 
+    oriented meaning here that the x,y,z axis do not have
     to be cartesian aligned
 
     Parameters

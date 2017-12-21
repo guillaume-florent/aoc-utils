@@ -7,7 +7,7 @@ import os.path
 
 
 class Texture(object):
-    """This class encapsulates the necessary texture properties: 
+    """This class encapsulates the necessary texture properties:
     Filename, toScaleU, etc.
 
     Parameters

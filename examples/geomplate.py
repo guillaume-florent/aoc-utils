@@ -364,7 +364,7 @@ def build_curve_network(event=None):
     # outer_wire = make_wire(_edges)
 
 
-def exit(event=None):
+def exit_(event=None):
     r"""Exit the display"""
     sys.exit()
 
@@ -374,5 +374,5 @@ if __name__ == "__main__":
     if HAVE_SCIPY:
         add_function_to_menu('geom plate', solve_radius)
     add_function_to_menu('geom plate', build_curve_network)
-    add_function_to_menu('geom plate', exit)
+    add_function_to_menu('geom plate', exit_)
     start_display()

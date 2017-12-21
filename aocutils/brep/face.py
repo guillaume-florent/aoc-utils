@@ -222,7 +222,7 @@ class Face(BaseObject):
         return self.domain[3]
 
     def _midpoint(self):
-        """u, v parameters at the mid point of the face, 
+        """u, v parameters at the mid point of the face,
         and its corresponding gp_Pnt
 
         Returns
@@ -479,7 +479,7 @@ class Face(BaseObject):
 # ===========================================================================
 
     def project_vertex(self, pnt, tol=OCCUTILS_DEFAULT_TOLERANCE):
-        r"""Projects self with a point, curve, edge, face, solid method 
+        r"""Projects self with a point, curve, edge, face, solid method
         wraps dealing with the various topologies
 
         Parameters
@@ -585,7 +585,7 @@ class Face(BaseObject):
 
     def local_props(self, u, v):
         r"""Curvature at the u parameter
-        the local_props object can be returned too 
+        the local_props object can be returned too
         using curvatureType == curvatureType
         curvatureTypes are:
             gaussian
@@ -747,6 +747,7 @@ class Face(BaseObject):
         du, dv = OCC.gp.gp_Dir(), OCC.gp.gp_Dir()
         curv = self.local_props(u, v)
         if curv.IsTangentUDefined() and curv.IsTangentVDefined():
+            # TODO : WTF ?
             curv.TangentU(du), curv.TangentV(dv)
             return (OCC.gp.gp_Vec(du.X(),
                                   du.Y(),

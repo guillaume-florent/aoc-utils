@@ -1,6 +1,6 @@
 # coding: utf-8
 
-r"""This modules makes the construction of geometry a little easier 
+r"""This modules makes the construction of geometry a little easier
 with the help of the GEOM library.
 
 """
