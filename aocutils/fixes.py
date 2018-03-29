@@ -6,7 +6,7 @@ curve resampling
 """
 
 import logging
-import ast
+# import ast
 
 import OCC.GCPnts
 import OCC.GeomAbs

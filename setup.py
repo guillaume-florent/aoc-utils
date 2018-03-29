@@ -33,7 +33,7 @@ Notes
 # Always prefer setuptools over distutils
 from setuptools import setup
 # To use a consistent encoding
-from codecs import open
+import codecs
 from os import path
 
 import aocutils
@@ -41,7 +41,7 @@ import aocutils
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README_SHORT file
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
+with codecs.open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 

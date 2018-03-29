@@ -172,10 +172,19 @@ def points_vectors(list_of_points,
     """
     # OCC.GeomAPI.GeomAPI_Interpolate is buggy:
     #                   need to use `fix` in order to get the right points in...
-    assert len(list_of_points) == len(list_of_vectors), 'vector and point list not of same length'
+
+    # assert len(list_of_points) == len(list_of_vectors)
+    if len(list_of_points) != len(list_of_vectors):
+        msg = 'vector and point list not of same length'
+        logger.error(msg)
+        raise ValueError(msg)
 
     if vector_mask is not None:
-        assert len(vector_mask) == len(list_of_points), 'length vector mask is not of length points list nor []'
+        # assert len(vector_mask) == len(list_of_points)
+        if len(vector_mask) != len(list_of_points):
+            msg = 'length vector mask is not of length points list nor []'
+            logger.error(msg)
+            raise ValueError(msg)
     else:
         vector_mask = [True for _ in range(len(list_of_points))]
 

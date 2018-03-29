@@ -25,7 +25,7 @@ class Wire(BaseObject):
 
     Parameters
     ----------
-        wire : OCC.TopoDS.TopoDS_Wire
+        topods_wire : OCC.TopoDS.TopoDS_Wire
 
     """
 
@@ -34,7 +34,11 @@ class Wire(BaseObject):
             msg = 'Wire.__init__() needs a TopoDS_Wire, got a %s' % topods_wire.__class__
             logger.critical(msg)
             raise WrongTopologicalType(msg)
-        assert not topods_wire.IsNull()
+        # assert not topods_wire.IsNull()
+        if topods_wire.IsNull():
+            msg = "topods_wire is Null"
+            logger.error(msg)
+            raise ValueError(msg)
 
         BaseObject.__init__(self, topods_wire, name='topods_wire')
 

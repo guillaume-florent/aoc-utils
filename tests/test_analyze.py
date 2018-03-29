@@ -166,7 +166,8 @@ def test_minimum_distance():
     md = MinimumDistance(sphere_, sphere_2)
     assert md.minimum_distance == 20.
     assert md.nb_solutions == 1
-    assert type(md.point_pairs[0][0]) == gp_Pnt
+    # assert type(md.point_pairs[0][0]) == gp_Pnt
+    assert isinstance(md.point_pairs[0][0], (gp_Pnt, ))
 
 
 def test_global_properties_box():
@@ -180,11 +181,11 @@ def test_global_properties_box():
 
     # check the length is not defined for the box
     with pytest.raises(WrongTopologicalType):
-        box_properties.length
+        _ = box_properties.length
 
     # check the area is not defined for the box ....
     with pytest.raises(WrongTopologicalType):
-        box_properties.area
+        _ = box_properties.area
 
     # .... but the area of the shell of the box is defined and exact
     box_shell = Topo(box_, return_iter=False).shells[0]
@@ -196,11 +197,11 @@ def test_global_properties_box():
 
     # but the length is not defined for a shell....
     with pytest.raises(WrongTopologicalType):
-        shell_properties.length
+        _ = shell_properties.length
 
     # ... nor is the volume
     with pytest.raises(WrongTopologicalType):
-        shell_properties.volume
+        _ = shell_properties.volume
 
 
 def test_global_properties_edge():
@@ -213,11 +214,12 @@ def test_global_properties_edge():
 
     # the volume of an edge is undefined !
     with pytest.raises(WrongTopologicalType):
-        edge_properties.volume
+        _ = edge_properties.volume
 
     # but the centre exists and is at the middle of a straight edge
     edge_centre = edge_properties.centre
-    assert type(edge_centre) == gp_Pnt
+    # assert type(edge_centre) == gp_Pnt
+    assert isinstance(edge_centre, (gp_Pnt, ))
     assert edge_centre.X() == square_side_length / 2.
     assert edge_centre.Y() == 0
     assert edge_centre.Z() == 0

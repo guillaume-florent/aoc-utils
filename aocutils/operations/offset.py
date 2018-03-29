@@ -91,10 +91,17 @@ def offset(wire_or_face,
     A shape that has a negative offsetDistance will return a sharp corner
 
     """
-    _joints = [OCC.GeomAbs.GeomAbs_Arc, OCC.GeomAbs.GeomAbs_Tangent, OCC.GeomAbs.GeomAbs_Intersection]
-    assert join_type in _joints, '%s is not one of %s' % (join_type, _joints)
+    _joints = [OCC.GeomAbs.GeomAbs_Arc,
+               OCC.GeomAbs.GeomAbs_Tangent,
+               OCC.GeomAbs.GeomAbs_Intersection]
+    # assert join_type in _joints, '%s is not one of %s' % (join_type, _joints)
+    if join_type not in _joints:
+        msg = '%s is not one of %s' % (join_type, _joints)
+        logger.error(msg)
+        raise ValueError(msg)
     try:
-        an_offset = OCC.BRepOffsetAPI.BRepOffsetAPI_MakeOffset(wire_or_face, join_type)
+        an_offset = OCC.BRepOffsetAPI.BRepOffsetAPI_MakeOffset(wire_or_face,
+                                                               join_type)
         an_offset.Perform(offset_distance, altitude)
         if an_offset.IsDone():
             return shape_to_topology(an_offset.Shape())

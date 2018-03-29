@@ -3,6 +3,8 @@
 aoc-utils
 =========
 
+.. image:: https://api.codacy.com/project/badge/Grade/ad66c28ad30e46ee8816c561eb19d831
+   :target: https://www.codacy.com/app/guillaume-florent/aoc-utils?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=guillaume-florent/aoc-utils&amp;utm_campaign=Badge_Grade
 .. image:: http://img.shields.io/badge/Status-development-ff3300.svg
    :alt: Development
 .. image:: http://img.shields.io/badge/license-GPL_v3-blue.svg

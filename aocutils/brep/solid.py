@@ -30,7 +30,11 @@ class Solid(BaseObject):
             msg = 'need a TopoDS_Solid, got a %s' % topods_solid.__class__
             logger.critical(msg)
             raise WrongTopologicalType(msg)
-        assert not topods_solid.IsNull()
+        # assert not topods_solid.IsNull()
+        if topods_solid.IsNull():
+            msg = 'topods_solid is Null'
+            logger.error(msg)
+            raise ValueError(msg)
         BaseObject.__init__(self, topods_solid, 'solid')
 
         # self.global_properties =

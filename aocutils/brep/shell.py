@@ -32,7 +32,11 @@ class Shell(BaseObject):
             logger.critical(msg)
             raise WrongTopologicalType(msg)
 
-        assert not topods_shell.IsNull()
+        # assert not topods_shell.IsNull()
+        if topods_shell.IsNull():
+            msg = "topods_shell is Null"
+            logger.error(msg)
+            raise ValueError(msg)
 
         BaseObject.__init__(self, topods_shell, 'shell')
 

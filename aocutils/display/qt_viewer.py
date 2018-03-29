@@ -25,7 +25,8 @@ print("CSF_GraphicShr" in os.environ)
 if "CSF_GraphicShr" in os.environ:
     print(os.environ["CSF_GraphicShr"])
 
-from PyQt4 import QtCore, QtGui, QtOpenGL
+# from PyQt4 import QtCore, QtGui, QtOpenGL
+from PyQt4 import QtGui, QtOpenGL
 
 import OCC.Display.qtDisplay
 

@@ -389,7 +389,7 @@ class BetterBoundingBox(AbstractBoundingBox):
     Hence the need for a workaround.
     The bounding box workaround is useful for complex shapes,
     not for simple primitives like sphere, box ...
-    
+
     Potential improvements
     ----------------------
     The algorithm could be faster by using dichotomy rather than linear movement

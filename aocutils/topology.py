@@ -461,7 +461,7 @@ class Topo(object):
                                  topological_entity):
         r"""Number of shape ancestors
 
-        If you want to know how many edges a faces has: 
+        If you want to know how many edges a faces has:
              _number_shapes_ancestors(self, TopAbs_EDGE, TopAbs_FACE, edg)
         will return the number of edges a faces has
 
