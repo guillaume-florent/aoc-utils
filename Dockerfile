@@ -2,7 +2,7 @@ FROM guillaumeflorent/miniconda-pythonocc:3-0.18.3
 
 MAINTAINER Guillaume Florent <florentsailing@gmail.com>
 
-RUN conda install -y numpy scipy
+RUN conda install -y numpy scipy pytest
 
 RUN conda install -c gflorent corelib
 

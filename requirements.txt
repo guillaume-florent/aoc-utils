@@ -3,3 +3,5 @@ scipy
 wx >= 2.8  # to run some examples
 numpy
 corelib
+
+pytest
