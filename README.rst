@@ -1,18 +1,17 @@
 .. -*- coding: utf-8 -*-
 
+*********
 aoc-utils
-=========
+*********
+
+.. image:: https://travis-ci.org/guillaume-florent/aoc-utils.svg?branch=master
+    :target: https://travis-ci.org/guillaume-florent/aoc-utils
 
 .. image:: https://api.codacy.com/project/badge/Grade/ad66c28ad30e46ee8816c561eb19d831
-   :target: https://www.codacy.com/app/guillaume-florent/aoc-utils?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=guillaume-florent/aoc-utils&amp;utm_campaign=Badge_Grade
-.. image:: http://img.shields.io/badge/Status-development-ff3300.svg
-   :alt: Development
-.. image:: http://img.shields.io/badge/license-GPL_v3-blue.svg
-   :target: https://www.gnu.org/copyleft/gpl.html
-   :alt: GPL v3
+    :target: https://www.codacy.com/app/guillaume-florent/aoc-utils?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=guillaume-florent/aoc-utils&amp;utm_campaign=Badge_Grade
+
 .. image:: http://img.shields.io/badge/Python-2.7_3.*-ff3366.svg
-   :target: https://www.python.org/downloads/
-   :alt: Python 2.7 3.*
+    :target: https://www.python.org/downloads/
 
 The **aoc-utils** project provides a Python package named **aocutils** with
 useful modules/classes/methods for `PythonOCC <http://github.com/tpaviot/pythonocc-core>`_. It is a high level API for PythonOCC.
