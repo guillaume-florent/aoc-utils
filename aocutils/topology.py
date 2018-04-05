@@ -7,11 +7,13 @@ from __future__ import print_function
 import logging
 
 # import OCC.BRep
-from OCC.BRepToolsimport BRepTools_WireExplorer
+from OCC.BRepTools import BRepTools_WireExplorer
 from OCC.TopAbs import TopAbs_VERTEX, TopAbs_EDGE, TopAbs_WIRE, TopAbs_FACE, \
     TopAbs_SHELL, TopAbs_SOLID, TopAbs_COMPOUND, TopAbs_COMPSOLID
 from OCC.TopExp import TopExp_Explorer, topexp_MapShapesAndAncestors,
-from OCC.TopTools import TopTools_ListOfShape, TopTools_ListIteratorOfListOfShape, TopTools_IndexedDataMapOfShapeListOfShape
+from OCC.TopTools import TopTools_ListOfShape, \
+    TopTools_ListIteratorOfListOfShape, \
+    TopTools_IndexedDataMapOfShapeListOfShape
 from OCC.TopoDS import topods_Edge, topods_Vertex, TopoDS_Shape, TopoDS_Wire
 
 from aocutils.exceptions import WrongTopologicalType
