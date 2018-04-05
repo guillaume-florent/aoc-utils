@@ -8,9 +8,9 @@ import itertools
 from OCC.BRepCheck import *
 from OCC.GeomAbs import *
 from OCC.TopoDS import TopoDS_Vertex, TopoDS_Edge, TopoDS_Face, TopoDS_Wire, \
-    TopoDS_Shell, TopoDS_Solid, TopoDS_Compound, TopoDS_Compsolid
+    TopoDS_Shell, TopoDS_Solid, TopoDS_Compound, TopoDS_CompSolid
 from OCC.TopoDS.topods import Vertex, Edge, Face, Wire, Shell, Solid, \
-    Compound, Compsolid
+    Compound, CompSolid
 # import OCC.BRep
 from OCC.TopAbs import *
 # import OCC.Geom
