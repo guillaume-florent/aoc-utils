@@ -1,19 +1,15 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # coding: utf-8
 
 r"""types module tests"""
 
 import pytest
-import logging
 
 import OCC.BRepPrimAPI
 import OCC.TopAbs
 
 import aocutils.topology
 import aocutils.types
-
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s :: %(levelname)6s :: %(module)20s :: %(lineno)3d :: %(message)s')
 
 box_x_dim = 10.
 box_y_dim = 20.
