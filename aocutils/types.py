@@ -9,8 +9,8 @@ from OCC.BRepCheck import *
 from OCC.GeomAbs import *
 from OCC.TopoDS import TopoDS_Vertex, TopoDS_Edge, TopoDS_Face, TopoDS_Wire, \
     TopoDS_Shell, TopoDS_Solid, TopoDS_Compound, TopoDS_CompSolid
-from OCC.TopoDS.topods import Vertex, Edge, Face, Wire, Shell, Solid, \
-    Compound, CompSolid
+# from OCC.TopoDS.topods import Vertex, Edge, Face, Wire, Shell, Solid, \
+#     Compound, CompSolid
 # import OCC.BRep
 from OCC.TopAbs import *
 # import OCC.Geom
@@ -20,14 +20,14 @@ from OCC.TopAbs import *
 PY3 = not (int(sys.version.split('.')[0]) <= 2)
 
 # dictionary used to "cast" a shape to the subclass corresponding to its type
-topo_factory = {TopAbs_VERTEX: Vertex,
-                TopAbs_EDGE: Edge,
-                TopAbs_FACE: Face,
-                TopAbs_WIRE: Wire,
-                TopAbs_SHELL: Shell,
-                TopAbs_SOLID: Solid,
-                TopAbs_COMPOUND: Compound,
-                TopAbs_COMPSOLID: CompSolid}
+# topo_factory = {TopAbs_VERTEX: Vertex,
+#                 TopAbs_EDGE: Edge,
+#                 TopAbs_FACE: Face,
+#                 TopAbs_WIRE: Wire,
+#                 TopAbs_SHELL: Shell,
+#                 TopAbs_SOLID: Solid,
+#                 TopAbs_COMPOUND: Compound,
+#                 TopAbs_COMPSOLID: CompSolid}
 
 
 # key: shape type; value: TopoDS_* subclass
