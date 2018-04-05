@@ -79,13 +79,13 @@ def test_better_bounds_box():
     assert - bbb.x_min <= 2 * tolerance
 
     assert box_dim_x <= bbb.x_max
-    assert bbb.x_max - box_dim_x <= tolerance
+    assert bbb.x_max - box_dim_x <= 2 * tolerance
 
     assert box_dim_y <= bbb.y_max
-    assert bbb.y_max - box_dim_y <= tolerance
+    assert bbb.y_max - box_dim_y <= 2 * tolerance
 
     assert box_dim_z <= bbb.z_max
-    assert bbb.z_max - box_dim_z <= tolerance
+    assert bbb.z_max - box_dim_z <= 2 * tolerance
 
     tolerance = 0.001
     bbb = BetterBoundingBox(box_, tol=tolerance)
@@ -94,13 +94,13 @@ def test_better_bounds_box():
     assert - bbb.x_min <= 2 * tolerance
 
     assert box_dim_x <= bbb.x_max
-    assert bbb.x_max - box_dim_x <= tolerance
+    assert bbb.x_max - box_dim_x <= 2 * tolerance
 
     assert box_dim_y <= bbb.y_max
-    assert bbb.y_max - box_dim_y <= tolerance
+    assert bbb.y_max - box_dim_y <= 2 * tolerance
 
     assert box_dim_z <= bbb.z_max
-    assert bbb.z_max - box_dim_z <= tolerance
+    assert bbb.z_max - box_dim_z <= 2 * tolerance
 
 
 def test_bounds_sphere():
@@ -116,18 +116,18 @@ def test_better_bounds_sphere():
     r"""Test the better bounding box on a sphere"""
     tolerance = 0.01
     bbb = BetterBoundingBox(sphere_, tol=tolerance)
-    assert 2 * sphere_radius <= bbb.x_span < 2 * sphere_radius + 2 * tolerance
-    assert 2 * sphere_radius <= bbb.y_span < 2 * sphere_radius + 2 * tolerance
-    assert 2 * sphere_radius <= bbb.z_span < 2 * sphere_radius + 2 * tolerance
+    assert 2 * sphere_radius <= bbb.x_span < 2 * sphere_radius + 2.1 * tolerance
+    assert 2 * sphere_radius <= bbb.y_span < 2 * sphere_radius + 2.1 * tolerance
+    assert 2 * sphere_radius <= bbb.z_span < 2 * sphere_radius + 2.1 * tolerance
 
     assert bbb.x_max >= sphere_radius
-    assert bbb.x_max - sphere_radius <= tolerance
+    assert bbb.x_max - sphere_radius <= 2 * tolerance
 
     assert bbb.y_max >= sphere_radius
-    assert bbb.y_max - sphere_radius <= tolerance
+    assert bbb.y_max - sphere_radius <= 2 * tolerance
 
     assert bbb.z_max >= sphere_radius
-    assert bbb.z_max - sphere_radius <= tolerance
+    assert bbb.z_max - sphere_radius <= 2 * tolerance
 
 
 def test_better_bounds_complex_shape():
