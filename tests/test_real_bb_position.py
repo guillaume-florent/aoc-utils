@@ -35,7 +35,7 @@ def test_with_sphere():
     assert bb.z_max > radius
 
     assert bbw_x_min <= - radius
-    assert abs(bbw_x_min - (-radius)) <= increment
+    assert abs(bbw_x_min - (-radius)) <= 2 * increment
 
     assert bbw_x_max >= radius
     assert abs(bbw_x_max - radius) <= increment
@@ -83,7 +83,7 @@ def test_with_box():
     assert bb.z_max > dz
 
     assert bbw_x_min <= 0.
-    assert abs(bbw_x_min) <= increment
+    assert abs(bbw_x_min) <= 2 * increment
 
     assert bbw_x_max >= dx
     assert abs(bbw_x_max - dx) <= increment

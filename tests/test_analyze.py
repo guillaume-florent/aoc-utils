@@ -91,7 +91,7 @@ def test_better_bounds_box():
     bbb = BetterBoundingBox(box_, tol=tolerance)
 
     assert 0 >= bbb.x_min
-    assert - bbb.x_min <= tolerance
+    assert - bbb.x_min <= 2 * tolerance
 
     assert box_dim_x <= bbb.x_max
     assert bbb.x_max - box_dim_x <= tolerance
@@ -114,7 +114,7 @@ def test_bounds_sphere():
 
 def test_better_bounds_sphere():
     r"""Test the better bounding box on a sphere"""
-    tolerance = 0.01
+    tol = 0.01
     bbb = BetterBoundingBox(sphere_, tol=tolerance)
     assert 2 * sphere_radius <= bbb.x_span < 2 * sphere_radius + 2.001 * tol
     assert 2 * sphere_radius <= bbb.y_span < 2 * sphere_radius + 2.001 * tol
