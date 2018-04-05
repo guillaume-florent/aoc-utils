@@ -596,13 +596,13 @@ class Edge(BaseObject):
 
         Returns
         -------
-        .gp_Vec
+        gp_Vec
 
         """
         if self.is_line():
             first, last = list(map(Vertex.to_pnt,
                                    [self.first_vertex(), self.last_vertex()]))
-            return .gp_Vec(first, last)
+            return gp_Vec(first, last)
         else:
             msg = "edge is not a line, " \
                   "hence no meaningful vector can be returned"
@@ -837,7 +837,7 @@ class Edge(BaseObject):
 
         Returns
         -------
-        .gp_Vec
+        gp_Vec
 
         """
         self._check_u_in_domain(u)
