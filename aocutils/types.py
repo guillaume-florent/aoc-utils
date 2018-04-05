@@ -29,6 +29,15 @@ PY3 = not (int(sys.version.split('.')[0]) <= 2)
 #                 TopAbs_COMPOUND: Compound,
 #                 TopAbs_COMPSOLID: CompSolid}
 
+topo_factory = {TopAbs_VERTEX: TopoDS_Vertex,
+                TopAbs_EDGE: TopoDS_Edge,
+                TopAbs_FACE: TopoDS_Face,
+                TopAbs_WIRE: TopoDS_Wire,
+                TopAbs_SHELL: TopoDS_Shell,
+                TopAbs_SOLID: TopoDS_Solid,
+                TopAbs_COMPOUND: TopoDS_Compound,
+                TopAbs_COMPSOLID: TopoDS_CompSolid}
+
 
 # key: shape type; value: TopoDS_* subclass
 topo_type_class = {TopAbs_VERTEX: TopoDS_Vertex,
