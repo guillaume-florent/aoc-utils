@@ -419,32 +419,32 @@ class BetterBoundingBox(AbstractBoundingBox):
         bb = BoundingBox(self._shape)
         self._x_min = real_bb_position("X",
                                        "MIN",
-                                       bb.x_min - tol,
+                                       bb.x_min,
                                        self._shape,
                                        increment=tol)
         self._x_max = real_bb_position("X",
                                        "MAX",
-                                       bb.x_max + tol,
+                                       bb.x_max,
                                        self._shape,
                                        increment=tol)
         self._y_min = real_bb_position("Y",
                                        "MIN",
-                                       bb.y_min - tol,
+                                       bb.y_min,
                                        self._shape,
                                        increment=tol)
         self._y_max = real_bb_position("Y",
                                        "MAX",
-                                       bb.y_max + tol,
+                                       bb.y_max,
                                        self._shape,
                                        increment=tol)
         self._z_min = real_bb_position("Z",
                                        "MIN",
-                                       bb.z_min - tol,
+                                       bb.z_min,
                                        self._shape,
                                        increment=tol)
         self._z_max = real_bb_position("Z",
                                        "MAX",
-                                       bb.z_max + tol,
+                                       bb.z_max,
                                        self._shape,
                                        increment=tol)
 
