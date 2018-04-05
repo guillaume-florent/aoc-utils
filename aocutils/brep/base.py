@@ -4,12 +4,12 @@ r"""BaseObject is inherited by Vertex, Edge, Face, Shell, Solid"""
 
 import logging
 
-import OCC.BRepBuilderAPI
-import OCC.BRepCheck
-import OCC.BRepGProp
-import OCC.Display.SimpleGui
-import OCC.GProp
-import OCC.TopoDS
+from OCC.BRepBuilderAPI import BRepBuilderAPI_Copy
+from OCC.BRepCheck import BRepCheck_Analyzer
+# import OCC.BRepGProp
+# import OCC.Display.SimpleGui
+# import OCC.GProp
+# import OCC.TopoDS
 
 from aocutils.types import topo_types_dict
 from aocutils.topology import Topo, shape_to_topology
@@ -154,7 +154,7 @@ class BaseObject(object):
         bool
             True if the object is valid, False otherwise
         """
-        analyse = OCC.BRepCheck.BRepCheck_Analyzer(self._wrapped_instance)
+        analyse = BRepCheck_Analyzer(self._wrapped_instance)
         ok = analyse.IsValid()
         if ok:
             return True
@@ -169,7 +169,7 @@ class BaseObject(object):
         A copy of self
 
         """
-        brep_builder_copy = OCC.BRepBuilderAPI.BRepBuilderAPI_Copy(self._wrapped_instance)
+        brep_builder_copy = BRepBuilderAPI_Copy(self._wrapped_instance)
         brep_builder_copy.Perform(self._wrapped_instance)
         # get the class, construct a new instance
         # cast the cp.Shape() to its specific TopoDS topology

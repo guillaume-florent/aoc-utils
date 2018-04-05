@@ -7,20 +7,10 @@ from __future__ import print_function
 import logging
 import functools
 
-import OCC.BRepAdaptor
-import OCC.BRepBuilderAPI
-import OCC.GCPnts
-import OCC.Geom
-import OCC.TopExp
-import OCC.TopoDS
-import OCC.gp
-import OCC.GeomLProp
-import OCC.BRepLProp
-import OCC.GeomLib
-import OCC.GeomAPI
-import OCC.ShapeAnalysis
-import OCC.BRep
-import OCC.BRepIntCurveSurface
+# import OCC.BRepAdaptor
+from OCC.BRepBuilderAPI import BRepBuilderAPI_MakeEdge, \
+    BRepBuilderAPI_MakeEdge2d
+from OCC.gp import gp_Circ
 
 from aocutils.common import AssertIsDone
 from aocutils.math_ import smooth_pnts
@@ -29,7 +19,7 @@ from aocutils.operations.interpolate import points_to_bspline
 logger = logging.getLogger(__name__)
 
 
-@functools.wraps(OCC.BRepBuilderAPI.BRepBuilderAPI_MakeEdge2d)
+@functools.wraps(BRepBuilderAPI_MakeEdge2d)
 def edge2d(*args):
     r"""Build an edge
 
@@ -39,19 +29,19 @@ def edge2d(*args):
 
     Returns
     -------
-    OCC.TopoDS.TopoDS_Edge
+    TopoDS_Edge
 
     """
-    edge_ = OCC.BRepBuilderAPI.BRepBuilderAPI_MakeEdge2d(*args)
+    edge_ = BRepBuilderAPI_MakeEdge2d(*args)
     with AssertIsDone(edge_, 'failed to produce edge'):
         result = edge_.Edge()
         edge_.Delete()
     return result
 
 
-@functools.wraps(OCC.BRepBuilderAPI.BRepBuilderAPI_MakeEdge)
+@functools.wraps(BRepBuilderAPI_MakeEdge)
 def edge(*args):
-    r"""Make a OCC.TopoDS.TopoDS_Edge
+    r"""Make a TopoDS_Edge
 
     Parameters
     ----------
@@ -59,10 +49,10 @@ def edge(*args):
 
     Returns
     -------
-    OCC.TopoDS.TopoDS_Edge
+    TopoDS_Edge
 
     """
-    an_edge = OCC.BRepBuilderAPI.BRepBuilderAPI_MakeEdge(*args)
+    an_edge = BRepBuilderAPI_MakeEdge(*args)
     with AssertIsDone(an_edge, 'failed to produce edge'):
         result = an_edge.Edge()
         an_edge.Delete()
@@ -74,16 +64,16 @@ def circle(pnt, radius):
 
     Parameters
     ----------
-    pnt : OCC.gp.gp_Pnt
+    pnt : gp_Pnt
         Circle centre
     radius : float
 
     Returns
     -------
-    OCC.TopoDS.TopoDS_Edge
+    TopoDS_Edge
 
     """
-    circ = OCC.gp.gp_Circ()
+    circ = gp_Circ()
     circ.SetLocation(pnt)
     circ.SetRadius(radius)
     return edge(circ)
@@ -94,12 +84,12 @@ def line(pnt1, pnt2):
 
     Parameters
     ----------
-    pnt1 : OCC.gp.gp_Pnt
-    pnt2 : OCC.gp.gp_Pnt
+    pnt1 : gp_Pnt
+    pnt2 : gp_Pnt
 
     Returns
     -------
-    OCC.TopoDS.TopoDS_Edge
+    TopoDS_Edge
 
     """
     return edge(pnt1, pnt2)

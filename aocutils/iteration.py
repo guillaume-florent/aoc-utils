@@ -9,7 +9,7 @@ This module helps looping through topology
 
 """
 
-import OCC.BRep
+from OCC.BRep import BRep_Tool
 
 from aocutils.topology import Topo, WireExplorer
 from aocutils.brep.edge import Edge
@@ -84,7 +84,7 @@ class LoopWirePairs(object):
         self.wire_explorer_b = WireExplorer(self.wireB)
         self.topo_a = Topo(self.wireA)
         self.topo_b = Topo(self.wireB)
-        self.brep_tool = OCC.BRep.BRep_Tool()
+        self.brep_tool = BRep_Tool()
         self.vertices_a = [v for v in self.wire_explorer_a.ordered_vertices]
         self.vertices_b = [v for v in self.wire_explorer_b.ordered_vertices]
 

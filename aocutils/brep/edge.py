@@ -6,21 +6,21 @@ from __future__ import print_function
 
 import logging
 
-import OCC.BRepAdaptor
-import OCC.BRepBuilderAPI
-import OCC.GCPnts
-import OCC.Geom
-import OCC.TopExp
-import OCC.TopoDS
-import OCC.gp
-import OCC.GeomLProp
-import OCC.BRepLProp
-import OCC.GeomLib
-import OCC.GeomAPI
-import OCC.ShapeAnalysis
-import OCC.BRep
-import OCC.BRepIntCurveSurface
-import OCC.BRepCheck
+from OCC.BRepAdaptor import BRepAdaptor_Curve, BRepAdaptor_HCurve
+# import OCC.BRepBuilderAPI
+from OCC.GCPnts import GCPnts_AbscissaPoint, GCPnts_UniformAbscissa
+from OCC.Geom import Geom_TrimmedCurve, Geom_OffsetCurve
+from OCC.TopExp import topexp
+from OCC.TopoDS import TopoDS_Vertex, TopoDS_Edge, TopoDS_Face
+from OCC.gp import gp_Pnt, gp_Vec, gp_Dir
+from OCC.GeomLProp import GeomLProp_CurveTool
+from OCC.BRepLProp import BRepLProp_CLProps
+from OCC.GeomLib import geomlib
+from OCC.GeomAPI import GeomAPI_ProjectPointOnCurve
+from OCC.ShapeAnalysis import ShapeAnalysis_Edge
+from OCC.BRep import BRep_Tool_Curve, BRep_Tool, BRep_Tool_Continuity
+from OCC.BRepIntCurveSurface import BRepIntCurveSurface_Inter
+# import OCC.BRepCheck
 
 from aocutils.analyze.distance import MinimumDistance
 from aocutils.brep.base import BaseObject
@@ -39,16 +39,16 @@ logger = logging.getLogger(__name__)
 
 
 class Edge(BaseObject):
-    r"""Wrapper for OCC.TopoDS.TopoDS_Edge
+    r"""Wrapper for TopoDS_Edge
 
     Parameters
     ----------
-    topods_edge : OCC.TopoDS.TopoDS_Edge
+    topods_edge : TopoDS_Edge
 
     """
     def __init__(self, topods_edge):
-        if not isinstance(topods_edge, OCC.TopoDS.TopoDS_Edge):
-            msg = 'Need a OCC.TopoDS.TopoDS_Edge, got a %s' % topods_edge.__class__
+        if not isinstance(topods_edge, TopoDS_Edge):
+            msg = 'Need a TopoDS_Edge, got a %s' % topods_edge.__class__
             logger.critical(msg)
             raise WrongTopologicalType(msg)
 
@@ -74,7 +74,7 @@ class Edge(BaseObject):
 
         """
         if self._adaptor is None:
-            self._adaptor = OCC.BRepAdaptor.BRepAdaptor_Curve(self._wrapped_instance)
+            self._adaptor = BRepAdaptor_Curve(self._wrapped_instance)
         return self._adaptor
 
     # def to_adaptor_3d(self):
@@ -209,7 +209,7 @@ class Edge(BaseObject):
     #
     #     Parameters
     #     ----------
-    #     edg : OCC.TopoDS.TopoDS_Edge
+    #     edg : TopoDS_Edge
     #
     #     Returns
     #     -------
@@ -228,7 +228,7 @@ class Edge(BaseObject):
         Handle< Geom_Curve >
 
         """
-        return OCC.BRep.BRep_Tool_Curve(self._wrapped_instance)[0]
+        return BRep_Tool_Curve(self._wrapped_instance)[0]
 
     # def to_hcurve(self):
     #     r"""Adapt edge to HCurve
@@ -254,7 +254,7 @@ class Edge(BaseObject):
         -------
 
         """
-        return OCC.BRepAdaptor.BRepAdaptor_HCurve(self.adaptor)
+        return BRepAdaptor_HCurve(self.adaptor)
 
     @property
     def geom_curve_handle(self):
@@ -295,7 +295,7 @@ class Edge(BaseObject):
         v
 
         """
-        crv, u, v = OCC.BRep.BRep_Tool().CurveOnSurface(self._wrapped_instance,
+        crv, u, v = BRep_Tool().CurveOnSurface(self._wrapped_instance,
                                                         face)
         return crv.GetObject(), u, v
 
@@ -305,10 +305,10 @@ class Edge(BaseObject):
 
         Returns
         -------
-        OCC.GeomLProp.GeomLProp_CurveTool
+        GeomLProp_CurveTool
 
         """
-        return OCC.GeomLProp.GeomLProp_CurveTool()
+        return GeomLProp_CurveTool()
 
     @property
     def brep_local_props(self):
@@ -316,13 +316,13 @@ class Edge(BaseObject):
 
         Returns
         -------
-        OCC.BRepLProp.BRepLProp_CLProps
+        BRepLProp_CLProps
 
         """
         if self._brep_local_props is None:
-            self._brep_local_props = OCC.BRepLProp.BRepLProp_CLProps(self.adaptor,
-                                                                     2,
-                                                                     self.tolerance)
+            self._brep_local_props = BRepLProp_CLProps(self.adaptor,
+                                                       2,
+                                                       self.tolerance)
         return self._brep_local_props
 
     @property
@@ -379,7 +379,7 @@ class Edge(BaseObject):
 
         lbound = _min if lbound is None else lbound
         ubound = _max if ubound is None else ubound
-        return OCC.GCPnts.GCPnts_AbscissaPoint().Length(self.adaptor,
+        return GCPnts_AbscissaPoint().Length(self.adaptor,
                                                         lbound,
                                                         ubound,
                                                         tolerance)
@@ -398,9 +398,9 @@ class Edge(BaseObject):
 
         """
         a, b = sorted([lbound, ubound])
-        trimmed_curve = OCC.Geom.Geom_TrimmedCurve(self.adaptor.Curve().Curve(),
-                                                   a,
-                                                   b).GetHandle()
+        trimmed_curve = Geom_TrimmedCurve(self.adaptor.Curve().Curve(),
+                                          a,
+                                          b).GetHandle()
         return Edge(edge(trimmed_curve))
 
     def extend_by_point(self, pnt, continuity=3, after=True):
@@ -410,16 +410,15 @@ class Edge(BaseObject):
 
         Parameters
         ----------
-        pnt : OCC.gp.gp_Pnt
+        pnt : .gp_Pnt
         continuity : int
         after
 
         """
         if self.continuity > 3:
             raise ValueError('to extend you self.curve should be <= 3, is %s' % self.degree)
-        # return OCC.GeomLib.geomlib.ExtendCurveToPoint(self.curve,
-        #                                               pnt, continuity, after)
-        OCC.GeomLib.geomlib.ExtendCurveToPoint(self.curve, pnt, continuity, after)
+        # return geomlib.ExtendCurveToPoint(self.curve, pnt, continuity, after)
+        geomlib.ExtendCurveToPoint(self.curve, pnt, continuity, after)
 
     def closest(self, other):
         r"""Closest
@@ -448,11 +447,11 @@ class Edge(BaseObject):
         Quantity_Parameter, gp_Pnt
 
         """
-        if isinstance(pnt_or_vertex, OCC.TopoDS.TopoDS_Vertex):
+        if isinstance(pnt_or_vertex, TopoDS_Vertex):
             pnt_or_vertex = Vertex.to_pnt(pnt_or_vertex)
 
-        project_point_on_curve = OCC.GeomAPI.GeomAPI_ProjectPointOnCurve(pnt_or_vertex,
-                                                                         self.curve_handle)
+        project_point_on_curve = GeomAPI_ProjectPointOnCurve(pnt_or_vertex,
+                                                             self.curve_handle)
         return (project_point_on_curve.LowerDistanceParameter(),
                 project_point_on_curve.NearestPoint())
 
@@ -475,11 +474,11 @@ class Edge(BaseObject):
         OutOfBoundary
             if no such parameter exists
         """
-        abscissa_point = OCC.GCPnts.GCPnts_AbscissaPoint(self.adaptor,
-                                                         distance,
-                                                         close_parameter,
-                                                         estimate_parameter,
-                                                         1e-5)
+        abscissa_point = GCPnts_AbscissaPoint(self.adaptor,
+                                              distance,
+                                              close_parameter,
+                                              estimate_parameter,
+                                              1e-5)
         with AssertIsDone(abscissa_point, 'could not compute distance on curve'):
             return abscissa_point.Parameter()
 
@@ -491,7 +490,7 @@ class Edge(BaseObject):
         -------
         float
             the parameter at the mid point of the curve
-        OCC.gp.gp_Pnt
+        .gp_Pnt
             gp_Pnt corresponding to the parameter
         """
         return self.adaptor.Value(self.midpoint_parameter)
@@ -534,10 +533,10 @@ class Edge(BaseObject):
             n_pts = 2
 
         try:
-            npts = OCC.GCPnts.GCPnts_UniformAbscissa(self.adaptor,
-                                                     n_pts,
-                                                     _lbound,
-                                                     _ubound)
+            npts = GCPnts_UniformAbscissa(self.adaptor,
+                                          n_pts,
+                                          _lbound,
+                                          _ubound)
         except:  # TODO : specify exceptions
             logger.warning("OCC.GCPnts.GCPnts_UniformAbscissa failed")
 
@@ -558,20 +557,20 @@ class Edge(BaseObject):
 
         Returns
         -------
-        OCC.TopoDS.TopoDS_Vertex
+        TopoDS_Vertex
 
         """
-        return OCC.TopExp.topexp.FirstVertex(self._wrapped_instance)
+        return topexp.FirstVertex(self._wrapped_instance)
 
     def last_vertex(self):
         r"""Last vertex
 
         Returns
         -------
-        OCC.TopoDS.TopoDS_Vertex
+        TopoDS_Vertex
 
         """
-        return OCC.TopExp.topexp.LastVertex(self._wrapped_instance)
+        return topexp.LastVertex(self._wrapped_instance)
 
     def common_vertex(self, edge):
         """Finds the vertex  common to the two edges <E1,E2>
@@ -586,8 +585,8 @@ class Edge(BaseObject):
             True if the Vertex exists
 
         """
-        vert = OCC.TopoDS.TopoDS_Vertex()
-        if OCC.TopExp.topexp.CommonVertex(self._wrapped_instance, edge, vert):
+        vert = TopoDS_Vertex()
+        if topexp.CommonVertex(self._wrapped_instance, edge, vert):
             return vert
         else:
             return False
@@ -597,13 +596,13 @@ class Edge(BaseObject):
 
         Returns
         -------
-        OCC.gp.gp_Vec
+        .gp_Vec
 
         """
         if self.is_line():
             first, last = list(map(Vertex.to_pnt,
                                    [self.first_vertex(), self.last_vertex()]))
-            return OCC.gp.gp_Vec(first, last)
+            return .gp_Vec(first, last)
         else:
             msg = "edge is not a line, " \
                   "hence no meaningful vector can be returned"
@@ -612,7 +611,8 @@ class Edge(BaseObject):
 
     def _check_u_in_domain(self, u):
         if not self.domain[0] <= u <= self.domain[1]:
-            msg = "Parameter is outside of domain ranging from %s to %s" % (str(self.domain[0]), str(self.domain[0]))
+            msg = "Parameter is outside of domain ranging from " \
+                  "%s to %s" % (str(self.domain[0]), str(self.domain[0]))
             logger.error(msg)
             raise ParameterOutOfDomainException(msg)
         else:
@@ -627,7 +627,7 @@ class Edge(BaseObject):
 
         Returns
         -------
-        OCC.gp.gp_Pnt
+        .gp_Pnt
 
         """
         self._check_u_in_domain(u)
@@ -642,7 +642,7 @@ class Edge(BaseObject):
 
         Returns
         -------
-        OCC.TopoDS.TopoDS_Shape
+        TopoDS_Shape
 
         """
         return fix_continuity(self._wrapped_instance, continuity)
@@ -652,15 +652,15 @@ class Edge(BaseObject):
 
         Parameters
         ----------
-        f1 : OCC.TopoDS.TopoDS_Face
-        f2 : OCC.TopoDS.TopoDS_Face
+        f1 : TopoDS_Face
+        f2 : TopoDS_Face
 
         Returns
         -------
         OCC.GeomAbs.GeomAbs_Shape
 
         """
-        return OCC.BRep.BRep_Tool_Continuity(self._wrapped_instance, f1, f2)
+        return BRep_Tool_Continuity(self._wrapped_instance, f1, f2)
 
     def is_line(self):
         r"""Is the edge a line?
@@ -688,7 +688,7 @@ class Edge(BaseObject):
             True if the edge has two pcurves on one surface
             (in the case of a sphere for example... )
         """
-        sae = OCC.ShapeAnalysis.ShapeAnalysis_Edge()
+        sae = ShapeAnalysis_Edge()
         return sae.IsSeam(self._wrapped_instance, face)
 
     def is_edge_on_face(self, face):
@@ -703,23 +703,23 @@ class Edge(BaseObject):
         bool?
 
         """
-        return OCC.ShapeAnalysis.ShapeAnalysis_Edge().HasPCurve(self._wrapped_instance, face)
+        return ShapeAnalysis_Edge().HasPCurve(self._wrapped_instance, face)
 
     def intersect(self, other, tolerance=1e-2):
         r"""Intersect self with a point, curve, edge, face, solid method wraps dealing with the various topologies
 
         Parameters
         ----------
-        other : OCC.TopoDS.TopoDS_*
+        other : TopoDS_*
         tolerance : float
 
         Returns
         -------
-        list[OCC.gp.gp_Pnt]
+        list[.gp_Pnt]
 
         """
-        if isinstance(other, OCC.TopoDS.TopoDS_Face):
-            face_curve_intersect = OCC.BRepIntCurveSurface.BRepIntCurveSurface_Inter()
+        if isinstance(other, TopoDS_Face):
+            face_curve_intersect = BRepIntCurveSurface_Inter()
             face_curve_intersect.Init(other, self.adaptor.Curve(), tolerance)
             pnts = []
             while face_curve_intersect.More():
@@ -736,7 +736,7 @@ class Edge(BaseObject):
 
         Returns
         -------
-        OCC.gp.gp_Pnt
+        .gp_Pnt
 
         Raises
         ------
@@ -747,7 +747,7 @@ class Edge(BaseObject):
         self._check_u_in_domain(u)
         # NOT SO SURE IF THIS IS THE SAME THING!!!
         self.brep_local_props.SetParameter(u)
-        pnt = OCC.gp.gp_Pnt()
+        pnt = .gp_Pnt()
         try:
             self.brep_local_props.CentreOfCurvature(pnt)
             return pnt
@@ -783,13 +783,13 @@ class Edge(BaseObject):
 
         Returns
         -------
-        OCC.gp.gp_Dir
+        .gp_Dir
 
         """
         self._check_u_in_domain(u)
         self.brep_local_props.SetParameter(u)
         if self.brep_local_props.IsTangentDefined():
-            ddd = OCC.gp.gp_Dir()
+            ddd = .gp_Dir()
             self.brep_local_props.Tangent(ddd)
             return ddd
         else:
@@ -810,7 +810,7 @@ class Edge(BaseObject):
 
         Returns
         -------
-        OCC.gp.gp_Dir
+        .gp_Dir
 
         Raises
         ------
@@ -821,7 +821,7 @@ class Edge(BaseObject):
         self._check_u_in_domain(u)
         try:
             self.brep_local_props.SetParameter(u)
-            a_dir = OCC.gp.gp_Dir()
+            a_dir = .gp_Dir()
             self.brep_local_props.Normal(a_dir)
             return a_dir
         except:
@@ -837,7 +837,7 @@ class Edge(BaseObject):
 
         Returns
         -------
-        OCC.gp.gp_Vec
+        .gp_Vec
 
         """
         self._check_u_in_domain(u)
@@ -872,10 +872,10 @@ class Edge(BaseObject):
 
         Returns
         -------
-        OCC.Geom.Geom_OffsetCurve
+        Geom_OffsetCurve
 
         """
-        return OCC.Geom.Geom_OffsetCurve(self.curve_handle, offset, vec)
+        return Geom_OffsetCurve(self.curve_handle, offset, vec)
 
     def show(self):
         r"""poles, knots, should render all slightly different.

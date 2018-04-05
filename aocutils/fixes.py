@@ -8,11 +8,12 @@ curve resampling
 import logging
 # import ast
 
-import OCC.GCPnts
-import OCC.GeomAbs
-import OCC.GeomAPI
-import OCC.ShapeFix
-import OCC.ShapeUpgrade
+from OCC.GCPnts import GCPnts_UniformDeflection
+from OCC.GeomAbs import GeomAbs_C2
+from OCC.GeomAbs import GeomAbs_C0, GeomAbs_C1  # dynamically built code
+from OCC.GeomAPI import GeomAPI_PointsToBSpline
+from OCC.ShapeFix import ShapeFix_ShapeTolerance, ShapeFix_Shape, ShapeFix_Face
+from OCC.ShapeUpgrade import ShapeUpgrade_ShapeDivideContinuity
 
 from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE, \
     OCCUTILS_FIXING_TOLERANCE
@@ -36,7 +37,7 @@ def fix_shape(shp, tolerance=OCCUTILS_FIXING_TOLERANCE):
     OCC.TopoDS.TopoDS_Shape
 
     """
-    fix = OCC.ShapeFix.ShapeFix_Shape(shp)
+    fix = ShapeFix_Shape(shp)
 
     # Returns (modifiable) the mode for applying fixes of ShapeFix_Shell,
     # by default True
@@ -69,7 +70,7 @@ def fix_face(face, tolerance=OCCUTILS_FIXING_TOLERANCE):
     OCC.TopoDS.TopoDS_Face
 
     """
-    fix = OCC.ShapeFix.ShapeFix_Face(face)
+    fix = ShapeFix_Face(face)
     fix.SetMaxTolerance(tolerance)
 
     # Performs all the fixes, depending on modes
@@ -101,7 +102,7 @@ def fix_tolerance(shape, tolerance=OCCUTILS_DEFAULT_TOLERANCE):
     """
     # void 	SetTolerance (const TopoDS_Shape &shape, const Standard_Real preci,
     #                     const TopAbs_ShapeEnum styp=TopAbs_SHAPE) const
-    OCC.ShapeFix.ShapeFix_ShapeTolerance().SetTolerance(shape, tolerance)
+    ShapeFix_ShapeTolerance().SetTolerance(shape, tolerance)
 
 
 def fix_continuity(edge, continuity=1):
@@ -120,8 +121,8 @@ def fix_continuity(edge, continuity=1):
     """
     # ShapeUpgrade_ShapeDivideContinuity :
     #     API Tool for converting shapes with C0 geometry into C1 ones
-    shape_upgrade = OCC.ShapeUpgrade.ShapeUpgrade_ShapeDivideContinuity(edge)
-    continuity_constant = eval('OCC.GeomAbs.GeomAbs_C' + str(continuity))
+    shape_upgrade = ShapeUpgrade_ShapeDivideContinuity(edge)
+    continuity_constant = eval('GeomAbs_C' + str(continuity))
     shape_upgrade.SetBoundaryCriterion(continuity_constant)
     shape_upgrade.Perform()
     return shape_upgrade.Result()
@@ -131,7 +132,7 @@ def resample_curve_uniform_deflection(curve,
                                       deflection=0.5,
                                       degree_min=3,
                                       degree_max=8,
-                                      continuity=OCC.GeomAbs.GeomAbs_C2,
+                                      continuity=GeomAbs_C2,
                                       tolerance=OCCUTILS_DEFAULT_TOLERANCE):
     r"""Fits a bspline through the samples on curve
 
@@ -141,7 +142,7 @@ def resample_curve_uniform_deflection(curve,
     deflection : float
     degree_min : int
     degree_max : int
-    continuity : OCC.GeomAbs.GeomAbs_C*
+    continuity : GeomAbs_C*
     tolerance : float
 
     Returns
@@ -152,12 +153,12 @@ def resample_curve_uniform_deflection(curve,
     """
     # crv = aocutils.convert.adapt.to_adaptor_3d(curve)
     crv = Curve(curve).to_adaptor_3d()
-    defl = OCC.GCPnts.GCPnts_UniformDeflection(crv, deflection)
+    defl = GCPnts_UniformDeflection(crv, deflection)
     with AssertIsDone(defl, 'failed to compute UniformDeflection'):
         logger.info('Number of points : %i' % defl.NbPoints())
     sampled_pnts = [defl.Value(i) for i in range(1, defl.NbPoints())]
 
-    resampled_curve = OCC.GeomAPI.GeomAPI_PointsToBSpline(
+    resampled_curve = GeomAPI_PointsToBSpline(
         point_list_to_tcolgp_array1_of_pnt(sampled_pnts),
         degree_min,
         degree_max,

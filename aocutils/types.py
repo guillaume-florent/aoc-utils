@@ -5,124 +5,127 @@ r"""types.py module of aocutils"""
 import sys
 import itertools
 
-import OCC.BRepCheck
-import OCC.GeomAbs
-import OCC.TopoDS
-import OCC.BRep
-import OCC.TopAbs
-import OCC.Geom
+from OCC.BRepCheck import *
+from OCC.GeomAbs import *
+from OCC.TopoDS import TopoDS_Vertex, TopoDS_Edge, TopoDS_Face, TopoDS_Wire, \
+    TopoDS_Shell, TopoDS_Solid, TopoDS_Compound, TopoDS_Compsolid
+from OCC.TopoDS.topods import Vertex, Edge, Face, Wire, Shell, Solid, \
+    Compound, Compsolid
+# import OCC.BRep
+from OCC.TopAbs import *
+# import OCC.Geom
 
 # from aocutils.exceptions import WrongTopologicalType
 
 PY3 = not (int(sys.version.split('.')[0]) <= 2)
 
 # dictionary used to "cast" a shape to the subclass corresponding to its type
-topo_factory = {OCC.TopAbs.TopAbs_VERTEX: OCC.TopoDS.topods.Vertex,
-                OCC.TopAbs.TopAbs_EDGE: OCC.TopoDS.topods.Edge,
-                OCC.TopAbs.TopAbs_FACE: OCC.TopoDS.topods.Face,
-                OCC.TopAbs.TopAbs_WIRE: OCC.TopoDS.topods.Wire,
-                OCC.TopAbs.TopAbs_SHELL: OCC.TopoDS.topods.Shell,
-                OCC.TopAbs.TopAbs_SOLID: OCC.TopoDS.topods.Solid,
-                OCC.TopAbs.TopAbs_COMPOUND: OCC.TopoDS.topods.Compound,
-                OCC.TopAbs.TopAbs_COMPSOLID: OCC.TopoDS.topods.CompSolid}
+topo_factory = {TopAbs_VERTEX: Vertex,
+                TopAbs_EDGE: Edge,
+                TopAbs_FACE: Face,
+                TopAbs_WIRE: Wire,
+                TopAbs_SHELL: Shell,
+                TopAbs_SOLID: Solid,
+                TopAbs_COMPOUND: Compound,
+                TopAbs_COMPSOLID: CompSolid}
 
 
 # key: shape type; value: TopoDS_* subclass
-topo_type_class = {OCC.TopAbs.TopAbs_VERTEX: OCC.TopoDS.TopoDS_Vertex,
-                   OCC.TopAbs.TopAbs_EDGE: OCC.TopoDS.TopoDS_Edge,
-                   OCC.TopAbs.TopAbs_FACE: OCC.TopoDS.TopoDS_Face,
-                   OCC.TopAbs.TopAbs_WIRE: OCC.TopoDS.TopoDS_Wire,
-                   OCC.TopAbs.TopAbs_SHELL: OCC.TopoDS.TopoDS_Shell,
-                   OCC.TopAbs.TopAbs_SOLID: OCC.TopoDS.TopoDS_Solid,
-                   OCC.TopAbs.TopAbs_COMPOUND: OCC.TopoDS.TopoDS_Compound,
-                   OCC.TopAbs.TopAbs_COMPSOLID: OCC.TopoDS.TopoDS_CompSolid}
+topo_type_class = {TopAbs_VERTEX: TopoDS_Vertex,
+                   TopAbs_EDGE: TopoDS_Edge,
+                   TopAbs_FACE: TopoDS_Face,
+                   TopAbs_WIRE: TopoDS_Wire,
+                   TopAbs_SHELL: TopoDS_Shell,
+                   TopAbs_SOLID: TopoDS_Solid,
+                   TopAbs_COMPOUND: TopoDS_Compound,
+                   TopAbs_COMPSOLID: TopoDS_CompSolid}
 
 
-curve_types_dict = {OCC.GeomAbs.GeomAbs_Line: "line",
-                    OCC.GeomAbs.GeomAbs_Circle: "circle",
-                    OCC.GeomAbs.GeomAbs_Ellipse: "ellipse",
-                    OCC.GeomAbs.GeomAbs_Hyperbola: "hyperbola",
-                    OCC.GeomAbs.GeomAbs_Parabola: "parabola",
-                    OCC.GeomAbs.GeomAbs_BezierCurve: "bezier",
-                    OCC.GeomAbs.GeomAbs_BSplineCurve: "spline",
-                    OCC.GeomAbs.GeomAbs_OtherCurve: "other"}
+curve_types_dict = {GeomAbs_Line: "line",
+                    GeomAbs_Circle: "circle",
+                    GeomAbs_Ellipse: "ellipse",
+                    GeomAbs_Hyperbola: "hyperbola",
+                    GeomAbs_Parabola: "parabola",
+                    GeomAbs_BezierCurve: "bezier",
+                    GeomAbs_BSplineCurve: "spline",
+                    GeomAbs_OtherCurve: "other"}
 
-surface_types_dict = {OCC.GeomAbs.GeomAbs_Plane: "plane",
-                      OCC.GeomAbs.GeomAbs_Cylinder: "cylinder",
-                      OCC.GeomAbs.GeomAbs_Cone: "cone",
-                      OCC.GeomAbs.GeomAbs_Sphere: "sphere",
-                      OCC.GeomAbs.GeomAbs_Torus: "torus",
-                      OCC.GeomAbs.GeomAbs_BezierSurface: "bezier",
-                      OCC.GeomAbs.GeomAbs_BSplineSurface: "spline",
-                      OCC.GeomAbs.GeomAbs_SurfaceOfRevolution: "revolution",
-                      OCC.GeomAbs.GeomAbs_SurfaceOfExtrusion: "extrusion",
-                      OCC.GeomAbs.GeomAbs_OffsetSurface: "offset",
-                      OCC.GeomAbs.GeomAbs_OtherSurface: "other"}
+surface_types_dict = {GeomAbs_Plane: "plane",
+                      GeomAbs_Cylinder: "cylinder",
+                      GeomAbs_Cone: "cone",
+                      GeomAbs_Sphere: "sphere",
+                      GeomAbs_Torus: "torus",
+                      GeomAbs_BezierSurface: "bezier",
+                      GeomAbs_BSplineSurface: "spline",
+                      GeomAbs_SurfaceOfRevolution: "revolution",
+                      GeomAbs_SurfaceOfExtrusion: "extrusion",
+                      GeomAbs_OffsetSurface: "offset",
+                      GeomAbs_OtherSurface: "other"}
 
-state_dict = {OCC.TopAbs.TopAbs_IN: "in",
-              OCC.TopAbs.TopAbs_OUT: "out",
-              OCC.TopAbs.TopAbs_ON: "on",
-              OCC.TopAbs.TopAbs_UNKNOWN: "unknown"}
+state_dict = {TopAbs_IN: "in",
+              TopAbs_OUT: "out",
+              TopAbs_ON: "on",
+              TopAbs_UNKNOWN: "unknown"}
 
-orient_dict = {OCC.TopAbs.TopAbs_FORWARD: "TopAbs_FORWARD",
-               OCC.TopAbs.TopAbs_REVERSED: "TopAbs_REVERSED",
-               OCC.TopAbs.TopAbs_INTERNAL: "TopAbs_INTERNAL",
-               OCC.TopAbs.TopAbs_EXTERNAL: "TopAbs_EXTERNAL"}
+orient_dict = {TopAbs_FORWARD: "TopAbs_FORWARD",
+               TopAbs_REVERSED: "TopAbs_REVERSED",
+               TopAbs_INTERNAL: "TopAbs_INTERNAL",
+               TopAbs_EXTERNAL: "TopAbs_EXTERNAL"}
 
-topo_types_dict = {OCC.TopAbs.TopAbs_VERTEX: "vertex",
-                   OCC.TopAbs.TopAbs_EDGE: "edge",
-                   OCC.TopAbs.TopAbs_WIRE: "wire",
-                   OCC.TopAbs.TopAbs_FACE: "face",
-                   OCC.TopAbs.TopAbs_SHELL: "shell",
-                   OCC.TopAbs.TopAbs_SOLID: "solid",
-                   OCC.TopAbs.TopAbs_COMPSOLID: "compsolid",
-                   OCC.TopAbs.TopAbs_COMPOUND: "compound",
-                   OCC.TopAbs.TopAbs_SHAPE: "shape"}
+topo_types_dict = {TopAbs_VERTEX: "vertex",
+                   TopAbs_EDGE: "edge",
+                   TopAbs_WIRE: "wire",
+                   TopAbs_FACE: "face",
+                   TopAbs_SHELL: "shell",
+                   TopAbs_SOLID: "solid",
+                   TopAbs_COMPSOLID: "compsolid",
+                   TopAbs_COMPOUND: "compound",
+                   TopAbs_SHAPE: "shape"}
 
-geom_types_dict = {OCC.GeomAbs.GeomAbs_Line: "line",
-                   OCC.GeomAbs.GeomAbs_Circle: "circle",
-                   OCC.GeomAbs.GeomAbs_Ellipse: "ellipse",
-                   OCC.GeomAbs.GeomAbs_Hyperbola: "hyperbola",
-                   OCC.GeomAbs.GeomAbs_Parabola: "parabola",
-                   OCC.GeomAbs.GeomAbs_BezierCurve: "beziercurve",
-                   OCC.GeomAbs.GeomAbs_BSplineCurve: "bsplinecurve",
-                   OCC.GeomAbs.GeomAbs_OtherCurve: "othercurve"}
+geom_types_dict = {GeomAbs_Line: "line",
+                   GeomAbs_Circle: "circle",
+                   GeomAbs_Ellipse: "ellipse",
+                   GeomAbs_Hyperbola: "hyperbola",
+                   GeomAbs_Parabola: "parabola",
+                   GeomAbs_BezierCurve: "beziercurve",
+                   GeomAbs_BSplineCurve: "bsplinecurve",
+                   GeomAbs_OtherCurve: "othercurve"}
 
 
-brep_check_dict = {OCC.BRepCheck.BRepCheck_NoError: "NoError",
-                   OCC.BRepCheck.BRepCheck_InvalidPointOnCurve: "InvalidPointOnCurve",
-                   OCC.BRepCheck.BRepCheck_InvalidPointOnCurveOnSurface: "InvalidPointOnCurveOnSurface",
-                   OCC.BRepCheck.BRepCheck_InvalidPointOnSurface: "InvalidPointOnSurface",
-                   OCC.BRepCheck.BRepCheck_No3DCurve: "No3DCurve",
-                   OCC.BRepCheck.BRepCheck_Multiple3DCurve: "Multiple3DCurve",
-                   OCC.BRepCheck.BRepCheck_Invalid3DCurve: "Invalid3DCurve",
-                   OCC.BRepCheck.BRepCheck_NoCurveOnSurface: "NoCurveOnSurface",
-                   OCC.BRepCheck.BRepCheck_InvalidCurveOnSurface: "InvalidCurveOnSurface",
-                   OCC.BRepCheck.BRepCheck_InvalidCurveOnClosedSurface: "InvalidCurveOnClosedSurface",
-                   OCC.BRepCheck.BRepCheck_InvalidSameRangeFlag: "InvalidSameRangeFlag",
-                   OCC.BRepCheck.BRepCheck_InvalidSameParameterFlag: "InvalidSameParameterFlag",
-                   OCC.BRepCheck.BRepCheck_InvalidDegeneratedFlag: "InvalidDegeneratedFlag",
-                   OCC.BRepCheck.BRepCheck_FreeEdge: "FreeEdge",
-                   OCC.BRepCheck.BRepCheck_InvalidMultiConnexity: "InvalidMultiConnexity",
-                   OCC.BRepCheck.BRepCheck_InvalidRange: "InvalidRange",
-                   OCC.BRepCheck.BRepCheck_EmptyWire: "EmptyWire",
-                   OCC.BRepCheck.BRepCheck_RedundantEdge: "RedundantEdge",
-                   OCC.BRepCheck.BRepCheck_SelfIntersectingWire: "SelfIntersectingWire",
-                   OCC.BRepCheck.BRepCheck_NoSurface: "NoSurface",
-                   OCC.BRepCheck.BRepCheck_InvalidWire: "InvalidWire",
-                   OCC.BRepCheck.BRepCheck_RedundantWire: "RedundantWire",
-                   OCC.BRepCheck.BRepCheck_IntersectingWires: "IntersectingWires",
-                   OCC.BRepCheck.BRepCheck_InvalidImbricationOfWires: "InvalidImbricationOfWires",
-                   OCC.BRepCheck.BRepCheck_EmptyShell: "EmptyShell",
-                   OCC.BRepCheck.BRepCheck_RedundantFace: "RedundantFace",
-                   OCC.BRepCheck.BRepCheck_UnorientableShape: "UnorientableShape",
-                   OCC.BRepCheck.BRepCheck_NotClosed: "NotClosed",
-                   OCC.BRepCheck.BRepCheck_NotConnected: "NotConnected",
-                   OCC.BRepCheck.BRepCheck_SubshapeNotInShape: "SubshapeNotInShape",
-                   OCC.BRepCheck.BRepCheck_BadOrientation: "BadOrientation",
-                   OCC.BRepCheck.BRepCheck_BadOrientationOfSubshape: "BadOrientationOfSubshape",
-                   OCC.BRepCheck.BRepCheck_InvalidToleranceValue: "InvalidToleranceValue",
-                   OCC.BRepCheck.BRepCheck_CheckFail: "CheckFail"}
+brep_check_dict = {BRepCheck_NoError: "NoError",
+                   BRepCheck_InvalidPointOnCurve: "InvalidPointOnCurve",
+                   BRepCheck_InvalidPointOnCurveOnSurface: "InvalidPointOnCurveOnSurface",
+                   BRepCheck_InvalidPointOnSurface: "InvalidPointOnSurface",
+                   BRepCheck_No3DCurve: "No3DCurve",
+                   BRepCheck_Multiple3DCurve: "Multiple3DCurve",
+                   BRepCheck_Invalid3DCurve: "Invalid3DCurve",
+                   BRepCheck_NoCurveOnSurface: "NoCurveOnSurface",
+                   BRepCheck_InvalidCurveOnSurface: "InvalidCurveOnSurface",
+                   BRepCheck_InvalidCurveOnClosedSurface: "InvalidCurveOnClosedSurface",
+                   BRepCheck_InvalidSameRangeFlag: "InvalidSameRangeFlag",
+                   BRepCheck_InvalidSameParameterFlag: "InvalidSameParameterFlag",
+                   BRepCheck_InvalidDegeneratedFlag: "InvalidDegeneratedFlag",
+                   BRepCheck_FreeEdge: "FreeEdge",
+                   BRepCheck_InvalidMultiConnexity: "InvalidMultiConnexity",
+                   BRepCheck_InvalidRange: "InvalidRange",
+                   BRepCheck_EmptyWire: "EmptyWire",
+                   BRepCheck_RedundantEdge: "RedundantEdge",
+                   BRepCheck_SelfIntersectingWire: "SelfIntersectingWire",
+                   BRepCheck_NoSurface: "NoSurface",
+                   BRepCheck_InvalidWire: "InvalidWire",
+                   BRepCheck_RedundantWire: "RedundantWire",
+                   BRepCheck_IntersectingWires: "IntersectingWires",
+                   BRepCheck_InvalidImbricationOfWires: "InvalidImbricationOfWires",
+                   BRepCheck_EmptyShell: "EmptyShell",
+                   BRepCheck_RedundantFace: "RedundantFace",
+                   BRepCheck_UnorientableShape: "UnorientableShape",
+                   BRepCheck_NotClosed: "NotClosed",
+                   BRepCheck_NotConnected: "NotConnected",
+                   BRepCheck_SubshapeNotInShape: "SubshapeNotInShape",
+                   BRepCheck_BadOrientation: "BadOrientation",
+                   BRepCheck_BadOrientationOfSubshape: "BadOrientationOfSubshape",
+                   BRepCheck_InvalidToleranceValue: "InvalidToleranceValue",
+                   BRepCheck_CheckFail: "CheckFail"}
 
 
 class BidirDict(dict):
@@ -185,14 +188,14 @@ geom_lut = BidirDict(geom_types_dict)
 #
 #     Parameters
 #     ----------
-#     face : OCC.TopoDS_Shape of type OCC.TopAbs.TopAbs_FACE
+#     face : OCC.TopoDS_Shape of type TopAbs_FACE
 #
 #     Returns
 #     -------
 #     list
 #
 #     """
-#     if not face.ShapeType() == OCC.TopAbs.TopAbs_FACE:
+#     if not face.ShapeType() == TopAbs_FACE:
 #         msg = '%s type is not TopAbs_FACE. Conversion impossible' % str(face)
 #         logger.error(msg)
 #         raise WrongTopologicalType(msg)
@@ -201,7 +204,7 @@ geom_lut = BidirDict(geom_types_dict)
 #     # ------------------------------
 #     # static const Handle< Geom_Surface > & 	Surface (const TopoDS_Face &F, TopLoc_Location &L)
 #     #         static Handle< Geom_Surface > 	Surface (const TopoDS_Face &F)
-#     handle_geom_surface = OCC.BRep.BRep_Tool_Surface(face)
+#     handle_geom_surface = BRep_Tool_Surface(face)
 #     geom_surface = handle_geom_surface.GetObject()
 #
 #     result = list()
@@ -221,7 +224,7 @@ geom_lut = BidirDict(geom_types_dict)
 #
 #     Parameters
 #     ----------
-#     face : OCC.TopoDS.TopoDS_Face
+#     face : TopoDS_Face
 #
 #     Returns
 #     -------
@@ -229,8 +232,8 @@ geom_lut = BidirDict(geom_types_dict)
 #         True is the TopoDS_Shape is a cylinder, False otherwise
 #
 #     """
-#     hs = OCC.BRep.BRep_Tool_Surface(face)
-#     downcast_result = OCC.Geom.Handle_Geom_CylindricalSurface().DownCast(hs)
+#     hs = BRep_Tool_Surface(face)
+#     downcast_result = Handle_Geom_CylindricalSurface().DownCast(hs)
 #     if downcast_result.IsNull():
 #         return False
 #     else:

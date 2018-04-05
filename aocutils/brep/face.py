@@ -4,25 +4,25 @@ r"""face.py module of aocutils"""
 
 import logging
 
-import OCC.BRepBuilderAPI
-import OCC.BRep
-import OCC.BRepTopAdaptor
-import OCC.BRepFill
-import OCC.Geom
-import OCC.GeomAbs
-import OCC.GeomAPI
-import OCC.GeomLib
-import OCC.TopAbs
-import OCC.TopExp
-import OCC.TopoDS
-import OCC.GeomLProp
-import OCC.BRepTools
-import OCC.BRepAdaptor
-import OCC.ShapeAnalysis
-import OCC.GeomProjLib
-import OCC.Adaptor3d
-import OCC.gp
-import OCC.BRepCheck
+# import OCC.BRepBuilderAPI
+from OCC.BRep import BRep_Tool, BRep_Tool_Surface
+from OCC.BRepTopAdaptor import BRepTopAdaptor_FClass2d
+# import OCC.BRepFill
+from OCC.Geom import Geom_Curve, Handle_Geom_Plane
+# import OCC.GeomAbs
+from OCC.GeomAPI import GeomAPI_ProjectPointOnSurf
+from OCC.GeomLib import GeomLib_IsPlanarSurface
+from OCC.TopAbs import TopAbs_REVERSED, TopAbs_IN
+from OCC.TopExp import topexp
+from OCC.TopoDS import TopoDS_Vertex, TopoDS_Edge, TopoDS_Face
+from OCC.GeomLProp import GeomLProp_SLProps
+from OCC.BRepTools import breptools_UVBounds
+from OCC.BRepAdaptor import BRepAdaptor_Surface, BRepAdaptor_HSurface
+from OCC.ShapeAnalysis import ShapeAnalysis_Surface
+from OCC.GeomProjLib import geomprojlib
+from OCC.Adaptor3d import Adaptor3d_IsoCurve
+from OCC.gp import gp_Pnt, gp_Pnt2d, gp_Vec, gp_Dir
+from OCC.BRepCheck import BRepCheck_NoError, BRepCheck_Face
 
 from aocutils.brep.base import BaseObject
 from aocutils.brep.edge import Edge
@@ -46,7 +46,7 @@ class Face(BaseObject):
 
     """
     def __init__(self, topods_face):
-        if not isinstance(topods_face, OCC.TopoDS.TopoDS_Face):
+        if not isinstance(topods_face, TopoDS_Face):
             msg = 'need a TopoDS_Face, got a %s' % topods_face.__class__
             logger.critical(msg)
             raise WrongTopologicalType(msg)
@@ -67,13 +67,13 @@ class Face(BaseObject):
 
     def check(self):
         r"""Check the face"""
-        check_face = OCC.BRepCheck.BRepCheck_Face(self._wrapped_instance)
+        check_face = BRepCheck_Face(self._wrapped_instance)
         check_intersect_wires = check_face.IntersectWires()
         check_classify_wires = check_face.ClassifyWires()
         check_orientation_of_wires = check_face.OrientationOfWires()
-        if (check_intersect_wires != OCC.BRepCheck.BRepCheck_NoError or
-            check_classify_wires != OCC.BRepCheck.BRepCheck_NoError or
-            check_orientation_of_wires != OCC.BRepCheck.BRepCheck_NoError):
+        if (check_intersect_wires != BRepCheck_NoError or
+            check_classify_wires != BRepCheck_NoError or
+            check_orientation_of_wires != BRepCheck_NoError):
 
             return False
         else:
@@ -203,7 +203,7 @@ class Face(BaseObject):
         UMin, UMax, VMin, VMax : tuple of float
 
         """
-        return OCC.BRepTools.breptools_UVBounds(self._wrapped_instance)
+        return breptools_UVBounds(self._wrapped_instance)
 
     @property
     def u_domain_start(self):
@@ -227,7 +227,7 @@ class Face(BaseObject):
 
         Returns
         -------
-        OCC.gp.gp_Pnt
+        gp_Pnt
 
         """
         u_min, u_max, v_min, v_max = self.domain
@@ -241,7 +241,7 @@ class Face(BaseObject):
 
         Returns
         -------
-        OCC.gp.gp_Pnt
+        gp_Pnt
 
         """
         return self._midpoint()[1]
@@ -264,7 +264,7 @@ class Face(BaseObject):
 
         Returns
         -------
-        OCC.Geom.Geom_Surface or subclass
+        Geom_Surface or subclass
 
         """
         return self.surface_handle.GetObject()
@@ -288,11 +288,11 @@ class Face(BaseObject):
 
         Returns
         -------
-        OCC.BRepAdaptor.BRepAdaptor_Surface
+        BRepAdaptor_Surface
 
         """
         if self._adaptor is None:
-            self._adaptor = OCC.BRepAdaptor.BRepAdaptor_Surface(self._wrapped_instance)
+            self._adaptor = BRepAdaptor_Surface(self._wrapped_instance)
         return self._adaptor
 
     @property
@@ -301,11 +301,11 @@ class Face(BaseObject):
 
         Returns
         -------
-        OCC.BRepAdaptor.BRepAdaptor_HSurface
+        BRepAdaptor_HSurface
 
         """
         if self._adaptor_handle is None:
-            self._adaptor_handle = OCC.BRepAdaptor.BRepAdaptor_HSurface()
+            self._adaptor_handle = BRepAdaptor_HSurface()
             self._adaptor_handle.Set(self.adaptor)
         return self._adaptor_handle
 
@@ -318,7 +318,7 @@ class Face(BaseObject):
         tuple[bool]
 
         """
-        sa = OCC.ShapeAnalysis.ShapeAnalysis_Surface(self.surface_handle)
+        sa = ShapeAnalysis_Surface(self.surface_handle)
         # sa.GetBoxUF()
         return sa.IsUClosed(), sa.IsVClosed()
 
@@ -335,8 +335,8 @@ class Face(BaseObject):
 
         """
         # logger.debug(str(self.surface_handle))
-        # is_planar_surface = OCC.GeomLib.GeomLib_IsPlanarSurface(self.surface_handle, tol)
-        return OCC.GeomLib.GeomLib_IsPlanarSurface(self.surface_handle, tol).IsPlanar()
+        # is_planar_surface = GeomLib_IsPlanarSurface(self.surface_handle, tol)
+        return GeomLib_IsPlanarSurface(self.surface_handle, tol).IsPlanar()
 
     @property
     def is_plane(self):
@@ -353,8 +353,8 @@ class Face(BaseObject):
 
         """
 
-        hs = OCC.BRep.BRep_Tool_Surface(self._wrapped_instance)
-        downcast_result = OCC.Geom.Handle_Geom_Plane().DownCast(hs)
+        hs = BRep_Tool_Surface(self._wrapped_instance)
+        downcast_result = Handle_Geom_Plane().DownCast(hs)
         # the handle is null if downcast failed or is not possible,
         # that is to say the face is not a plane
         if downcast_result.IsNull():
@@ -369,12 +369,16 @@ class Face(BaseObject):
         Returns
         -------
         bool
-            True if the Wire delimiting the Face lies on the bounds of the surface
-            if this is not the case, the wire represents a contour that delimits the face [ think cookie cutter ]
+            True if the Wire delimiting the Face lies on the bounds
+            of the surface
+            if this is not the case, the wire represents a contour that
+            delimits the face [ think cookie cutter ]
             and implies that the surface is trimmed
         """
-        a = list(map(lambda x: round(x, 3), OCC.BRepTools.breptools_UVBounds(self._wrapped_instance)))
-        b = list(map(lambda x: round(x, 3), self.adaptor.Surface().Surface().GetObject().Bounds()))
+        a = list(map(lambda x: round(x, 3),
+                     breptools_UVBounds(self._wrapped_instance)))
+        b = list(map(lambda x: round(x, 3),
+                     self.adaptor.Surface().Surface().GetObject().Bounds()))
         if a != b:
             logger.info('%s, %s' % (str(a), str(b)))
             return True
@@ -394,16 +398,18 @@ class Face(BaseObject):
 
         """
         if self._classify_uv is None:
-            self._classify_uv = OCC.BRepTopAdaptor.BRepTopAdaptor_FClass2d(self._wrapped_instance, 1e-9)
-        uv = OCC.gp.gp_Pnt2d(u, v)
-        if self._classify_uv.Perform(uv) == OCC.TopAbs.TopAbs_IN:
+            self._classify_uv = BRepTopAdaptor_FClass2d(self._wrapped_instance,
+                                                        1e-9)
+        uv = gp_Pnt2d(u, v)
+        if self._classify_uv.Perform(uv) == TopAbs_IN:
             return True
         else:
             return False
 
     def _check_u_in_domain(self, u):
         if not self.domain[0] <= u <= self.domain[1]:
-            msg = "Parameter u is outside of domain ranging from %s to %s" % (str(self.domain[0]), str(self.domain[0]))
+            msg = "Parameter u is outside of domain ranging from %s " \
+                  "to %s" % (str(self.domain[0]), str(self.domain[0]))
             logger.error(msg)
             raise ParameterOutOfDomainException(msg)
         else:
@@ -411,7 +417,8 @@ class Face(BaseObject):
 
     def _check_v_in_domain(self, v):
         if not self.domain[2] <= v <= self.domain[3]:
-            msg = "Parameter v is outside of domain ranging from %s to %s" % (str(self.domain[2]), str(self.domain[3]))
+            msg = "Parameter v is outside of domain ranging from %s to " \
+                  "%s" % (str(self.domain[2]), str(self.domain[3]))
             logger.error(msg)
             raise ParameterOutOfDomainException(msg)
         else:
@@ -427,7 +434,7 @@ class Face(BaseObject):
 
         Returns
         -------
-        OCC.gp.gp_Pnt
+        gp_Pnt
 
         """
         self._check_u_in_domain(u)
@@ -439,7 +446,7 @@ class Face(BaseObject):
 
         Parameters
         ----------
-        pt : OCC.gp.gp_Pnt
+        pt : gp_Pnt
 
         Returns
         -------
@@ -447,7 +454,7 @@ class Face(BaseObject):
             u, v coordinates
 
         """
-        sas = OCC.ShapeAnalysis.ShapeAnalysis_Surface(self.surface_handle)
+        sas = ShapeAnalysis_Surface(self.surface_handle)
         uv = sas.ValueOfUV(pt, self.tolerance)
         return uv.X(), uv.Y()
 
@@ -457,8 +464,8 @@ class Face(BaseObject):
         Parameters
         ----------
         edge :
-            an occutils.edge.Edge or OCC.TopoDS.TopoDS_Edge from :face:
-        face : Face or OCC.TopoDS.TopoDS_Face
+            an occutils.edge.Edge or TopoDS_Edge from :face:
+        face : Face or TopoDS_Face
 
         Returns
         -------
@@ -466,7 +473,7 @@ class Face(BaseObject):
             bool, GeomAbs_Shape if it has continuity, otherwise False, None
 
         """
-        bt = OCC.BRep.BRep_Tool()
+        bt = BRep_Tool()
         if bt.HasContinuity(edge, self._wrapped_instance, face):
             continuity = bt.Continuity(edge, self._wrapped_instance, face)
             return True, continuity
@@ -484,7 +491,7 @@ class Face(BaseObject):
 
         Parameters
         ----------
-        pnt : OCC.TopoDS.TopoDS_Vertex or OCC.gp.gp_Pnt
+        pnt : TopoDS_Vertex or gp_Pnt
         tol : float
 
         Returns
@@ -492,12 +499,12 @@ class Face(BaseObject):
         uv, point
 
         """
-        if isinstance(pnt, OCC.TopoDS.TopoDS_Vertex):
-            pnt = OCC.BRep.BRep_Tool.Pnt(pnt)
+        if isinstance(pnt, TopoDS_Vertex):
+            pnt = BRep_Tool.Pnt(pnt)
 
-        proj = OCC.GeomAPI.GeomAPI_ProjectPointOnSurf(pnt,
-                                                      self.surface_handle,
-                                                      tol)
+        proj = GeomAPI_ProjectPointOnSurf(pnt,
+                                          self.surface_handle,
+                                          tol)
         # uv = proj.LowerDistanceParameters()
         proj_pnt = proj.NearestPoint()
 
@@ -508,7 +515,7 @@ class Face(BaseObject):
 
         Parameters
         ----------
-        other : OCC.TopoDS.TopoDS_Edge or OCC.Geom.Geom_Curve (or subclass)
+        other : TopoDS_Edge or Geom_Curve (or subclass)
 
         Returns
         -------
@@ -516,18 +523,16 @@ class Face(BaseObject):
 
         """
         # this way Geom_Circle and alike are valid too
-        if isinstance(other, OCC.TopoDS.TopoDS_Edge) or isinstance(other, OCC.Geom.Geom_Curve) \
-                or issubclass(other, OCC.Geom.Geom_Curve):
+        if isinstance(other, TopoDS_Edge) or isinstance(other, Geom_Curve) \
+                or issubclass(other, Geom_Curve):
                 # convert edge to curve
-                first, last = OCC.TopExp.topexp.FirstVertex(other), OCC.TopExp.topexp.LastVertex(other)
-                lbound, ubound = OCC.BRep.BRep_Tool().Parameter(first, other), OCC.BRep.BRep_Tool().Parameter(last,
-                                                                                                              other)
-                other = OCC.BRep.BRep_Tool.Curve(other, lbound, ubound).GetObject()
+                first, last = topexp.FirstVertex(other), topexp.LastVertex(other)
+                lbound, ubound = BRep_Tool().Parameter(first, other), BRep_Tool().Parameter(last, other)
+                other = BRep_Tool.Curve(other, lbound, ubound).GetObject()
 
                 # Project (const Handle< Geom_Curve > &C,
                 #          const Handle< Geom_Surface > &S)
-                return OCC.GeomProjLib.geomprojlib.Project(other,
-                                                           self.surface_handle)
+                return geomprojlib.Project(other, self.surface_handle)
 
     def project_edge(self, edg):
         r"""Project edge
@@ -556,7 +561,7 @@ class Face(BaseObject):
 
         Returns
         -------
-        OCC.Adaptor3d.Adaptor3d_IsoCurve
+        Adaptor3d_IsoCurve
 
         """
         if u_or_v == "u":
@@ -567,9 +572,7 @@ class Face(BaseObject):
             # if u_or_v is not "u", it is assumed to be "v"
             self._check_v_in_domain(param)
         uv = 0 if u_or_v == 'u' else 1
-        return OCC.Adaptor3d.Adaptor3d_IsoCurve(self.adaptor_handle.GetHandle(),
-                                                uv,
-                                                param)
+        return Adaptor3d_IsoCurve(self.adaptor_handle.GetHandle(), uv, param)
 
     @property
     def edges(self):
@@ -601,16 +604,12 @@ class Face(BaseObject):
 
         Returns
         -------
-        OCC.GeomLProp.GeomLProp_SLProps
+        GeomLProp_SLProps
 
         """
         self._check_u_in_domain(u)
         self._check_v_in_domain(v)
-        _local_props = OCC.GeomLProp.GeomLProp_SLProps(self.surface_handle,
-                                                       u,
-                                                       v,
-                                                       1,
-                                                       1e-6)
+        _local_props = GeomLProp_SLProps(self.surface_handle, u, v, 1, 1e-6)
 
         _domain = self.domain
         if u in _domain or v in _domain:
@@ -712,7 +711,7 @@ class Face(BaseObject):
 
         Returns
         -------
-        OCC.gp.gp_Vec
+        gp_Vec
 
         """
         self._check_u_in_domain(u)
@@ -720,9 +719,9 @@ class Face(BaseObject):
         curv = self.local_props(u, v)
         if curv.IsNormalDefined():
             norm = curv.Normal()
-            if self.orientation == OCC.TopAbs.TopAbs_REVERSED:
+            if self.orientation == TopAbs_REVERSED:
                 norm.Reverse()
-            return OCC.gp.gp_Vec(norm.X(), norm.Y(), norm.Z())
+            return gp_Vec(norm.X(), norm.Y(), norm.Z())
         else:
             msg = "normal is not defined at u,v: {0}, {1}".format(u, v)
             logger.error(msg)
@@ -738,23 +737,19 @@ class Face(BaseObject):
 
         Returns
         -------
-        tuple[OCC.gp.gp_Vec]
+        tuple[gp_Vec]
             U tangent, V tangent
 
         """
         self._check_u_in_domain(u)
         self._check_v_in_domain(v)
-        du, dv = OCC.gp.gp_Dir(), OCC.gp.gp_Dir()
+        du, dv = gp_Dir(), gp_Dir()
         curv = self.local_props(u, v)
         if curv.IsTangentUDefined() and curv.IsTangentVDefined():
             # TODO : WTF ?
             curv.TangentU(du), curv.TangentV(dv)
-            return (OCC.gp.gp_Vec(du.X(),
-                                  du.Y(),
-                                  du.Z()),
-                    OCC.gp.gp_Vec(dv.X(),
-                                  dv.Y(),
-                                  dv.Z()))
+            return (gp_Vec(du.X(), du.Y(), du.Z()),
+                    gp_Vec(dv.X(), dv.Y(), dv.Z()))
         else:
             msg = 'Tangent not defined in U or V'
             logger.error(msg)

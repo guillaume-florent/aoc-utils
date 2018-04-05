@@ -8,7 +8,7 @@ import numpy as np
 
 # import OCC.gp
 
-import aocutils.math_
+from aocutils.math_ import roundlist, smooth_pnts
 
 list_numbers = [np.random.random() for _ in range(100)]
 # list_gp_pnt = [OCC.gp.gp_Pnt(np.random.random(),
@@ -20,11 +20,11 @@ print(list_numbers)
 
 
 def test_roundlist():
-    list_rounded_numbers = aocutils.math_.roundlist(list_numbers, 3)
+    list_rounded_numbers = roundlist(list_numbers, 3)
     assert len(list_rounded_numbers) == 100
 
 
 def test_smooth_pnts():
-    smoothed_numbers = aocutils.math_.smooth_pnts(list_numbers)
+    smoothed_numbers = smooth_pnts(list_numbers)
     assert len(smoothed_numbers) == 100
     # smoothed_points = occutils.math_.smooth_pnts(list_gp_pnt)

@@ -7,9 +7,9 @@ rotate ....
 
 import math
 
-import OCC.BRepBuilderAPI
-import OCC.gp
-import OCC.TopoDS
+from OCC.BRepBuilderAPI import BRepBuilderAPI_Transform
+from OCC.gp import gp_Trsf, gp_Ax1
+from OCC.TopoDS import TopoDS_Shape
 
 from aocutils.common import AssertIsDone
 from aocutils.topology import shape_to_topology
@@ -29,14 +29,14 @@ def translate(brep_or_iterable, vec, copy=False):
 
     Returns
     -------
-    list[OCC.TopoDS.TopoDS_*]
+    list[TopoDS_*]
 
     """
     # st = occutils.types_lut.ShapeToTopology()
-    gp_trsf = OCC.gp.gp_Trsf()
+    gp_trsf = gp_Trsf()
     gp_trsf.SetTranslation(vec)
-    if issubclass(brep_or_iterable.__class__, OCC.TopoDS.TopoDS_Shape):
-        brep_transform = OCC.BRepBuilderAPI.BRepBuilderAPI_Transform(brep_or_iterable, gp_trsf, copy)
+    if issubclass(brep_or_iterable.__class__, TopoDS_Shape):
+        brep_transform = BRepBuilderAPI_Transform(brep_or_iterable, gp_trsf, copy)
         brep_transform.Build()
         return shape_to_topology(brep_transform.Shape())
     else:
@@ -48,20 +48,20 @@ def rotate(brep, axe, degree, copy=False):
 
     Parameters
     ----------
-    brep : OCC.TopoDS.TopoDS_*
-    axe : OCC.gp.gp_Ax1
+    brep : TopoDS_*
+    axe : gp_Ax1
     degree : float
         Rotation angle in degrees
     copy : bool
 
     Returns
     -------
-    OCC.TopoDS.TopoDS_*
+    TopoDS_*
 
     """
-    gp_trsf = OCC.gp.gp_Trsf()
+    gp_trsf = gp_Trsf()
     gp_trsf.SetRotation(axe, math.radians(degree))
-    brep_transform = OCC.BRepBuilderAPI.BRepBuilderAPI_Transform(brep, gp_trsf, copy)
+    brep_transform = BRepBuilderAPI_Transform(brep, gp_trsf, copy)
     with AssertIsDone(brep_transform, 'could not produce rotation'):
         brep_transform.Build()
         return shape_to_topology(brep_transform.Shape())
@@ -74,7 +74,7 @@ def scale_uniform(brep, pnt, factor, copy=False):
     ----------
     brep
         the Topo_DS to scale
-    pnt : OCC.gp.gp_Pnt
+    pnt : gp_Pnt
         a gp_Pnt
     factor : float
         scaling factor
@@ -83,12 +83,12 @@ def scale_uniform(brep, pnt, factor, copy=False):
 
     Returns
     -------
-    OCC.TopoDS.TopoDS_Shape
+    TopoDS_Shape
 
     """
-    trns = OCC.gp.gp_Trsf()
+    trns = gp_Trsf()
     trns.SetScale(pnt, factor)
-    brep_trns = OCC.BRepBuilderAPI.BRepBuilderAPI_Transform(brep, trns, copy)
+    brep_trns = BRepBuilderAPI_Transform(brep, trns, copy)
     brep_trns.Build()
     return brep_trns.Shape()
 
@@ -99,18 +99,18 @@ def mirror_pnt_dir(brep, pnt, direction, copy=False):
     Parameters
     ----------
     brep
-    pnt : OCC.gp.gp_Pnt
-    direction : OCC.gp.gp_Dir
+    pnt : gp_Pnt
+    direction : gp_Dir
     copy : bool
 
     Returns
     -------
-    OCC.TopoDS.TopoDS_Shape
+    TopoDS_Shape
 
     """
-    trns = OCC.gp.gp_Trsf()
-    trns.SetMirror(OCC.gp.gp_Ax1(pnt, direction))
-    brep_trns = OCC.BRepBuilderAPI.BRepBuilderAPI_Transform(brep, trns, copy)
+    trns = gp_Trsf()
+    trns.SetMirror(gp_Ax1(pnt, direction))
+    brep_trns = BRepBuilderAPI_Transform(brep, trns, copy)
     with AssertIsDone(brep_trns, 'could not produce mirror'):
         brep_trns.Build()
         return brep_trns.Shape()
@@ -121,18 +121,18 @@ def mirror_axe2(brep, axe2, copy=False):
 
     Parameters
     ----------
-    brep : OCC.TopoDS.TopoDS_*
-    axe2 : OCC.gp.gp_Ax2
+    brep : TopoDS_*
+    axe2 : gp_Ax2
     copy : bool
 
     Returns
     -------
-    OCC.TopoDS.TopoDS_Shape
+    TopoDS_Shape
 
     """
-    trns = OCC.gp.gp_Trsf()
+    trns = gp_Trsf()
     trns.SetMirror(axe2)
-    brep_trns = OCC.BRepBuilderAPI.BRepBuilderAPI_Transform(brep, trns, copy)
+    brep_trns = BRepBuilderAPI_Transform(brep, trns, copy)
     with AssertIsDone(brep_trns, 'could not produce mirror'):
         brep_trns.Build()
         return brep_trns.Shape()

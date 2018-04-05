@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-r"""examples/occutils_geomplate"""
+r""""""
 
 
 from __future__ import print_function
@@ -17,27 +17,28 @@ try:
 except ImportError:
     HAVE_SCIPY = False
 
-import OCC.gp
-import OCC.BRepAdaptor
-import OCC.BRep
-import OCC.ShapeAnalysis
-import OCC.GeomLProp
-import OCC.BRepFill
-import OCC.GeomPlate
-import OCC.IGESControl
-import OCC.IFSelect
-import OCC.Display.SimpleGui
-import OCC.TopoDS
-import OCC.GeomAbs
+from OCC.gp import gp_Pnt
+from OCC.BRepAdaptor import BRepAdaptor_HCurve
+from OCC.BRep import BRep_Builder, BRep_Tool
+from OCC.ShapeAnalysis import ShapeAnalysis_Surface
+from OCC.GeomLProp import GeomLProp_SLProps
+from OCC.BRepFill import BRepFill_CurveConstraint
+from OCC.GeomPlate import GeomPlate_MakeApprox, GeomPlate_BuildPlateSurface, \
+    GeomPlate_PointConstraint
+from OCC.IGESControl import IGESControl_Reader
+from OCC.IFSelect import IFSelect_ItemsByEntity, IFSelect_RetDone
+from OCC.Display.SimpleGui import init_display
+from OCC.TopoDS import TopoDS_Compound
+# import OCC.GeomAbs
 
-import aocutils.brep.wire_make
-import aocutils.brep.face_make
-import aocutils.brep.vertex_make
-import aocutils.topology
-import aocutils.display.defaults
+from aocutils.brep.wire_make import closed_polygon
+from aocutils.brep.face_make import n_sided, face
+from aocutils.brep.vertex_make import vertex
+from aocutils.topology import Topo, WireExplorer
+from aocutils.display.defaults import backend
 
-backend = aocutils.display.defaults.backend
-display, start_display, add_menu, add_function_to_menu = OCC.Display.SimpleGui.init_display(backend)
+backend = backend
+display, start_display, add_menu, add_function_to_menu = init_display(backend)
 
 
 class IGESImporter(object):
@@ -47,7 +48,8 @@ class IGESImporter(object):
         self._filename = None
         self.nbs = 0
         if not os.path.isfile(filename):
-            raise AssertionError("IGESImporter initialization Error: file %s not found." % filename)
+            raise AssertionError("IGESImporter initialization Error: "
+                                 "file %s not found." % filename)
         self.filename = filename
 
     @property
@@ -58,35 +60,38 @@ class IGESImporter(object):
     @filename.setter
     def filename(self, value):
         if not os.path.isfile(value):
-            raise AssertionError("IGESImporter initialization Error: file %s not found." % value)
+            raise AssertionError("IGESImporter initialization Error: "
+                                 "file %s not found." % value)
         else:
             self._filename = value
 
     def read_file(self):
         """Read the IGES file and stores the result in a list of TopoDS_Shape"""
-        a_reader = OCC.IGESControl.IGESControl_Reader()
+        a_reader = IGESControl_Reader()
         status = a_reader.ReadFile(self._filename)
-        if status == OCC.IFSelect.IFSelect_RetDone:
+        if status == IFSelect_RetDone:
             failsonly = False
-            a_reader.PrintCheckLoad(failsonly, OCC.IFSelect.IFSelect_ItemsByEntity)
+            a_reader.PrintCheckLoad(failsonly, IFSelect_ItemsByEntity)
             nbr = a_reader.NbRootsForTransfer()
-            a_reader.PrintCheckTransfer(failsonly, OCC.IFSelect.IFSelect_ItemsByEntity)
+            a_reader.PrintCheckTransfer(failsonly, IFSelect_ItemsByEntity)
             # ok = a_reader.TransferRoots()
             for _ in range(1, nbr + 1):
                 self.nbs = a_reader.NbShapes()
                 if self.nbs == 0:
                     # The program stops !!!! Why ?
-                    print("At least one shape in IGES cannot be transfered")
+                    print("At least one shape in IGES cannot be transferred")
                 elif nbr == 1 and self.nbs == 1:
                     a_res_shape = a_reader.Shape(1)
                     if a_res_shape.IsNull():
-                        print("At least one shape in IGES cannot be transferred")
+                        print("At least one shape in IGES "
+                              "cannot be transferred")
                     self._shapes.append(a_res_shape)
                 else:
                     for i in range(1, self.nbs+1):
                         a_shape = a_reader.Shape(i)
                         if a_shape.IsNull():
-                            print("At least one shape in STEP cannot be transferred")
+                            print("At least one shape in STEP "
+                                  "cannot be transferred")
                         else:
                             self._shapes.append(a_shape)
             return True
@@ -97,8 +102,8 @@ class IGESImporter(object):
     def get_compound(self):
         r"""Create and returns a compound from the _shapes list"""
         # Create a compound
-        compound = OCC.TopoDS.TopoDS_Compound()
-        builder = OCC.BRep.BRep_Builder()
+        compound = TopoDS_Compound()
+        builder = BRep_Builder()
         builder.MakeCompound(compound)
         # Populate the compound
         for shape in self._shapes:
@@ -118,16 +123,20 @@ def geom_plate(event=None):
 
     """
     display.EraseAll()
-    p1 = OCC.gp.gp_Pnt(0, 0, 0)
-    p2 = OCC.gp.gp_Pnt(0, 10, 0)
-    p3 = OCC.gp.gp_Pnt(0, 10, 10)
-    p4 = OCC.gp.gp_Pnt(0, 0, 10)
-    p5 = OCC.gp.gp_Pnt(5, 5, 5)
-    poly = aocutils.brep.wire_make.closed_polygon([p1, p2, p3, p4])  # poly is a OCC.TopoDS.TopoDS_Wire
-    edges = [edge for edge in aocutils.topology.Topo(poly).edges]  # list of OCC.TopoDS.TopoDS_Edge
+    p1 = gp_Pnt(0, 0, 0)
+    p2 = gp_Pnt(0, 10, 0)
+    p3 = gp_Pnt(0, 10, 10)
+    p4 = gp_Pnt(0, 0, 10)
+    p5 = gp_Pnt(5, 5, 5)
 
-    # C1 and C2 fail (C0 (default) works) - face is a OCC.TopoDS.TopoDS_Face
-    face = aocutils.brep.face_make.n_sided(edges, [p5])
+    # poly is a TopoDS_Wire
+    poly = closed_polygon([p1, p2, p3, p4])
+
+    # list of TopoDS_Edge
+    edges = [edge for edge in Topo(poly).edges]
+
+    # C1 and C2 fail (C0 (default) works) - face is a TopoDS_Face
+    face = n_sided(edges, [p5])
 
     display.DisplayShape(edges)
     # display.DisplayShape(occutils.construct.make_vertex(p5))
@@ -145,27 +154,27 @@ def build_plate(polygon, points):
     Parameters
     ----------
     polygon : list of polygons ( TopoDS_Shape)
-    points : list of points ( OCC.gp.gp_Pnt )
+    points : list of points ( gp_Pnt )
 
     Returns
     -------
-    OCC.TopoDS.TopoDS_Face
+    TopoDS_Face
 
     """
     # plate surface
-    bp_srf = OCC.GeomPlate.GeomPlate_BuildPlateSurface(3, 15, 2)
+    bp_srf = GeomPlate_BuildPlateSurface(3, 15, 2)
 
     # add curve constraints
     for poly in polygon:
-        for edg in aocutils.topology.WireExplorer(poly).ordered_edges:
-            c = OCC.BRepAdaptor.BRepAdaptor_HCurve()
+        for edg in WireExplorer(poly).ordered_edges:
+            c = BRepAdaptor_HCurve()
             c.ChangeCurve().Initialize(edg)
-            constraint = OCC.BRepFill.BRepFill_CurveConstraint(c.GetHandle(), 0)
+            constraint = BRepFill_CurveConstraint(c.GetHandle(), 0)
             bp_srf.Add(constraint.GetHandle())
 
     # add point constraint
     for pt in points:
-        bp_srf.Add(OCC.GeomPlate.GeomPlate_PointConstraint(pt, 0).GetHandle())
+        bp_srf.Add(GeomPlate_PointConstraint(pt, 0).GetHandle())
         bp_srf.Perform()
 
     max_seg, max_deg, crit_order = 9, 8, 0
@@ -173,10 +182,10 @@ def build_plate(polygon, points):
     dmax = max([tol, 10 * bp_srf.G0Error()])
 
     srf = bp_srf.Surface()
-    plate = OCC.GeomPlate.GeomPlate_MakeApprox(srf, tol, max_seg, max_deg, dmax, crit_order)
+    plate = GeomPlate_MakeApprox(srf, tol, max_seg, max_deg, dmax, crit_order)
     u_min, u_max, v_min, v_max = srf.GetObject().Bounds()
 
-    return aocutils.brep.face_make.face(plate.Surface(), u_min, u_max, v_min, v_max, 1e-4)
+    return face(plate.Surface(), u_min, u_max, v_min, v_max, 1e-4)
 
 
 def radius_at_uv(face, u, v):
@@ -197,9 +206,9 @@ def radius_at_uv(face, u, v):
         The radius of curvature at u, v
 
     """
-    h_srf = OCC.BRep.BRep_Tool.Surface(face)
+    h_srf = BRep_Tool.Surface(face)
     # uv_domain = GeomLProp_SurfaceTool().Bounds(h_srf)
-    curvature = OCC.GeomLProp.GeomLProp_SLProps(h_srf, u, v, 1, 1e-6)
+    curvature = GeomLProp_SLProps(h_srf, u, v, 1, 1e-6)
     try:
         _crv_min = 1. / curvature.MinCurvature()
     except ZeroDivisionError:
@@ -224,8 +233,8 @@ def uv_from_projected_point_on_face(face, pt):
     -------
 
     """
-    surface = OCC.BRep.BRep_Tool.Surface(face)
-    surface_shape_analysis = OCC.ShapeAnalysis.ShapeAnalysis_Surface(surface)
+    surface = BRep_Tool.Surface(face)
+    surface_shape_analysis = ShapeAnalysis_Surface(surface)
     uv = surface_shape_analysis.ValueOfUV(pt, 1e-2)
     print('distance', surface_shape_analysis.Value(uv).Distance(pt))
     return uv.Coord()
@@ -247,7 +256,7 @@ class RadiusConstrainedSurface(object):
         self.plate = build_plate([self.poly], [self.pnt])
         self.display.EraseAll()
         self.display.DisplayShape(self.plate)
-        vert = aocutils.brep.vertex_make.vertex(self.pnt)
+        vert = vertex(self.pnt)
         self.display.DisplayShape(vert, update=True)
 
     def radius(self, z):
@@ -289,12 +298,12 @@ def solve_radius(event=None):
 
     """
     display.EraseAll()
-    p1 = OCC.gp.gp_Pnt(0, 0, 0)
-    p2 = OCC.gp.gp_Pnt(0, 10, 0)
-    p3 = OCC.gp.gp_Pnt(0, 10, 10)
-    p4 = OCC.gp.gp_Pnt(0, 0, 10)
-    p5 = OCC.gp.gp_Pnt(5, 5, 5)
-    poly = aocutils.brep.wire_make.closed_polygon([p1, p2, p3, p4])
+    p1 = gp_Pnt(0, 0, 0)
+    p2 = gp_Pnt(0, 10, 0)
+    p3 = gp_Pnt(0, 10, 10)
+    p4 = gp_Pnt(0, 0, 10)
+    p5 = gp_Pnt(5, 5, 5)
+    poly = closed_polygon([p1, p2, p3, p4])
     for i in scipy.arange(0.1, 3., 0.2).tolist():
         radius_constrained_surface = RadiusConstrainedSurface(display, poly, p5, i)
         _ = radius_constrained_surface.solve()
@@ -313,14 +322,14 @@ def build_geom_plate(edges):
     -------
     face
     """
-    bp_srf = OCC.GeomPlate.GeomPlate_BuildPlateSurface(3, 9, 12)
+    bp_srf = GeomPlate_BuildPlateSurface(3, 9, 12)
 
     # add curve constraints
     for edg in edges:
-        c = OCC.BRepAdaptor.BRepAdaptor_HCurve()
+        c = BRepAdaptor_HCurve()
         print('edge:', edg)
         c.ChangeCurve().Initialize(edg)
-        constraint = OCC.BRepFill.BRepFill_CurveConstraint(c.GetHandle(), 0)
+        constraint = BRepFill_CurveConstraint(c.GetHandle(), 0)
         bp_srf.Add(constraint.GetHandle())
 
     # add point constraint
@@ -330,10 +339,10 @@ def build_geom_plate(edges):
         print('Failed to build the geom plate surface')
 
     srf = bp_srf.Surface()
-    plate = OCC.GeomPlate.GeomPlate_MakeApprox(srf, 1e-04, 100, 9, 1e-03, 0)
+    plate = GeomPlate_MakeApprox(srf, 1e-04, 100, 9, 1e-03, 0)
 
     u_min, u_max, v_min, v_max = srf.GetObject().Bounds()
-    face = aocutils.brep.face_make.face(plate.Surface(), u_min, u_max, v_min, v_max, 1e-6)
+    face = face(plate.Surface(), u_min, u_max, v_min, v_max, 1e-6)
     return face
 
 
@@ -350,7 +359,7 @@ def build_curve_network(event=None):
     print('done.')
 
     print('Building geomplate...', end='')
-    topo = aocutils.topology.Topo(iges_cpd)
+    topo = Topo(iges_cpd)
     edges_list = list(topo.edges)
     face = build_geom_plate(edges_list)
     print('done.')

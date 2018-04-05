@@ -9,6 +9,8 @@ Memory measurement functions
 
 """
 
+# TODO : this should go to corelib
+
 from __future__ import print_function
 
 import psutil
@@ -35,7 +37,8 @@ def mem(size="rss"):
         return process.memory_info().rss  # cross-platform
     else:
         if sys.platform == "linux" or sys.platform == "linux2":
-            return int(os.popen('ps -p %d -o %s | tail -1' % (os.getpid(), size)).read())
+            return int(os.popen('ps -p %d -o %s | tail -1' % (os.getpid(),
+                                                              size)).read())
         else:
             raise NotImplementedError
 

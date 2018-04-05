@@ -9,30 +9,30 @@ Box -> Topology -> 1 edge -> edge tolerance
 
 from __future__ import print_function
 
-import OCC.BRepPrimAPI
-import OCC.Display.SimpleGui
+from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere
+from OCC.Display.SimpleGui import init_display()
 
-import aocutils.brep.edge
-import aocutils.topology
-import aocutils.display.display
+from aocutils.brep.edge import Edge
+from aocutils.topology import Topo
+# import aocutils.display.display
 
-display, start_display, add_menu, add_function_to_menu = OCC.Display.SimpleGui.init_display("wx")
+display, start_display, add_menu, add_function_to_menu = init_display("wx")
 
 
 if __name__ == '__main__':
-    box = OCC.BRepPrimAPI.BRepPrimAPI_MakeBox(10, 20, 30).Shape()
-    box_topology = aocutils.topology.Topo(box)
+    box = BRepPrimAPI_MakeBox(10, 20, 30).Shape()
+    box_topology = Topo(box)
     first_edge = next(box_topology.edges)
-    occutils_wrapped_edge = aocutils.brep.edge.Edge(first_edge)
+    occutils_wrapped_edge = Edge(first_edge)
 
-    sphere = OCC.BRepPrimAPI.BRepPrimAPI_MakeSphere(10).Shape()
-    sphere_topology = aocutils.topology.Topo(sphere, return_iter=False)
+    sphere = BRepPrimAPI_MakeSphere(10).Shape()
+    sphere_topology = Topo(sphere, return_iter=False)
     print(sphere_topology.number_of_edges)
     edges = sphere_topology.edges
     edge_sphere_0 = edges[0]
     edge_sphere_1 = edges[1]
     edge_sphere_2 = edges[2]
-    wrapped_edge_sphere = aocutils.brep.edge.Edge(edge_sphere_1)
+    wrapped_edge_sphere = Edge(edge_sphere_1)
 
     print(occutils_wrapped_edge.tolerance)
     display.DisplayShape(edge_sphere_1)

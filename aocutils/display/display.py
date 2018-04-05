@@ -5,9 +5,9 @@ r"""Display related utility functions"""
 import functools
 import logging
 
-import OCC.Display.SimpleGui
-import OCC.AIS
-import OCC.Quantity
+from OCC.Display.SimpleGui import init_display
+from OCC.AIS import AIS_Shape
+from OCC.Quantity import Quantity_NOC_AQUAMARINE4
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 def colored_and_transparent(display,
                             object_,
                             width=4,
-                            color=OCC.Quantity.Quantity_NOC_AQUAMARINE4,
+                            color=Quantity_NOC_AQUAMARINE4,
                             transparency=0.5):
     r"""Display an object with color and transparency using AIS
 
@@ -29,7 +29,7 @@ def colored_and_transparent(display,
     transparency : float, optional (default is 0.5)
 
     """
-    ais_shp = OCC.AIS.AIS_Shape(object_)
+    ais_shp = AIS_Shape(object_)
     ais_shp.SetTransparency(transparency)
     ais_shp.SetColor(color)
     ais_shp.SetWidth(width)
@@ -49,10 +49,10 @@ def show(shape, backend=None):
     """
     if backend is None:
         display, start_display, _, _ = \
-            OCC.Display.SimpleGui.init_display()
+            init_display()
     else:
         display, start_display, _, _ = \
-            OCC.Display.SimpleGui.init_display(backend)
+            init_display(backend)
     display.DisplayShape(shape, update=True)
     display.FitAll()
     display.View_Iso()
@@ -85,10 +85,10 @@ class Display(object):
     def __init__(self, backend=None):
         if backend is None:
             self.display, self.start_display, self.add_menu, self.add_function_to_menu = \
-                OCC.Display.SimpleGui.init_display()
+                init_display()
         else:
             self.display, self.start_display, self.add_menu, self.add_function_to_menu = \
-                OCC.Display.SimpleGui.init_display(backend)
+                init_display(backend)
 
     def display_shape(self, *args, **kwargs):
         r"""Display a shape

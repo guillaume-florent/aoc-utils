@@ -5,11 +5,11 @@ r"""types module tests"""
 
 import pytest
 
-import OCC.BRepPrimAPI
-import OCC.TopAbs
+from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere
+from OCC.TopAbs import TopAbs_SOLID
 
-import aocutils.topology
-import aocutils.types
+# import aocutils.topology
+from aocutils.types import BidirDict, topo_lut
 
 box_x_dim = 10.
 box_y_dim = 20.
@@ -19,7 +19,7 @@ box_z_dim = 30.
 @pytest.fixture()
 def box_shape():
     r"""Box shape for testing as a pytest fixture"""
-    return OCC.BRepPrimAPI.BRepPrimAPI_MakeBox(box_x_dim, box_y_dim, box_z_dim).Shape()
+    return BRepPrimAPI_MakeBox(box_x_dim, box_y_dim, box_z_dim).Shape()
 
 
 sphere_radius = 10
@@ -28,7 +28,7 @@ sphere_radius = 10
 @pytest.fixture()
 def sphere_shape():
     r"""Sphere shape for testing as a pytext fixture"""
-    return OCC.BRepPrimAPI.BRepPrimAPI_MakeSphere(sphere_radius).Shape()
+    return BRepPrimAPI_MakeSphere(sphere_radius).Shape()
 
 
 def test_bidir_dict():
@@ -36,22 +36,22 @@ def test_bidir_dict():
 
     # all values are unique
     d = {"a": 1, "b": 2, "c": 3}
-    bd = aocutils.types.BidirDict(d)
+    bd = BidirDict(d)
     assert bd["a"] == 1
     assert bd[1] == "a"
 
     # duplicate a value
     d = {"a": 1, "b": 2, "c": 3, "d": 1}
-    bd = aocutils.types.BidirDict(d)
+    bd = BidirDict(d)
     with pytest.raises(KeyError):
         _ = bd["a"]
 
 
 def test_look_up_table():
     r"""Test look up tables"""
-    assert aocutils.types.topo_lut[OCC.TopAbs.TopAbs_SOLID] == "solid"
+    assert topo_lut[TopAbs_SOLID] == "solid"
     with pytest.raises(KeyError):
-        _ = aocutils.types.topo_lut[111]
+        _ = topo_lut[111]
 
 # def test_classes():
 #     assert aocutils.types.classes == ['BidirDict', 'OCC', 'PY3', '__builtins__', '__doc__', '__file__', '__name__',
@@ -70,7 +70,7 @@ def test_look_up_table():
 #     r"""test the what_is_face function"""
 #
 #     # wrap the box shape in a Topo object
-#     topo = aocutils.topology.Topo(box_shape, return_iter=False)
+#     topo = Topo(box_shape, return_iter=False)
 #
 #     # get the first face
 #     face = topo.faces()[0]

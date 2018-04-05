@@ -6,17 +6,18 @@ r"""topology module tests"""
 import sys
 import pytest
 
-import OCC.BRepPrimAPI
-import OCC.TopoDS
+from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox
+from OCC.TopoDS import TopoDS_Solid, TopoDS_Shape, TopoDS_Compound, \
+    TopoDS_CompSolid, TopoDS_Shell, TopoDS_Face, TopoDS_Edge
 
-import aocutils.topology
-import aocutils.primitives
-import aocutils.brep.edge
-import aocutils.brep.face
-import aocutils.brep.wire
-import aocutils.brep.vertex
-import aocutils.brep.shell
-import aocutils.brep.solid
+from aocutils.topology import Topo, shape_to_topology, WireExplorer
+from aocutils.primitives import box
+# import aocutils.brep.edge
+# import aocutils.brep.face
+# import aocutils.brep.wire
+# import aocutils.brep.vertex
+# import aocutils.brep.shell
+# import aocutils.brep.solid
 
 PY3 = not (int(sys.version.split('.')[0]) <= 2)
 
@@ -24,20 +25,21 @@ PY3 = not (int(sys.version.split('.')[0]) <= 2)
 @pytest.fixture()
 def box_shape():
     r"""Box shape for testing as a pytest fixture"""
-    return OCC.BRepPrimAPI.BRepPrimAPI_MakeBox(10, 20, 30).Shape()
+    return BRepPrimAPI_MakeBox(10, 20, 30).Shape()
 #
 # @pytest.fixture()
 # def sphere_shape():
 #     r"""Sphere shape of radius 10 for testing"""
-#     return OCC.BRepPrimAPI.BRepPrimAPI_MakeSphere(10.).Shape()
+#     return BRepPrimAPI_MakeSphere(10.).Shape()
 
 
 @pytest.fixture()
 def topo():
     r"""Topo object testing as a pytest fixture"""
-    # we use return_iter=True as the original tests were written with a Topo did not have the option to return lists
+    # we use return_iter=True as the original tests were written with a
+    # Topo did not have the option to return lists
     # instead of iterators
-    return aocutils.topology.Topo(aocutils.primitives.box(10, 10, 10), return_iter=True)
+    return Topo(box(10, 10, 10), return_iter=True)
 
 
 def test_shape_to_topology(box_shape):
@@ -50,16 +52,16 @@ def test_shape_to_topology(box_shape):
 
     """
 
-    assert isinstance(aocutils.topology.shape_to_topology(box_shape), OCC.TopoDS.TopoDS_Solid)
-    assert isinstance(aocutils.topology.shape_to_topology(box_shape), OCC.TopoDS.TopoDS_Shape)
+    assert isinstance(shape_to_topology(box_shape), TopoDS_Solid)
+    assert isinstance(shape_to_topology(box_shape), TopoDS_Shape)
 
-    assert not isinstance(box_shape, OCC.TopoDS.TopoDS_Solid)
-    assert not isinstance(aocutils.topology.shape_to_topology(box_shape), OCC.TopoDS.TopoDS_Compound)
-    assert not isinstance(aocutils.topology.shape_to_topology(box_shape), OCC.TopoDS.TopoDS_CompSolid)
-    assert not isinstance(aocutils.topology.shape_to_topology(box_shape), OCC.TopoDS.TopoDS_Shell)
-    assert not isinstance(aocutils.topology.shape_to_topology(box_shape), OCC.TopoDS.TopoDS_Face)
+    assert not isinstance(box_shape, TopoDS_Solid)
+    assert not isinstance(shape_to_topology(box_shape), TopoDS_Compound)
+    assert not isinstance(shape_to_topology(box_shape), TopoDS_CompSolid)
+    assert not isinstance(shape_to_topology(box_shape), TopoDS_Shell)
+    assert not isinstance(shape_to_topology(box_shape), TopoDS_Face)
 
-    assert issubclass(aocutils.topology.shape_to_topology(box_shape).__class__, OCC.TopoDS.TopoDS_Shape)
+    assert issubclass(shape_to_topology(box_shape).__class__, TopoDS_Shape)
 
 
 def test_wrap_subclass_of_topodsshape(topo):
@@ -67,13 +69,13 @@ def test_wrap_subclass_of_topodsshape(topo):
 
     Parameters
     ----------
-    topo : aocutils.topology.Topo
+    topo : Topo
         Topo object (pytest fixture)
 
     """
     shell = list(topo.shells)[0]
-    assert isinstance(shell, OCC.TopoDS.TopoDS_Shell)
-    new_topo = aocutils.topology.Topo(shell)
+    assert isinstance(shell, TopoDS_Shell)
+    new_topo = Topo(shell)
     assert new_topo.number_of_faces == 6
 
 
@@ -82,14 +84,14 @@ def test_loop_faces(topo):
 
     Parameters
     ----------
-    topo : aocutils.topology.Topo
+    topo : Topo
         Topo object (pytest fixture)
 
     """
     i = 0
     for face in topo.faces:
         i += 1
-        assert(isinstance(face, OCC.TopoDS.TopoDS_Face))
+        assert(isinstance(face, TopoDS_Face))
     assert i == 6
 
 
@@ -98,14 +100,14 @@ def test_loop_edges(topo):
 
     Parameters
     ----------
-    topo : aocutils.topology.Topo
+    topo : Topo
         Topo object (pytest fixture)
 
     """
     i = 0
     for face in topo.edges:
         i += 1
-        assert(isinstance(face, OCC.TopoDS.TopoDS_Edge))
+        assert(isinstance(face, TopoDS_Edge))
     assert i == 12
 
 
@@ -114,7 +116,7 @@ def test_number_of_topological_entities(topo):
 
     Parameters
     ----------
-    topo : aocutils.topology.Topo
+    topo : Topo
         Topo object (pytest fixture)
 
     """
@@ -133,14 +135,14 @@ def test_nested_iteration(topo):
 
     Parameters
     ----------
-    topo : aocutils.topology.Topo
+    topo : Topo
         Topo object (pytest fixture)
 
     """
     for f in topo.faces:
         for e in topo.edges:
-            assert isinstance(f, OCC.TopoDS.TopoDS_Face)
-            assert isinstance(e, OCC.TopoDS.TopoDS_Edge)
+            assert isinstance(f, TopoDS_Face)
+            assert isinstance(e, TopoDS_Edge)
 
 
 def test_kept_reference(topo):
@@ -149,7 +151,7 @@ def test_kept_reference(topo):
 
     Parameters
     ----------
-    topo : aocutils.topology.Topo
+    topo : Topo
         Topo object (pytest fixture)
 
     """
@@ -167,7 +169,7 @@ def test_edge_face(topo):
 
     Parameters
     ----------
-    topo : aocutils.topology.Topo
+    topo : Topo
         Topo object (pytest fixture)
 
     """
@@ -186,7 +188,7 @@ def test_edge_wire(topo):
 
     Parameters
     ----------
-    topo : aocutils.topology.Topo
+    topo : Topo
         Topo object (pytest fixture)
 
     """
@@ -205,7 +207,7 @@ def test_vertex_edge(topo):
 
     Parameters
     ----------
-    topo : aocutils.topology.Topo
+    topo : Topo
         Topo object (pytest fixture)
 
     """
@@ -224,7 +226,7 @@ def test_vertex_face(topo):
 
     Parameters
     ----------
-    topo : aocutils.topology.Topo
+    topo : Topo
         Topo object (pytest fixture)
 
     """
@@ -243,7 +245,7 @@ def test_face_solid(topo):
 
     Parameters
     ----------
-    topo : aocutils.topology.Topo
+    topo : Topo
         Topo object (pytest fixture)
 
     """
@@ -262,7 +264,7 @@ def test_wire_face(topo):
 
     Parameters
     ----------
-    topo : aocutils.topology.Topo
+    topo : Topo
         Topo object (pytest fixture)
 
     """
@@ -281,13 +283,13 @@ def test_edges_out_of_scope(topo):
 
     Parameters
     ----------
-    topo : aocutils.topology.Topo
+    topo : Topo
         Topo object (pytest fixture)
 
     """
     face = topo.faces.__next__() if PY3 else topo.faces.next()
     _edges = list()
-    for edg in aocutils.topology.Topo(face).edges:
+    for edg in Topo(face).edges:
         _edges.append(edg)
     for edg in _edges:
         assert not edg.IsNull()
@@ -298,17 +300,17 @@ def test_wires_out_of_scope(topo):
 
     Parameters
     ----------
-    topo : aocutils.topology.Topo
+    topo : Topo
         Topo object (pytest fixture)
 
     """
     wire = topo.wires.__next__() if PY3 else topo.wires.next()
     _edges, _vertices = list(), list()
-    for edg in aocutils.topology.WireExplorer(wire).ordered_edges:
+    for edg in WireExplorer(wire).ordered_edges:
         _edges.append(edg)
     for edg in _edges:
         assert not edg.IsNull()
-    for vert in aocutils.topology.WireExplorer(wire).ordered_vertices:
+    for vert in WireExplorer(wire).ordered_vertices:
         _vertices.append(vert)
     for v in _vertices:
         assert not v.IsNull()

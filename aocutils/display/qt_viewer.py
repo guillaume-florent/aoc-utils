@@ -28,7 +28,7 @@ if "CSF_GraphicShr" in os.environ:
 # from PyQt4 import QtCore, QtGui, QtOpenGL
 from PyQt4 import QtGui
 
-import OCC.Display.qtDisplay
+from OCC.Display.qtDisplay import qtViewer3d
 
 from aocutils.display.color import color
 
@@ -54,7 +54,7 @@ class Qt3dViewer(QtGui.QWidget, object):
                  show_topology_menu=True):
         QtGui.QWidget.__init__(self, parent)
 
-        self.viewer = OCC.Display.qtDisplay.qtViewer3d(self)
+        self.viewer = qtViewer3d(self)
         self.viewer.InitDriver()
 
         self.background_color = viewer_background_color

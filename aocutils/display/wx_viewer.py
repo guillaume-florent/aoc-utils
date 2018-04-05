@@ -9,9 +9,9 @@ import wx
 import wx.lib.buttons
 import wx.lib.colourselect
 
-import OCC.Display.wxDisplay
-import OCC.Quantity
-import OCC.AIS
+from OCC.Display.wxDisplay import wxViewer3d
+from OCC.Quantity import Quantity_NOC_MATRABLUE
+from OCC.AIS import AIS_Shape
 
 from aocutils.display.color import color
 from aocutils.display.topology import solids, shells, faces, edges, wires
@@ -25,7 +25,7 @@ class Wx3dViewer(wx.Panel):
                  show_topology_menu=True):
         wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY)
 
-        self.viewer = OCC.Display.wxDisplay.wxViewer3d(self)
+        self.viewer = wxViewer3d(self)
         self.viewer.InitDriver()
 
         self.background_color = viewer_background_color
@@ -263,7 +263,7 @@ class Wx3dViewer(wx.Panel):
 
     def display_ais_shape(self,
                           shapes,
-                          color_=OCC.Quantity.Quantity_NOC_MATRABLUE,
+                          color_=Quantity_NOC_MATRABLUE,
                           transparency=0.8,
                           topology=True):
         r"""Display shapes using AIS and keep track of displayed shapes
@@ -277,7 +277,7 @@ class Wx3dViewer(wx.Panel):
 
         """
         def display_ais(shape_):
-            ais_shp = OCC.AIS.AIS_Shape(shape_)
+            ais_shp = AIS_Shape(shape_)
             ais_shp.SetTransparency(transparency)
             ais_shp.SetColor(color_)
             ais_context = self.viewer_display.GetContext().GetObject()

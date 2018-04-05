@@ -4,10 +4,7 @@ r"""solid module of aocutils"""
 
 import logging
 
-import OCC.BRepBuilderAPI
-import OCC.BRepOffsetAPI
-import OCC.TopoDS
-import OCC.BRepCheck
+from OCC.TopoDS import TopoDS_Solid
 
 from aocutils.topology import Topo
 from aocutils.brep.base import BaseObject
@@ -22,11 +19,11 @@ class Solid(BaseObject):
 
     Parameters
     ----------
-        topods_solid : OCC.TopoDS.TopoDS_Solid
+        topods_solid : TopoDS_Solid
 
     """
     def __init__(self, topods_solid):
-        if not isinstance(topods_solid, OCC.TopoDS.TopoDS_Solid):
+        if not isinstance(topods_solid, TopoDS_Solid):
             msg = 'need a TopoDS_Solid, got a %s' % topods_solid.__class__
             logger.critical(msg)
             raise WrongTopologicalType(msg)
@@ -46,7 +43,7 @@ class Solid(BaseObject):
 
         Returns
         -------
-        OCC.TopoDS.TopoDS_Solid"""
+        TopoDS_Solid"""
         return self._wrapped_instance
 
     def shells(self):

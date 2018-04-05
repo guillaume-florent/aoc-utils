@@ -4,13 +4,13 @@ r"""vertex module of aocutils"""
 
 import logging
 
-import OCC.BRep
-import OCC.BRepBuilderAPI
-import OCC.gp
-import OCC.TopoDS
-import OCC.TopExp
-import OCC.ShapeBuild
-import OCC.BRepCheck
+from OCC.BRep import BRep_Tool
+# import OCC.BRepBuilderAPI
+from OCC.gp import gp_Pnt2d, gp_Pnt, gp_XYZ, gp_Vec, gp_Dir
+# import OCC.TopoDS
+# import OCC.TopExp
+from OCC.ShapeBuild import ShapeBuild_ReShape
+# import OCC.BRepCheck
 
 from aocutils.brep.base import BaseObject
 from aocutils.brep.vertex_make import vertex
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class Vertex(BaseObject):
-    r"""Wraps OCC.gp.gp_Pnt
+    r"""Wraps gp_Pnt
 
     Parameters
     ----------
@@ -30,7 +30,7 @@ class Vertex(BaseObject):
     _n = 0
 
     def __init__(self, x, y, z):
-        self._pnt = OCC.gp.gp_Pnt(x, y, z)
+        self._pnt = gp_Pnt(x, y, z)
         BaseObject.__init__(self,
                             vertex(self._pnt),
                             name='Vertex #{0}'.format(self._n))
@@ -64,7 +64,7 @@ class Vertex(BaseObject):
         """
         # TODO: perhaps should take an argument until which topological level
         # topological entities bound to the vertex should be updated too...
-        reshape = OCC.ShapeBuild.ShapeBuild_ReShape()
+        reshape = ShapeBuild_ReShape()
         reshape.Replace(self._wrapped_instance, vertex(self._pnt))
 
     @property
@@ -112,40 +112,40 @@ class Vertex(BaseObject):
 
     @property
     def as_vec(self):
-        r"""returns a OCC.gp.gp_Vec version of self"""
-        return OCC.gp.gp_Vec(self._pnt.X(), self._pnt.Y(), self._pnt.Z())
+        r"""returns a gp_Vec version of self"""
+        return gp_Vec(self._pnt.X(), self._pnt.Y(), self._pnt.Z())
 
     @property
     def as_dir(self):
-        r"""returns a OCC.gp.gp_Dir version of self"""
-        return OCC.gp.gp_Dir(self._pnt.X(), self._pnt.Y(), self._pnt.Z())
+        r"""returns a gp_Dir version of self"""
+        return gp_Dir(self._pnt.X(), self._pnt.Y(), self._pnt.Z())
 
     @property
     def as_xyz(self):
-        r"""returns a OCC.gp.gp_XYZ version of self"""
-        return OCC.gp.gp_XYZ(self._pnt.X(), self._pnt.Y(), self._pnt.Z())
+        r"""returns a gp_XYZ version of self"""
+        return gp_XYZ(self._pnt.X(), self._pnt.Y(), self._pnt.Z())
 
     @property
     def as_pnt(self):
-        r"""returns a OCC.gp.gp_Pnt version of self"""
+        r"""returns a gp_Pnt version of self"""
         return self._pnt
 
     @staticmethod
     def to_pnt(vertex):
-        r"""Returns a gp_Pnt from a OCC.TopoDS.TopoDS_Vertex
+        r"""Returns a gp_Pnt from a TopoDS_Vertex
 
         Parameters
         ----------
-        vertex : OCC.TopoDS.TopoDS_Vertex
+        vertex : TopoDS_Vertex
 
         Returns
         -------
-        OCC.gp.gp_Pnt
+        gp_Pnt
 
         """
-        return OCC.BRep.BRep_Tool.Pnt(vertex)
+        return BRep_Tool.Pnt(vertex)
 
     @property
     def as_2d(self):
         r"""returns a gp_Pnt2d version of self"""
-        return OCC.gp.gp_Pnt2d(self._pnt.X(), self._pnt.Y())
+        return gp_Pnt2d(self._pnt.X(), self._pnt.Y())

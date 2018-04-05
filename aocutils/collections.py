@@ -2,8 +2,8 @@
 
 r"""OCC collections utilities and conversions"""
 
-import OCC.TColgp
-import OCC.TCollection
+from OCC.TColgp import TColgp_Array1OfPnt, TColgp_Array1OfPnt2d
+from OCC.TCollection import TCollection_ExtendedString
 
 
 def to_string(_string):
@@ -15,10 +15,10 @@ def to_string(_string):
 
     Returns
     -------
-    OCC.TCollection.TCollection_ExtendedString
+    TCollection_ExtendedString
 
     """
-    return OCC.TCollection.TCollection_ExtendedString(_string)
+    return TCollection_ExtendedString(_string)
 
 
 def to_tcol_(_list, collection_type):
@@ -71,18 +71,18 @@ def tcol_dim_1(li, _type, start_at_one=False):
 
 
 def point_list_to_tcolgp_array1_of_pnt(li):
-    r"""Populate a OCC.TColgp.TColgp_Array1OfPnt with a list of points
+    r"""Populate a TColgp_Array1OfPnt with a list of points
 
     Parameters
     ----------
-    li : list[OCC.gp.gp_Pnt]
+    li : list[gp_Pnt]
 
     Returns
     -------
-    OCC.TColgp.TColgp_Array1OfPnt
+    TColgp_Array1OfPnt
 
     """
-    pts = OCC.TColgp.TColgp_Array1OfPnt(0, len(li) - 1)
+    pts = TColgp_Array1OfPnt(0, len(li) - 1)
     for n, i in enumerate(li):
         pts.SetValue(n, i)
     return pts
@@ -93,11 +93,11 @@ def point2d_list_to_tcolgp_array1_of_pnt2d(li):
 
     Parameters
     ----------
-    li : list[OCC.gp.gp_Pnt2d]
+    li : list[gp_Pnt2d]
 
     Returns
     -------
-    OCC.TColgp.TColgp_Array1OfPnt2d
+    TColgp_Array1OfPnt2d
 
     """
-    return tcol_dim_1(li, OCC.TColgp.TColgp_Array1OfPnt2d)
+    return tcol_dim_1(li, TColgp_Array1OfPnt2d)

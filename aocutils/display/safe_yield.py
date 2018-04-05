@@ -4,13 +4,13 @@ r"""safe_yield.py"""
 
 from __future__ import print_function
 
-import OCC.Display.SimpleGui
+from OCC.Display.SimpleGui import get_backend
 
 
 def safe_yield():
     r"""Reimplementation of the safe_yield() function
     that once existed in OCC.Display.SimpleGui"""
-    if OCC.Display.SimpleGui.get_backend() == 'wx':
+    if get_backend() == 'wx':
         # This function (SafeYield) is similar to `wx.Yield`,
         # except that it disables the
         # user input to all program windows before calling `wx.Yield` and
@@ -19,11 +19,11 @@ def safe_yield():
         # interaction.
         import wx
         wx.SafeYield()
-    elif OCC.Display.SimpleGui.get_backend() == 'qt-pyqt4':
+    elif get_backend() == 'qt-pyqt4':
         # QtCore.processEvents()
         import PyQt4
         PyQt4.QtGui.QApplication.processEvents()
-    elif OCC.Display.SimpleGui.get_backend() == 'qt-pyside':
+    elif get_backend() == 'qt-pyside':
         import PySide
         PySide.QtGui.QApplication.processEvents()
     else:

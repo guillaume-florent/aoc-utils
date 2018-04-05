@@ -2,10 +2,10 @@
 
 r"""Projection operations"""
 
-import OCC.GeomAPI
-import OCC.GeomProjLib
-import OCC.ProjLib
-import OCC.TopoDS
+from OCC.GeomAPI import GeomAPI_ProjectPointOnCurve
+from OCC.GeomProjLib import geomprojlib_ProjectOnPlane
+from OCC.ProjLib import projlib_Project
+from OCC.TopoDS import TopoDS_Shape
 
 # TODO : wrong name
 import aocutils.convert.adapt
@@ -24,12 +24,12 @@ def point_on_curve(crv, pnt):
     -------
 
     """
-    if isinstance(crv, OCC.TopoDS.TopoDS_Shape):
+    if isinstance(crv, TopoDS_Shape):
         # get the curve handle...
         crv = aocutils.convert.adapt.edge_to_curve(crv).Curve().Curve()
     else:
-        raise NotImplementedError('expected a OCC.TopoDS.TopoDS_Edge...')
-    rrr = OCC.GeomAPI.GeomAPI_ProjectPointOnCurve(pnt, crv)
+        raise NotImplementedError('expected a TopoDS_Edge...')
+    rrr = GeomAPI_ProjectPointOnCurve(pnt, crv)
     return rrr.LowerDistanceParameter(), rrr.NearestPoint()
 
 
@@ -47,7 +47,7 @@ def point_on_plane(plane, point):
 
     """
     pl = plane.Pln()
-    aa, bb = OCC.ProjLib.projlib_Project(pl, point).Coord()
+    aa, bb = projlib_Project(pl, point).Coord()
     point = plane.Value(aa, bb)
     return point
 
@@ -66,8 +66,8 @@ def edge_on_plane(edg, plane):
         TopoDS_Edge projected on the plane
 
     """
-    proj = OCC.GeomProjLib.geomprojlib_ProjectOnPlane(edg.adaptor.Curve().Curve(),
-                                                      plane.GetHandle(),
-                                                      plane.Axis().Direction(),
-                                                      1)
+    proj = geomprojlib_ProjectOnPlane(edg.adaptor.Curve().Curve(),
+                                      plane.GetHandle(),
+                                      plane.Axis().Direction(),
+                                      1)
     return edge(proj)

@@ -8,11 +8,11 @@ RGB to OCC conversion and sequences definition
 
 from __future__ import division
 
-import OCC.Quantity
+from OCC.Quantity import Quantity_Color, Quantity_TOC_RGB
 
 
 def color(r, g, b):
-    r"""Create a OCC.Quantity.Quantity_Color from RGB components
+    r"""Create a Quantity_Color from RGB components
 
     Parameters
     ----------
@@ -25,10 +25,10 @@ def color(r, g, b):
 
     Returns
     -------
-    OCC.Quantity.Quantity_Color
+    Quantity_Color
 
     """
-    return OCC.Quantity.Quantity_Color(r, g, b, OCC.Quantity.Quantity_TOC_RGB)
+    return Quantity_Color(r, g, b, Quantity_TOC_RGB)
 
 
 blue = color(0, 0, 1)

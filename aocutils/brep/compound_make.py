@@ -2,7 +2,7 @@
 
 r"""core/compound_make.py"""
 
-import OCC.TopoDS
+from OCC.TopoDS import TopoDS_Builder, TopoDS_Compound
 
 
 def compound(topo):
@@ -18,8 +18,8 @@ def compound(topo):
     OCC.TopoDS.TopoDS_Compound
 
     """
-    bd = OCC.TopoDS.TopoDS_Builder()
-    comp = OCC.TopoDS.TopoDS_Compound()
+    bd = TopoDS_Builder()
+    comp = TopoDS_Compound()
     bd.MakeCompound(comp)
     for i in topo:
         bd.Add(comp, i)

@@ -37,9 +37,9 @@ and if required:
 
 import logging
 
-import OCC.GeomAPI
-import OCC.TColgp
-import OCC.TColStd
+from OCC.GeomAPI import GeomAPI_Interpolate, GeomAPI_PointsToBSpline
+from OCC.TColgp import TColgp_HArray1OfPnt, TColgp_Array1OfVec
+from OCC.TColStd import TColStd_HArray1OfBoolean
 
 from aocutils.exceptions import InterpolationException
 from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
@@ -88,7 +88,7 @@ def points_to_bspline(pnts):
 
     """
     pnts = point_list_to_tcolgp_array1_of_pnt(pnts)
-    crv = OCC.GeomAPI.GeomAPI_PointsToBSpline(pnts)
+    crv = GeomAPI_PointsToBSpline(pnts)
     return crv.Curve()
 
 
@@ -136,12 +136,10 @@ def points(list_of_points,
         list_of_points = filter_points_by_distance(list_of_points)
 
     fixed_points = tcol_dim_1(list_of_points,
-                              OCC.TColgp.TColgp_HArray1OfPnt,
+                              TColgp_HArray1OfPnt,
                               start_at_one=True)
     try:
-        interp = OCC.GeomAPI.GeomAPI_Interpolate(fixed_points.GetHandle(),
-                                                 False,
-                                                 tolerance)
+        interp = GeomAPI_Interpolate(fixed_points.GetHandle(), False, tolerance)
         interp.Load(start_tangent, end_tangent, False)
         interp.Perform()
         if interp.IsDone():
@@ -170,7 +168,7 @@ def points_vectors(list_of_points,
     -------
 
     """
-    # OCC.GeomAPI.GeomAPI_Interpolate is buggy:
+    # GeomAPI_Interpolate is buggy:
     #                   need to use `fix` in order to get the right points in...
 
     # assert len(list_of_points) == len(list_of_vectors)
@@ -189,17 +187,17 @@ def points_vectors(list_of_points,
         vector_mask = [True for _ in range(len(list_of_points))]
 
     fixed_mask = tcol_dim_1(vector_mask,
-                            OCC.TColStd.TColStd_HArray1OfBoolean,
+                            TColStd_HArray1OfBoolean,
                             start_at_one=True)
     fixed_points = tcol_dim_1(list_of_points,
-                              OCC.TColgp.TColgp_HArray1OfPnt,
+                              TColgp_HArray1OfPnt,
                               start_at_one=True)
     fixed_vectors = tcol_dim_1(list_of_vectors,
-                               OCC.TColgp.TColgp_Array1OfVec,
+                               TColgp_Array1OfVec,
                                start_at_one=True)
 
     try:
-        interp = OCC.GeomAPI.GeomAPI_Interpolate(fixed_points.GetHandle(), False, tolerance)
+        interp = GeomAPI_Interpolate(fixed_points.GetHandle(), False, tolerance)
         interp.Load(fixed_vectors, fixed_mask.GetHandle(), False)
         interp.Perform()
         if interp.IsDone():
@@ -215,7 +213,7 @@ def points_no_tangency(list_of_points,
                        filter_pts=True,
                        closed=False,
                        tolerance=OCCUTILS_DEFAULT_TOLERANCE):
-    r"""OCC.GeomAPI.GeomAPI_Interpolate is buggy: need to use `fix`
+    r"""GeomAPI_Interpolate is buggy: need to use `fix`
     in order to get the right points in...
 
     Parameters
@@ -234,12 +232,12 @@ def points_no_tangency(list_of_points,
         list_of_points = filter_points_by_distance(list_of_points)
 
     fixed_points = tcol_dim_1(list_of_points,
-                              OCC.TColgp.TColgp_HArray1OfPnt,
+                              TColgp_HArray1OfPnt,
                               start_at_one=True)
     try:
-        interp = OCC.GeomAPI.GeomAPI_Interpolate(fixed_points.GetHandle(),
-                                                 closed,
-                                                 tolerance)
+        interp = GeomAPI_Interpolate(fixed_points.GetHandle(),
+                                     closed,
+                                     tolerance)
         interp.Perform()
         if interp.IsDone():
             return interp.Curve()

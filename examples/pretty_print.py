@@ -8,28 +8,29 @@ from __future__ import print_function
 
 import math
 
-import OCC.gp
+from OCC.gp import gp_Pnt, gp_Vec, gp_Dir, gp_Ax1, gp_Trsf
 
-import aocutils.primitives
-import aocutils.pretty_print
+from aocutils.primitives import box
+from aocutils.pretty_print import gp_pnt_print, gp_vec_print, gp_ax1_print, \
+    gp_trsf_print, dump_topology
 
-point = OCC.gp.gp_Pnt(1, 2, 3)
-print(aocutils.pretty_print.gp_pnt_print(point))
+point = gp_Pnt(1, 2, 3)
+print(gp_pnt_print(point))
 
-vec = OCC.gp.gp_Vec(1, 2, 3)
-print(aocutils.pretty_print.gp_vec_print(vec))
+vec = gp_Vec(1, 2, 3)
+print(gp_vec_print(vec))
 
-direction = OCC.gp.gp_Dir(1, 2, 3)
-ax1 = OCC.gp.gp_Ax1(point, direction)
-print(aocutils.pretty_print.gp_ax1_print(ax1))
+direction = gp_Dir(1, 2, 3)
+ax1 = gp_Ax1(point, direction)
+print(gp_ax1_print(ax1))
 
 
-trsf = OCC.gp.gp_Trsf()
+trsf = gp_Trsf()
 trsf.SetTranslation(vec)
-print(aocutils.pretty_print.gp_trsf_print(trsf))
+print(gp_trsf_print(trsf))
 
 trsf.SetRotation(ax1, math.radians(180))
-print(aocutils.pretty_print.gp_trsf_print(trsf))
+print(gp_trsf_print(trsf))
 
-box_shape = aocutils.primitives.box(10, 10, 10)
-aocutils.pretty_print.dump_topology(box_shape)
+box_shape = box(10, 10, 10)
+dump_topology(box_shape)

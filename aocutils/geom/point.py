@@ -4,7 +4,7 @@ r"""geom point"""
 
 import logging
 
-import OCC.gp
+from OCC.gp import gp_Pnt
 
 from aocutils.geom._three_d import ThreeD
 from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
@@ -37,18 +37,18 @@ class Point(ThreeD):
 
     @property
     def gp_pnt(self):
-        return OCC.gp.gp_Pnt(self.X(), self.Y(), self.Z())
+        return gp_Pnt(self.X(), self.Y(), self.Z())
 
     def translate(self, vector):
         r"""Translate a point with a vector
 
         Parameters
         ----------
-        vector : OCC.gp.gp_Vec or Vector
+        vector : gp_Vec or Vector
 
         Returns
         -------
-        OCC.gp.gp_Pnt
+        gp_Pnt
 
         """
         return Point.from_xyz(self.X() + vector.X(),
@@ -61,8 +61,8 @@ class Point(ThreeD):
 
         Parameters
         ----------
-        pnt_a : OCC.gp.gp_Pnt or Point
-        pnt_b : OCC.gp.gp_Pnt or Point
+        pnt_a : gp_Pnt or Point
+        pnt_b : gp_Pnt or Point
 
         Returns
         -------
@@ -89,7 +89,7 @@ class Point(ThreeD):
 
         Parameters
         ----------
-        other : OCC.gp.gp_Pnt or Point
+        other : gp_Pnt or Point
 
         Returns
         -------
@@ -98,7 +98,7 @@ class Point(ThreeD):
         """
         if isinstance(other, Point):
             return self.gp_pnt.IsEqual(other.gp_pnt, OCCUTILS_DEFAULT_TOLERANCE)
-        elif isinstance(other, OCC.gp.gp_Pnt):
+        elif isinstance(other, gp_Pnt):
             return self.gp_pnt.IsEqual(other, OCCUTILS_DEFAULT_TOLERANCE)
         else:
             msg = "Incompatible point geom_type for comparison"

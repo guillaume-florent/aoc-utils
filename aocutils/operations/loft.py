@@ -4,9 +4,9 @@ r"""Loft operation"""
 
 import logging
 
-import OCC.BRepOffsetAPI
-import OCC.GeomAbs
-import OCC.TopoDS
+from OCC.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+from OCC.GeomAbs import GeomAbs_C2
+from OCC.TopoDS import TopoDS_Wire, TopoDS_Vertex
 
 from aocutils.common import AssertIsDone
 from aocutils.topology import shape_to_topology
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 def loft(elements,
          ruled=False,
          tolerance=OCCUTILS_DEFAULT_TOLERANCE,
-         continuity=OCC.GeomAbs.GeomAbs_C2,
+         continuity=GeomAbs_C2,
          check_compatibility=True):
     r"""Loft
 
@@ -27,23 +27,24 @@ def loft(elements,
     elements
     ruled : bool
     tolerance : float
-    continuity : OCC.GeomAbs.GeomAbs_C*, optional
-        (the default is OCC.GeomAbs.GeomAbs_C2)
+    continuity : GeomAbs_C*, optional
+        (the default is GeomAbs_C2)
     check_compatibility : bool
 
     Returns
     -------
-    OCC.TopoDS.TopoDS_*
+    TopoDS_*
 
     """
-    sections = OCC.BRepOffsetAPI.BRepOffsetAPI_ThruSections(False, ruled, tolerance)
+    sections = BRepOffsetAPI_ThruSections(False, ruled, tolerance)
     for i in elements:
-        if isinstance(i, OCC.TopoDS.TopoDS_Wire):
+        if isinstance(i, TopoDS_Wire):
             sections.AddWire(i)
-        elif isinstance(i, OCC.TopoDS.TopoDS_Vertex):
+        elif isinstance(i, TopoDS_Vertex):
             sections.AddVertex(i)
         else:
-            msg = "elements is a list of OCC.TopoDS.TopoDS_Wire or OCC.TopoDS.TopoDS_Vertex, found a %s " % i.__class__
+            msg = "elements is a list of TopoDS_Wire or TopoDS_Vertex, " \
+                  "found a %s " % i.__class__
             logger.error(msg)
             raise TypeError(msg)
 

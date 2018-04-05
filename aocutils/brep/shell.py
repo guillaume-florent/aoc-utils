@@ -4,10 +4,9 @@ r"""shell module of aocutils"""
 
 import logging
 
-import OCC.BRepBuilderAPI
-import OCC.TopoDS
-import OCC.ShapeAnalysis
-import OCC.BRepCheck
+from OCC.TopoDS import TopoDS_Shell
+from OCC.ShapeAnalysis import ShapeAnalysis_Shell
+from OCC.BRepCheck import BRepCheck_Shell, BRepCheck_NoError
 
 from aocutils.topology import Topo
 from aocutils.brep.base import BaseObject
@@ -21,13 +20,13 @@ class Shell(BaseObject):
 
     Parameters
     ----------
-    topods_shell : OCC.TopoDS.TopoDS_Shell
+    topods_shell : TopoDS_Shell
 
     """
     _n = 0
 
     def __init__(self, topods_shell):
-        if not isinstance(topods_shell, OCC.TopoDS.TopoDS_Shell):
+        if not isinstance(topods_shell, TopoDS_Shell):
             msg = 'need a TopoDS_Shell, got a %s' % topods_shell.__class__
             logger.critical(msg)
             raise WrongTopologicalType(msg)
@@ -48,10 +47,10 @@ class Shell(BaseObject):
 
     def check(self):
         r"""Super class abstract method implementation"""
-        shell_check = OCC.BRepCheck.BRepCheck_Shell(self._wrapped_instance)
+        shell_check = BRepCheck_Shell(self._wrapped_instance)
         check_orientation = shell_check.Orientation()
 
-        if check_orientation != OCC.BRepCheck.BRepCheck_NoError:
+        if check_orientation != BRepCheck_NoError:
             return False
         else:
             return True
@@ -66,9 +65,9 @@ class Shell(BaseObject):
             True if closed, False otherwise
 
         """
-        shell_check = OCC.BRepCheck.BRepCheck_Shell(self._wrapped_instance)
+        shell_check = BRepCheck_Shell(self._wrapped_instance)
         check_closed = shell_check.Closed()
-        if check_closed == OCC.BRepCheck.BRepCheck_NoError:
+        if check_closed == BRepCheck_NoError:
             return True
         else:
             return False
@@ -80,7 +79,7 @@ class Shell(BaseObject):
     def analyse(self):
         r"""Bad edges of the shell"""
         bad_edges = list()
-        ss = OCC.ShapeAnalysis.ShapeAnalysis_Shell()
+        ss = ShapeAnalysis_Shell()
         ss.LoadShells(self._wrapped_instance)
         if ss.HasFreeEdges():
             bad_edges = [e for e in Topo(ss.BadEdges()).edges]

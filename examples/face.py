@@ -5,15 +5,16 @@ r"""face.py module example use"""
 
 from __future__ import print_function
 
-import OCC.BRepPrimAPI
+from OCC.BRepPrimAPI import BRepPrimAPI_MakeSphere
 
-import aocutils.brep.face
+from aocutils.brep.face import Face
 
 
-# BRepPrimAPI_MakeSphere(<params>).Face() in inherited from BRepPrimAPI_MakeOneAxis
+# BRepPrimAPI_MakeSphere(<params>).Face() in inherited
+# from BRepPrimAPI_MakeOneAxis
 # Face() returns the lateral face of the rotational primitive.
-sphere_face = OCC.BRepPrimAPI.BRepPrimAPI_MakeSphere(1, 1).Face()
-occutils_wrapped_sphere_face = aocutils.brep.face.Face(sphere_face)
+sphere_face = BRepPrimAPI_MakeSphere(1, 1).Face()
+occutils_wrapped_sphere_face = Face(sphere_face)
 
 print(occutils_wrapped_sphere_face.topo)
 print(occutils_wrapped_sphere_face.topo_type)

@@ -6,13 +6,14 @@ from __future__ import division
 
 import functools
 
-import OCC.BRepPrimAPI
+from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere, \
+    BRepPrimAPI_MakeCylinder
 
 from aocutils.common import AssertIsDone
 from aocutils.operations.boolean import cut
 
 
-@functools.wraps(OCC.BRepPrimAPI.BRepPrimAPI_MakeBox)
+@functools.wraps(BRepPrimAPI_MakeBox)
 def box(*args):
     r"""Make a box
 
@@ -25,13 +26,13 @@ def box(*args):
     OCC.TopoDS.TopoDS_Shape
 
     """
-    a_box = OCC.BRepPrimAPI.BRepPrimAPI_MakeBox(*args)
+    a_box = BRepPrimAPI_MakeBox(*args)
     a_box.Build()
     with AssertIsDone(a_box, 'failed to build a cube...'):
         return a_box.Shape()
 
 
-@functools.wraps(OCC.BRepPrimAPI.BRepPrimAPI_MakeSphere)
+@functools.wraps(BRepPrimAPI_MakeSphere)
 def sphere(*args):
     r"""Make a sphere
 
@@ -44,13 +45,13 @@ def sphere(*args):
     OCC.TopoDS.TopoDS_Shape
 
     """
-    a_sphere = OCC.BRepPrimAPI.BRepPrimAPI_MakeSphere(*args)
+    a_sphere = BRepPrimAPI_MakeSphere(*args)
     a_sphere.Build()
     with AssertIsDone(a_sphere, 'failed to build a sphere...'):
         return a_sphere.Shape()
 
 
-@functools.wraps(OCC.BRepPrimAPI.BRepPrimAPI_MakeCylinder)
+@functools.wraps(BRepPrimAPI_MakeCylinder)
 def cylinder(*args):
     r"""Make a cylinder
 
@@ -63,7 +64,7 @@ def cylinder(*args):
     OCC.TopoDS.TopoDS_Shape
 
     """
-    a_cylinder = OCC.BRepPrimAPI.BRepPrimAPI_MakeCylinder(*args)
+    a_cylinder = BRepPrimAPI_MakeCylinder(*args)
     a_cylinder.Build()
     with AssertIsDone(a_cylinder, 'failed to build a cylinder...'):
         return a_cylinder.Shape()
@@ -83,14 +84,12 @@ def tube(outer_diameter, inner_diameter, length):
     OCC.TopoDS.TopoDS_Shape
 
     """
-    out_cylinder = OCC.BRepPrimAPI.BRepPrimAPI_MakeCylinder(outer_diameter / 2.,
-                                                            length)
+    out_cylinder = BRepPrimAPI_MakeCylinder(outer_diameter / 2., length)
     out_cylinder.Build()
     with AssertIsDone(out_cylinder, 'failed to build the outer cylinder...'):
         shape_a = out_cylinder.Shape()
 
-    in_cylinder = OCC.BRepPrimAPI.BRepPrimAPI_MakeCylinder(inner_diameter / 2.,
-                                                           length)
+    in_cylinder = BRepPrimAPI_MakeCylinder(inner_diameter / 2., length)
     in_cylinder.Build()
     with AssertIsDone(in_cylinder, 'failed to build the inner cylinder...'):
         shape_b = in_cylinder.Shape()

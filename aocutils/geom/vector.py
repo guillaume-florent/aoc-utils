@@ -7,7 +7,7 @@ from __future__ import division
 import logging
 
 import numpy as np
-import OCC.gp
+from OCC.gp import gp_Pnt, gp_Vec, gp_Dir
 
 from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
 from aocutils.exceptions import ZeroNormVectorException
@@ -49,7 +49,7 @@ class Vector(ThreeD):
 
     @property
     def gp_vec(self):
-        return OCC.gp.gp_Vec(self.X(), self.Y(), self.Z())
+        return gp_Vec(self.X(), self.Y(), self.Z())
 
     @property
     def norm(self):
@@ -77,7 +77,7 @@ class Vector(ThreeD):
 
         Parameters
         ----------
-        other : OCC.gp.gp_Vec or Vector
+        other : gp_Vec or Vector
 
         Returns
         -------
@@ -93,7 +93,7 @@ class Vector(ThreeD):
 
         Parameters
         ----------
-        other : OCC.gp.gp_Vec or Vector
+        other : gp_Vec or Vector
 
         Returns
         -------
@@ -145,7 +145,7 @@ class Vector(ThreeD):
 
         Parameters
         ----------
-        other : OCC.gp.gp_Pnt or Point
+        other : gp_Pnt or Point
 
         Returns
         -------
@@ -154,7 +154,7 @@ class Vector(ThreeD):
         """
         if isinstance(other, Vector):
             return self.gp_vec.IsEqual(other.gp_vec, OCCUTILS_DEFAULT_TOLERANCE)
-        elif isinstance(other, OCC.gp.gp_Pnt):
+        elif isinstance(other, gp_Pnt):
             return self.gp_vec.IsEqual(other, OCCUTILS_DEFAULT_TOLERANCE)
         else:
             msg = "Incompatible vector geom_type for comparison"
@@ -166,7 +166,7 @@ class Vector(ThreeD):
 
         Returns
         -------
-        OCC.gp.gp_Dir
+        gp_Dir
 
         """
-        return OCC.gp.gp_Dir(self.gp_vec)
+        return gp_Dir(self.gp_vec)

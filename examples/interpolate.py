@@ -5,32 +5,31 @@ r"""Points interpolation examples"""
 
 import logging
 
-import OCC.Display.SimpleGui
-import OCC.gp
+from OCC.Display.SimpleGui import init_display
+from OCC.gp import gp_Pnt, gp_Vec
 
 from aocutils.operations.interpolate import points_to_bspline, points, \
     points_vectors, points_no_tangency
 from aocutils.geom.curve import Curve
 # import aocutils.operations.interpolate
 # import aocutils.geom.curve
-import aocutils.display.defaults
+from aocutils.display.defaults import backend
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: %(levelname)6s :: %(module)20s :: '
                            '%(lineno)3d :: %(message)s')
 
-backend = aocutils.display.defaults.backend
-display, start_display, add_menu, add_function_to_menu = \
-    OCC.Display.SimpleGui.init_display(backend)
+backend = backend
+display, start_display, add_menu, add_function_to_menu = init_display(backend)
 
-point_1 = OCC.gp.gp_Pnt(0, 0, 0)
-point_2 = OCC.gp.gp_Pnt(10, 0, 0)
-point_3 = OCC.gp.gp_Pnt(10, 10, 0)
+point_1 = gp_Pnt(0, 0, 0)
+point_2 = gp_Pnt(10, 0, 0)
+point_3 = gp_Pnt(10, 10, 0)
 point_list = [point_1, point_2, point_3]
 
-vector_1 = OCC.gp.gp_Vec(1, 0, 0)
-vector_2 = OCC.gp.gp_Vec(0, 1, 0)
-vector_3 = OCC.gp.gp_Vec(0, 1, 0)
+vector_1 = gp_Vec(1, 0, 0)
+vector_2 = gp_Vec(0, 1, 0)
+vector_3 = gp_Vec(0, 1, 0)
 vector_list = [vector_1, vector_2, vector_3]
 
 handle_points_to_bspline = points_to_bspline(point_list)

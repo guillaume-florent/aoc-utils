@@ -4,12 +4,12 @@ r"""geom curve"""
 
 import logging
 
-import OCC.Geom
-import OCC.GeomAdaptor
-import OCC.Approx
-import OCC.BRepAdaptor
-import OCC.GeomAbs
-import OCC.GeomConvert
+from OCC.Geom import Geom_Curve
+from OCC.GeomAdaptor import GeomAdaptor_Curve
+# import OCC.Approx
+# import OCC.BRepAdaptor
+from OCC.GeomAbs import GeomAbs_C1
+from OCC.GeomConvert import GeomConvert_ApproxCurve
 
 from aocutils.common import AssertIsDone
 from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
@@ -21,11 +21,12 @@ logger = logging.getLogger(__name__)
 
 class Curve(object):
     r"""
-    _curve is a OCC.Geom.Geom_Curve (or subclass)
+    _curve is a Geom_Curve (or subclass)
     """
     def __init__(self, curve):
-        if not issubclass(curve.__class__, OCC.Geom.Geom_Curve):
-            msg = 'Curve.__init__() needs a Geom_Curve or a subclass, got a %s' % curve.__class__
+        if not issubclass(curve.__class__, Geom_Curve):
+            msg = 'Curve.__init__() needs a Geom_Curve or a subclass, ' \
+                  'got a %s' % curve.__class__
             logger.critical(msg)
             raise WrongTopologicalType(msg)
         self._curve = curve
@@ -59,7 +60,7 @@ class Curve(object):
 
     def to_bspline(self,
                    tolerance=OCCUTILS_DEFAULT_TOLERANCE,
-                   continuity=OCC.GeomAbs.GeomAbs_C1,
+                   continuity=GeomAbs_C1,
                    sections=300,
                    degree=12):
         r"""Convert a curve to a bspline
@@ -67,8 +68,8 @@ class Curve(object):
         Parameters
         ----------
         tolerance : float
-        continuity : OCC.GeomAbs.GeomAbs_C*, optional
-            (the default is OCC.GeomAbs.GeomAbs_C1)
+        continuity : GeomAbs_C*, optional
+            (the default is GeomAbs_C1)
         sections : int
         degree : int
 
@@ -77,11 +78,11 @@ class Curve(object):
         Handle< Geom_BSplineCurve >
 
         """
-        approx_curve = OCC.GeomConvert.GeomConvert_ApproxCurve(self.handle,
-                                                               tolerance,
-                                                               continuity,
-                                                               sections,
-                                                               degree)
+        approx_curve = GeomConvert_ApproxCurve(self.handle,
+                                               tolerance,
+                                               continuity,
+                                               sections,
+                                               degree)
         with AssertIsDone(approx_curve, 'could not compute bspline from curve'):
             return approx_curve.Curve()
 
@@ -90,7 +91,7 @@ class Curve(object):
 
         Returns
         -------
-        OCC.GeomAdaptor.GeomAdaptor_Curve
+        GeomAdaptor_Curve
 
         """
-        return OCC.GeomAdaptor.GeomAdaptor_Curve(self._curve.GetHandle())
+        return GeomAdaptor_Curve(self._curve.GetHandle())

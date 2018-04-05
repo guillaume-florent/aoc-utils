@@ -29,72 +29,100 @@ class AbstractBoundingBox(object):
     r"""Abstract representation of a bounding box"""
     __metaclass__ = abc.ABCMeta
 
-    @abc.abstractproperty
+    # @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def x_min(self):
         r"""Minimum x"""
         raise NotImplementedError
 
-    @abc.abstractproperty
+    # @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def x_max(self):
         r"""Maximum x"""
         raise NotImplementedError
 
-    @abc.abstractproperty
+    # @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def y_min(self):
         r"""Minimum y"""
         raise NotImplementedError
 
-    @abc.abstractproperty
+    # @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def y_max(self):
         r"""Maximum y"""
         raise NotImplementedError
 
-    @abc.abstractproperty
+    # @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def z_min(self):
         r"""Minimum z"""
         raise NotImplementedError
 
-    @abc.abstractproperty
+    # @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def z_max(self):
         r"""Maximum z"""
         raise NotImplementedError
 
-    @abc.abstractproperty
+    # @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def x_span(self):
         r"""Dimension along the X axis"""
         raise NotImplementedError
 
-    @abc.abstractproperty
+    # @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def y_span(self):
         r"""Dimension along the Y axis"""
         raise NotImplementedError
 
-    @abc.abstractproperty
+    # @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def z_span(self):
         r"""Dimension along the Z axis"""
         raise NotImplementedError
 
-    @abc.abstractproperty
+    # @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def max_dimension(self):
         r"""Maximum dimension along any of the X Y Z axis"""
         raise NotImplementedError
 
-    @abc.abstractproperty
+    # @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def min_dimension(self):
         r"""Minimum dimension along any of the X Y Z axis"""
         raise NotImplementedError
 
-    @abc.abstractproperty
+    # @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def aspect_ratio(self):
         r"""Aspect ratio"""
         raise NotImplementedError
 
-    @abc.abstractproperty
+    # @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def as_tuple(self):
         r"""bounding box as the original tuple"""
         raise NotImplementedError
 
-    @abc.abstractproperty
+    # @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def centre(self):
         r"""Centre of the bounding box"""
         raise NotImplementedError
@@ -123,7 +151,9 @@ class BoundingBox(AbstractBoundingBox):
         self._bbox = Bnd_Box()
         self._bbox.SetGap(tol)
         brepbndlib_Add(self._shape, self._bbox)
-        self._x_min, self._y_min, self._z_min, self._x_max, self._y_max, self._z_max = self._bbox.Get()
+
+        (self._x_min, self._y_min, self._z_min,
+         self._x_max, self._y_max, self._z_max) = self._bbox.Get()
 
     @property
     def x_min(self):

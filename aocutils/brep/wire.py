@@ -4,13 +4,11 @@ r"""wire module of aocutils"""
 
 import logging
 
-import OCC.BRepBuilderAPI
-import OCC.TopoDS
-import OCC.Approx
-import OCC.BRepAdaptor
-import OCC.GeomAbs
-import OCC.GeomConvert
-import OCC.BRepCheck
+from OCC.TopoDS import TopoDS_Wire, TopoDS_Face
+from OCC.Approx import Approx_Curve3d
+from OCC.BRepAdaptor import BRepAdaptor_CompCurve, BRepAdaptor_HCompCurve
+from OCC.GeomAbs import GeomAbs_C2
+from OCC.BRepCheck import BRepCheck_Wire, BRepCheck_NoError
 
 from aocutils.brep.base import BaseObject
 from aocutils.common import AssertIsDone
@@ -25,13 +23,14 @@ class Wire(BaseObject):
 
     Parameters
     ----------
-        topods_wire : OCC.TopoDS.TopoDS_Wire
+        topods_wire : TopoDS_Wire
 
     """
 
     def __init__(self, topods_wire):
-        if not isinstance(topods_wire, OCC.TopoDS.TopoDS_Wire):
-            msg = 'Wire.__init__() needs a TopoDS_Wire, got a %s' % topods_wire.__class__
+        if not isinstance(topods_wire, TopoDS_Wire):
+            msg = 'Wire.__init__() needs a TopoDS_Wire, ' \
+                  'got a %s' % topods_wire.__class__
             logger.critical(msg)
             raise WrongTopologicalType(msg)
         # assert not topods_wire.IsNull()
@@ -48,26 +47,26 @@ class Wire(BaseObject):
 
     def check(self):
         r"""Super class abstract method implementation"""
-        wire_check = OCC.BRepCheck.BRepCheck_Wire(self._wrapped_instance)
+        wire_check = BRepCheck_Wire(self._wrapped_instance)
 
         # call with Null face
-        check_orientation = wire_check.Orientation(OCC.TopoDS.TopoDS_Face())
+        check_orientation = wire_check.Orientation(TopoDS_Face())
 
         # Buggy SelfIntersect ?
-        # edge_1 = OCC.TopoDS.TopoDS_Edge()
-        # edge_2 = OCC.TopoDS.TopoDS_Edge()
+        # edge_1 = TopoDS_Edge()
+        # edge_2 = TopoDS_Edge()
         # check_self_intersect =
-        #     wire_check.SelfIntersect(OCC.TopoDS.TopoDS_Face(), edge_1, edge_2)
+        #     wire_check.SelfIntersect(TopoDS_Face(), edge_1, edge_2)
 
-        if check_orientation != OCC.BRepCheck.BRepCheck_NoError:
-            # check_self_intersect != OCC.BRepCheck.BRepCheck_NoError):
+        if check_orientation != BRepCheck_NoError:
+            # check_self_intersect != BRepCheck_NoError):
             return False
         else:
             return True
 
     def to_curve(self,
                  tolerance=OCCUTILS_DEFAULT_TOLERANCE,
-                 order=OCC.GeomAbs.GeomAbs_C2,
+                 order=GeomAbs_C2,
                  max_segment=200,
                  max_order=12):
         r"""A wire can consist of many edges.
@@ -76,9 +75,8 @@ class Wire(BaseObject):
 
         Parameters
         ----------
-        wire : OCC.TopoDS.TopoDS_Wire
         tolerance : float, optional
-        order : OCC.GeomAbs.GeomAbs_C*, optional
+        order : GeomAbs_C*, optional
         max_segment : int, optional
         max_order : int, optional
 
@@ -87,25 +85,17 @@ class Wire(BaseObject):
         OCC.Geom.Geom_BSplineCurve
 
         """
-        adap = OCC.BRepAdaptor.BRepAdaptor_CompCurve(self._wrapped_instance)
-        hadap = OCC.BRepAdaptor.BRepAdaptor_HCompCurve(adap)
-        approx = OCC.Approx.Approx_Curve3d(hadap.GetHandle(),
-                                           tolerance,
-                                           order,
-                                           max_segment,
-                                           max_order)
-        with AssertIsDone(approx, 'not able to compute approximation from wire'):
+        adap = BRepAdaptor_CompCurve(self._wrapped_instance)
+        hadap = BRepAdaptor_HCompCurve(adap)
+        approx = Approx_Curve3d(hadap.GetHandle(),
+                                tolerance,
+                                order,
+                                max_segment,
+                                max_order)
+        with AssertIsDone(approx,
+                          'not able to compute approximation from wire'):
             return approx.Curve().GetObject()
 
     def to_adaptor_3d(self):
-        r"""Abstract curve like geom_type into an adaptor3d
-
-        Parameters
-        ----------
-        curve
-
-        Returns
-        -------
-
-        """
-        return OCC.BRepAdaptor.BRepAdaptor_CompCurve(self._wrapped_instance)
+        r"""Abstract curve like geom_type into an adaptor3d"""
+        return BRepAdaptor_CompCurve(self._wrapped_instance)

@@ -4,12 +4,13 @@ r"""Methods to make wire"""
 
 import functools
 
-import OCC.BRepBuilderAPI
+from OCC.BRepBuilderAPI import BRepBuilderAPI_MakeWire,\
+    BRepBuilderAPI_MakePolygon
 
 from aocutils.common import AssertIsDone
 
 
-@functools.wraps(OCC.BRepBuilderAPI.BRepBuilderAPI_MakeWire)
+@functools.wraps(BRepBuilderAPI_MakeWire)
 def wire(*args):
     r"""Make a OCC.TopoDS.TopoDS_Wire
 
@@ -24,20 +25,20 @@ def wire(*args):
     """
     # if we get an iterable, than add all edges to wire builder
     if isinstance(args[0], list) or isinstance(args[0], tuple):
-        a_wire = OCC.BRepBuilderAPI.BRepBuilderAPI_MakeWire()
+        a_wire = BRepBuilderAPI_MakeWire()
         for i in args[0]:
             a_wire.Add(i)
         a_wire.Build()
         return a_wire.Wire()
 
-    a_wire = OCC.BRepBuilderAPI.BRepBuilderAPI_MakeWire(*args)
+    a_wire = BRepBuilderAPI_MakeWire(*args)
     a_wire.Build()
     with AssertIsDone(a_wire, 'failed to produce wire'):
         result = a_wire.Wire()
         return result
 
 
-@functools.wraps(OCC.BRepBuilderAPI.BRepBuilderAPI_MakePolygon)
+@functools.wraps(BRepBuilderAPI_MakePolygon)
 def polygon(args, closed=False):
     r"""Make a polygon
 
@@ -51,7 +52,7 @@ def polygon(args, closed=False):
     OCC.TopoDS.TopoDS_Wire
 
     """
-    poly = OCC.BRepBuilderAPI.BRepBuilderAPI_MakePolygon()
+    poly = BRepBuilderAPI_MakePolygon()
     for pt in args:
         # support nested lists
         if isinstance(pt, list) or isinstance(pt, tuple):
@@ -68,7 +69,7 @@ def polygon(args, closed=False):
         return result
 
 
-@functools.wraps(OCC.BRepBuilderAPI.BRepBuilderAPI_MakePolygon)
+@functools.wraps(BRepBuilderAPI_MakePolygon)
 def closed_polygon(*args):
     r"""Make a closed polygon
 
@@ -81,7 +82,7 @@ def closed_polygon(*args):
     OCC.TopoDS.TopoDS_Wire
 
     """
-    poly = OCC.BRepBuilderAPI.BRepBuilderAPI_MakePolygon()
+    poly = BRepBuilderAPI_MakePolygon()
     for pt in args:
         if isinstance(pt, list) or isinstance(pt, tuple):
             for i in pt:

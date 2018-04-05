@@ -5,7 +5,7 @@ r"""Trim operation"""
 import warnings
 import logging
 
-import OCC.Geom
+from OCC.Geom import Geom_TrimmedCurve
 
 from aocutils.brep.edge_make import edge
 from aocutils.brep.wire import Wire
@@ -39,12 +39,13 @@ def trim_wire(wire, shape_limit_1, shape_limit_2, periodic=False):
         if spl.IsClosed():
             spl.SetPeriodic()
         else:
-            msg = "the wire to be trimmed is not closed, hence cannot be made periodic"
-            logger.warn(msg)
+            msg = "the wire to be trimmed is not closed, " \
+                  "hence cannot be made periodic"
+            logger.warning(msg)
             warnings.warn(msg)
 
     p1 = point_on_curve(bspl, shape_limit_1)[0]
     p2 = point_on_curve(bspl, shape_limit_2)[0]
     a, b = sorted([p1, p2])
-    tr = OCC.Geom.Geom_TrimmedCurve(bspl, a, b).GetHandle()
+    tr = Geom_TrimmedCurve(bspl, a, b).GetHandle()
     return edge(tr)

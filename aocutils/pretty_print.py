@@ -4,25 +4,26 @@ r"""Pretty printing of various OCC entities"""
 
 import math
 
-import OCC.gp
-import OCC.BRep
-import OCC.TopoDS
-import OCC.TopAbs
+from OCC.gp import gp_Vec, gp_Pnt, gp_Ax1, gp_Trsf, gp_Quaternion
+from OCC.BRep import BRep_Tool
+from OCC.TopoDS import TopoDS_Iterator, topods_Vertex
+from OCC.TopAbs import TopAbs_VERTEX, TopAbs_SOLID, TopAbs_EDGE, TopAbs_FACE, \
+    TopAbs_SHELL, TopAbs_WIRE, TopAbs_COMPOUND, TopAbs_COMPSOLID
 
 
 def add_str_repr():
     r"""Add the shortcuts to the gp types"""
     # print gp_Pnt() should return something informative...
-    OCC.gp.gp_Vec.__repr__ = gp_vec_print
-    OCC.gp.gp_Vec.__str__ = gp_vec_print
-    OCC.gp.gp_Pnt.__repr__ = gp_pnt_print
-    OCC.gp.gp_Pnt.__str__ = gp_pnt_print
-    OCC.gp.gp_Ax1.__repr__ = gp_ax1_print
-    OCC.gp.gp_Ax1.__str__ = gp_ax1_print
-    OCC.gp.gp_Trsf.__repr__ = gp_trsf_print
-    OCC.gp.gp_Trsf.__str__ = gp_trsf_print
-    OCC.gp.gp_Quaternion.__repr__ = gp_quat_print
-    OCC.gp.gp_Quaternion.__str__ = gp_quat_print
+    gp_Vec.__repr__ = gp_vec_print
+    gp_Vec.__str__ = gp_vec_print
+    gp_Pnt.__repr__ = gp_pnt_print
+    gp_Pnt.__str__ = gp_pnt_print
+    gp_Ax1.__repr__ = gp_ax1_print
+    gp_Ax1.__str__ = gp_ax1_print
+    gp_Trsf.__repr__ = gp_trsf_print
+    gp_Trsf.__str__ = gp_trsf_print
+    gp_Quaternion.__repr__ = gp_quat_print
+    gp_Quaternion.__str__ = gp_quat_print
 
 
 def gp_pnt_print(pnt):
@@ -30,7 +31,7 @@ def gp_pnt_print(pnt):
 
     Parameters
     ----------
-    pnt : OCC.gp.gp_Pnt
+    pnt : gp_Pnt
 
     Returns
     -------
@@ -48,7 +49,7 @@ def gp_vec_print(vec):
 
     Parameters
     ----------
-    vec : OCC.gp.gp_Vec
+    vec : gp_Vec
 
     Returns
     -------
@@ -67,7 +68,7 @@ def gp_ax1_print(ax1):
 
     Parameters
     ----------
-    ax1 : OCC.gp.gp_Ax1
+    ax1 : gp_Ax1
 
     Returns
     -------
@@ -89,7 +90,7 @@ def gp_trsf_print(trsf):
 
     Parameters
     ----------
-    trsf : OCC.gp.gp_Trsf
+    trsf : gp_Trsf
 
     Returns
     -------
@@ -112,7 +113,7 @@ def gp_quat_print(quat):
 
     Parameters
     ----------
-    quat : OCC.gp.gp_Quaternion
+    quat : gp_Quaternion
 
     Returns
     -------
@@ -120,7 +121,7 @@ def gp_quat_print(quat):
 
     """
     w, x, y, z = quat.W(), quat.X(), quat.Y(), quat.Z()
-    vec = OCC.gp.gp_Vec()
+    vec = gp_Vec()
     angle = math.degrees(quat.GetVectorAndAngle(vec))
     s = "< gp_Quaternion: w:{w}, x:{x}, y:{y}, z:{z} >\n" \
         "vector:{vec} angle:{angle}"
@@ -134,7 +135,7 @@ def dump_topology(shape, level=0):
 
     Parameters
     ----------
-    shape : OCC.TopoDS.TopoDS_Shape
+    shape : TopoDS_Shape
     level : int
 
     Returns
@@ -142,10 +143,10 @@ def dump_topology(shape, level=0):
     str
         Multiline description of the shape topology
     """
-    brep_tool = OCC.BRep.BRep_Tool
+    brep_tool = BRep_Tool
     s = shape.ShapeType()
-    if s == OCC.TopAbs.TopAbs_VERTEX:
-        pnt = brep_tool.Pnt(OCC.TopoDS.topods_Vertex(shape))
+    if s == TopAbs_VERTEX:
+        pnt = brep_tool.Pnt(topods_Vertex(shape))
         print(".." * level + "<Vertex %i: %s %s %s>" % (hash(shape),
                                                         pnt.X(),
                                                         pnt.Y(),
@@ -153,7 +154,7 @@ def dump_topology(shape, level=0):
     else:
         print(".." * level + shape_type_string(shape))
         # print(shape_type_string(shape))
-    shape_iterator = OCC.TopoDS.TopoDS_Iterator(shape)
+    shape_iterator = TopoDS_Iterator(shape)
     while shape_iterator.More():
         shp = shape_iterator.Value()
         shape_iterator.Next()
@@ -175,20 +176,20 @@ def shape_type_string(shape):
     """
     st = shape.ShapeType()
     s = "?"
-    if st == OCC.TopAbs.TopAbs_VERTEX:
+    if st == TopAbs_VERTEX:
         s = "Vertex"
-    if st == OCC.TopAbs.TopAbs_SOLID:
+    if st == TopAbs_SOLID:
         s = "Solid"
-    if st == OCC.TopAbs.TopAbs_EDGE:
+    if st == TopAbs_EDGE:
         s = "Edge"
-    if st == OCC.TopAbs.TopAbs_FACE:
+    if st == TopAbs_FACE:
         s = "Face"
-    if st == OCC.TopAbs.TopAbs_SHELL:
+    if st == TopAbs_SHELL:
         s = "Shell"
-    if st == OCC.TopAbs.TopAbs_WIRE:
+    if st == TopAbs_WIRE:
         s = "Wire"
-    if st == OCC.TopAbs.TopAbs_COMPOUND:
+    if st == TopAbs_COMPOUND:
         s = "Compound."
-    if st == OCC.TopAbs.TopAbs_COMPSOLID:
+    if st == TopAbs_COMPSOLID:
         s = "Compsolid."
     return "%s: %i" % (s, hash(shape))

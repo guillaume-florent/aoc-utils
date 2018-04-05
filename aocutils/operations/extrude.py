@@ -2,7 +2,7 @@
 
 r"""Extrusion operation"""
 
-import OCC.BRepPrimAPI
+from OCC.BRepPrimAPI import BRepPrimAPI_MakePrism
 
 from aocutils.common import AssertIsDone
 
@@ -12,15 +12,15 @@ def extrude(profile, vec):
 
     Parameters
     ----------
-    profile : OCC.TopoDS.TopoDS_Wire
-    vec : OCC.gp.gp_Vec
+    profile : TopoDS_Wire
+    vec : gp_Vec
 
     Returns
     -------
-    OCC.TopoDS.TopoDS_Shape
+    TopoDS_Shape
 
     """
-    pri = OCC.BRepPrimAPI.BRepPrimAPI_MakePrism(profile, vec, True)
+    pri = BRepPrimAPI_MakePrism(profile, vec, True)
     with AssertIsDone(pri, 'failed building prism'):
         pri.Build()
         return pri.Shape()

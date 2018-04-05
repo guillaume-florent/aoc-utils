@@ -5,23 +5,23 @@ r"""Types example"""
 
 from __future__ import print_function
 
-import aocutils.primitives
-import aocutils.types
-import aocutils.brep.solid
-import aocutils.brep.solid_make
-import aocutils.topology
+from aocutils.primitives import box, sphere
+from aocutils.types import topo_lut
+from aocutils.brep.solid import Solid
+# import aocutils.brep.solid_make
+from aocutils.topology import Topo
 
 
-box = aocutils.primitives.box(10, 10, 10)
-sphere = aocutils.primitives.sphere(10)
+box = box(10, 10, 10)
+sphere = sphere(10)
 
 print(type(box))
-print(aocutils.types.topo_lut[box.ShapeType()])
+print(topo_lut[box.ShapeType()])
 
 
-solid = aocutils.topology.Topo(box).solids[0]
+solid = Topo(box).solids[0]
 print(type(solid))
-wrapped_solid = aocutils.brep.solid.Solid(solid)
+wrapped_solid = Solid(solid)
 print(type(wrapped_solid))
 
 

@@ -4,9 +4,10 @@ r"""Offset operations"""
 
 import logging
 
-import OCC.BRepOffset
-import OCC.BRepOffsetAPI
-import OCC.GeomAbs
+from OCC.BRepOffset import BRepOffset_Skin
+from OCC.BRepOffsetAPI import BRepOffsetAPI_MakeOffset, \
+    BRepOffsetAPI_MakeOffsetShape
+from OCC.GeomAbs import GeomAbs_Arc, GeomAbs_Tangent, GeomAbs_Intersection
 
 from aocutils.exceptions import OffsetShapeException
 from aocutils.topology import shape_to_topology
@@ -18,10 +19,10 @@ logger = logging.getLogger(__name__)
 def offset_shape(shape_to_offset,
                  offset_distance,
                  tolerance=OCCUTILS_DEFAULT_TOLERANCE,
-                 offset_mode=OCC.BRepOffset.BRepOffset_Skin,
+                 offset_mode=BRepOffset_Skin,
                  intersection=False,
                  selfintersection=False,
-                 join_type=OCC.GeomAbs.GeomAbs_Arc):
+                 join_type=GeomAbs_Arc):
     r"""Builds an offset shell from a shape construct
     an offset version of the shape
 
@@ -30,12 +31,12 @@ def offset_shape(shape_to_offset,
     shape_to_offset
     offset_distance : float
     tolerance : float
-    offset_mode : OCC.BRepOffset.BRepOffset_*, optional
-        (the default is OCC.BRepOffset.BRepOffset_Skin)
+    offset_mode : BRepOffset_*, optional
+        (the default is BRepOffset_Skin)
     intersection : bool
     selfintersection : bool
-    join_type : OCC.GeomAbs.GeomAbs_*
-        (the default is OCC.GeomAbs.GeomAbs_Arc)
+    join_type : GeomAbs_*
+        (the default is GeomAbs_Arc)
 
     Returns
     -------
@@ -43,13 +44,13 @@ def offset_shape(shape_to_offset,
 
     """
     try:
-        an_offset = OCC.BRepOffsetAPI.BRepOffsetAPI_MakeOffsetShape(shape_to_offset,
-                                                                    offset_distance,
-                                                                    tolerance,
-                                                                    offset_mode,
-                                                                    intersection,
-                                                                    selfintersection,
-                                                                    join_type)
+        an_offset = BRepOffsetAPI_MakeOffsetShape(shape_to_offset,
+                                                  offset_distance,
+                                                  tolerance,
+                                                  offset_mode,
+                                                  intersection,
+                                                  selfintersection,
+                                                  join_type)
         if an_offset.IsDone():
             return an_offset.Shape()
         else:
@@ -65,7 +66,7 @@ def offset_shape(shape_to_offset,
 def offset(wire_or_face,
            offset_distance,
            altitude=0,
-           join_type=OCC.GeomAbs.GeomAbs_Arc):
+           join_type=GeomAbs_Arc):
     r"""Builds a offset wire or face from a wire or face
     construct an offset version of the shape
 
@@ -79,8 +80,8 @@ def offset(wire_or_face,
         move the offset shape to altitude from the normal of the wire or face
     join_type
         the geom_type of offset you want can be one of
-        OCC.GeomAbs.GeomAbs_Arc, OCC.GeomAbs.GeomAbs_Tangent,
-        OCC.GeomAbs.GeomAbs_Intersection
+        GeomAbs_Arc, GeomAbs_Tangent,
+        GeomAbs_Intersection
 
     Returns
     -------
@@ -91,17 +92,16 @@ def offset(wire_or_face,
     A shape that has a negative offsetDistance will return a sharp corner
 
     """
-    _joints = [OCC.GeomAbs.GeomAbs_Arc,
-               OCC.GeomAbs.GeomAbs_Tangent,
-               OCC.GeomAbs.GeomAbs_Intersection]
+    _joints = [GeomAbs_Arc,
+               GeomAbs_Tangent,
+               GeomAbs_Intersection]
     # assert join_type in _joints, '%s is not one of %s' % (join_type, _joints)
     if join_type not in _joints:
         msg = '%s is not one of %s' % (join_type, _joints)
         logger.error(msg)
         raise ValueError(msg)
     try:
-        an_offset = OCC.BRepOffsetAPI.BRepOffsetAPI_MakeOffset(wire_or_face,
-                                                               join_type)
+        an_offset = BRepOffsetAPI_MakeOffset(wire_or_face, join_type)
         an_offset.Perform(offset_distance, altitude)
         if an_offset.IsDone():
             return shape_to_topology(an_offset.Shape())

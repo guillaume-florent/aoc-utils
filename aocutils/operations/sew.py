@@ -4,7 +4,7 @@ r"""Sewing operation"""
 
 import logging
 
-import OCC.BRepBuilderAPI
+from OCC.BRepBuilderAPI import BRepBuilderAPI_Sewing
 
 from aocutils.topology import shape_to_topology
 
@@ -24,7 +24,7 @@ def sew_shapes(shapes, tolerance=1e-3):
     OCC.TopoDS.TopoDS_*
 
     """
-    sew = OCC.BRepBuilderAPI.BRepBuilderAPI_Sewing(tolerance)
+    sew = BRepBuilderAPI_Sewing(tolerance)
     for shp in shapes:
         if isinstance(shp, list):
             for i in shp:

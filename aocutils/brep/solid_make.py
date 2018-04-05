@@ -4,9 +4,9 @@ r"""Methods to make a solid"""
 
 import functools
 
-import OCC.BRepBuilderAPI
-import OCC.BRepOffsetAPI
-import OCC.TopoDS
+from OCC.BRepBuilderAPI import BRepBuilderAPI_MakeSolid
+from OCC.BRepOffsetAPI import BRepOffsetAPI_MakePipe
+# import OCC.TopoDS
 
 from aocutils.common import AssertIsDone
 from aocutils.brep.wire_make import polygon
@@ -16,9 +16,9 @@ from aocutils.operations.transform import translate
 from aocutils.operations.sew import sew_shapes
 
 
-@functools.wraps(OCC.BRepBuilderAPI.BRepBuilderAPI_MakeSolid)
+@functools.wraps(BRepBuilderAPI_MakeSolid)
 def solid(*args):
-    r"""Make a OCC.TopoDS.TopoDS_Solid
+    r"""Make a TopoDS_Solid
 
     Parameters
     ----------
@@ -26,7 +26,7 @@ def solid(*args):
 
     Returns
     -------
-    OCC.TopoDS.TopoDS_Solid
+    TopoDS_Solid
 
     Notes
     -----
@@ -41,7 +41,7 @@ def solid(*args):
     BRepBuilderAPI_MakeSolid (const TopoDS_Solid &So, const TopoDS_Shell &S)
 
     """
-    sld = OCC.BRepBuilderAPI.BRepBuilderAPI_MakeSolid(*args)
+    sld = BRepBuilderAPI_MakeSolid(*args)
     with AssertIsDone(sld, 'failed to produce solid'):
         result = sld.Solid()
         sld.Delete()
@@ -66,13 +66,13 @@ def oriented_box(v_corner, v_x, v_y, v_z):
 
     Returns
     -------
-    OCC.TopoDS.TopoDS_Solid
+    TopoDS_Solid
 
     """
     verts = map(lambda x: x.as_pnt(), [v_corner, v_corner + v_x, v_corner+v_x+v_y, v_corner+v_y])
     p = polygon(verts, closed=True)
     li = line(v_corner.as_pnt(), (v_corner + v_z).as_pnt())
-    bmp = OCC.BRepOffsetAPI.BRepOffsetAPI_MakePipe(p, li)
+    bmp = BRepOffsetAPI_MakePipe(p, li)
     bmp.Build()
     shp = bmp.Shape()
 

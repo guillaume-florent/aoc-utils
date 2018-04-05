@@ -4,10 +4,10 @@ r"""geom plane"""
 
 import logging
 
-import OCC.BRepBuilderAPI
-import OCC.GeomPlate
-import OCC.gp
-import OCC.TColgp
+from OCC.BRepBuilderAPI import BRepBuilderAPI_FindPlane
+from OCC.GeomPlate import GeomPlate_BuildAveragePlane
+from OCC.gp import gp_Vec
+from OCC.TColgp import TColgp_HArray1OfPnt, TColgp_SequenceOfVec
 
 from aocutils.exceptions import FindPlaneException
 from aocutils.brep.vertex import Vertex
@@ -45,7 +45,7 @@ class Plane(object):
 
         """
         try:
-            fpl = OCC.BRepBuilderAPI.BRepBuilderAPI_FindPlane(shape, tolerance)
+            fpl = BRepBuilderAPI_FindPlane(shape, tolerance)
             if fpl.Found():
                 return cls(fpl.Plane().GetObject())
             else:
@@ -72,17 +72,17 @@ class Plane(object):
         """
         uvs_from_vertices = [_face.project_vertex(Vertex.to_pnt(i))
                              for i in Topo(_face).vertices]
-        normals = [OCC.gp.gp_Vec(_face.DiffGeom.normal(*uv[0])) for uv in uvs_from_vertices]
+        normals = [gp_Vec(_face.DiffGeom.normal(*uv[0])) for uv in uvs_from_vertices]
         points = [i[1] for i in uvs_from_vertices]
 
-        NORMALS = OCC.TColgp.TColgp_SequenceOfVec()
+        NORMALS = TColgp_SequenceOfVec()
         # [NORMALS.Append(i) for i in normals]
         for i in normals:
             NORMALS.Append(i)
-        POINTS = to_tcol_(points, OCC.TColgp.TColgp_HArray1OfPnt)
+        POINTS = to_tcol_(points, TColgp_HArray1OfPnt)
 
-        pl = OCC.GeomPlate.GeomPlate_BuildAveragePlane(NORMALS, POINTS).Plane().GetObject()
-        vec = OCC.gp.gp_Vec(pl.Location(), _face.GlobalProperties.centre())
+        pl = GeomPlate_BuildAveragePlane(NORMALS, POINTS).Plane().GetObject()
+        vec = gp_Vec(pl.Location(), _face.GlobalProperties.centre())
         pt = (pl.Location().as_vec() + vec).as_pnt()
         pl.SetLocation(pt)
         return cls(pl)
@@ -92,13 +92,12 @@ class Plane(object):
 
         Parameters
         ----------
-        plane
         vec_length
 
         Returns
         -------
-        OCC.gp.gp_Vec
+        gp_Vec
 
         """
-        trns = OCC.gp.gp_Vec(self._geom_plane.Axis().Direction())
+        trns = gp_Vec(self._geom_plane.Axis().Direction())
         return Vector(trns.Normalized() * vec_length)

@@ -5,11 +5,9 @@ r"""Methods to make a vertex"""
 import functools
 import logging
 
-import OCC.BRepBuilderAPI
-import OCC.gp
-import OCC.TopoDS
-import OCC.TopExp
-import OCC.ShapeBuild
+from OCC.BRepBuilderAPI import BRepBuilderAPI_MakeVertex
+from OCC.TopoDS import TopoDS_Vertex
+from OCC.TopExp import topexp_CommonVertex
 
 from aocutils.common import AssertIsDone
 from aocutils.exceptions import NoCommonVertexException
@@ -17,9 +15,9 @@ from aocutils.exceptions import NoCommonVertexException
 logger = logging.getLogger(__name__)
 
 
-@functools.wraps(OCC.BRepBuilderAPI.BRepBuilderAPI_MakeVertex)
+@functools.wraps(BRepBuilderAPI_MakeVertex)
 def vertex(*args):
-    r"""Make a OCC.TopoDS.TopoDS_Vertex
+    r"""Make a TopoDS_Vertex
 
     Parameters
     ----------
@@ -27,10 +25,10 @@ def vertex(*args):
 
     Returns
     -------
-    OCC.TopoDS.TopoDS_Vertex
+    TopoDS_Vertex
 
     """
-    vert = OCC.BRepBuilderAPI.BRepBuilderAPI_MakeVertex(*args)
+    vert = BRepBuilderAPI_MakeVertex(*args)
     with AssertIsDone(vert, 'failed to produce vertex'):
         result = vert.Vertex()
         vert.Delete()
@@ -42,17 +40,17 @@ def common_vertex(edg1, edg2):
 
     Parameters
     ----------
-    edg1 : OCC.TopoDS.TopoDS_Edge
-    edg2 : OCC.TopoDS.TopoDS_Edge
+    edg1 : TopoDS_Edge
+    edg2 : TopoDS_Edge
 
     Returns
     -------
-    OCC.TopoDS.TopoDS_Vertex
+    TopoDS_Vertex
         The common vertex of 2 edges
 
     """
-    vert = OCC.TopoDS.TopoDS_Vertex()
-    if OCC.TopExp.topexp_CommonVertex(edg1, edg2, vert):
+    vert = TopoDS_Vertex()
+    if topexp_CommonVertex(edg1, edg2, vert):
         return vert
     else:
         msg = "No common vertex found"

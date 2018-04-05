@@ -9,7 +9,9 @@ import logging
 
 import numpy as np
 
-import OCC.gp
+from OCC.gp import gp_Vec
+from OCC import Graphic3d
+from OCC.Graphic3d import Graphic3d_MaterialAspect
 
 from aocutils.display.color import color
 
@@ -21,12 +23,12 @@ def random_vec():
 
     Returns
     -------
-    OCC.gp.gp_Vec
+    gp_Vec
         A random vector with components between -1 and 1
 
     """
     x, y, z = [np.random.uniform(-1, 1) for _ in range(3)]
-    return OCC.gp.gp_Vec(x, y, z)
+    return gp_Vec(x, y, z)
 
 
 def random_colored_material_aspect():
@@ -42,7 +44,7 @@ def random_colored_material_aspect():
     col = np.random.sample(clrs, 1)[0]
     logger.info('Color : %s' % str(col))
     # noinspection PyUnresolvedReferences
-    return OCC.Graphic3d.Graphic3d_MaterialAspect(getattr(OCC.Graphic3d, col))
+    return Graphic3d_MaterialAspect(getattr(Graphic3d, col))
 
 
 def random_color():
@@ -50,7 +52,7 @@ def random_color():
 
     Returns
     -------
-    OCC.Quantity.Quantity_Color
+    Quantity_Color
 
     """
     return color(np.random.random(), np.random.random(), np.random.random())

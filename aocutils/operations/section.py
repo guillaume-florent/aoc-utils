@@ -3,8 +3,8 @@
 r"""Section operation"""
 
 
-import OCC.BRepFill
-import OCC.TopTools
+from OCC.BRepFill import BRepFill_NSections
+from OCC.TopTools import TopTools_SequenceOfShape
 
 
 def n_sections(edges):
@@ -16,11 +16,11 @@ def n_sections(edges):
 
     Returns
     -------
-    OCC.BRepFill.BRepFill_NSections
+    BRepFill_NSections
 
     """
-    seq = OCC.TopTools.TopTools_SequenceOfShape()
+    seq = TopTools_SequenceOfShape()
     for i in edges:
         seq.Append(i)
-    n_sec = OCC.BRepFill.BRepFill_NSections(seq, True)
+    n_sec = BRepFill_NSections(seq, True)
     return n_sec

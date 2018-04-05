@@ -4,7 +4,8 @@ r"""Boolean operations"""
 
 import logging
 
-import OCC.BRepAlgoAPI
+from OCC.BRepAlgoAPI import BRepAlgoAPI_Common, BRepAlgoAPI_Cut, \
+    BRepAlgoAPI_Fuse
 
 from aocutils.exceptions import BooleanCommonException, BooleanCutException
 
@@ -24,8 +25,8 @@ def common(shape_1, shape_2):
     OCC.TopoDS.TopoDS_Shape
 
     """
-    algo_common = OCC.BRepAlgoAPI.BRepAlgoAPI_Common(shape_1, shape_2)
-    logger.debug("OCC.BRepAlgoAPI.BRepAlgoAPI_Common.BuilderCanWork()? : {answer}"
+    algo_common = BRepAlgoAPI_Common(shape_1, shape_2)
+    logger.debug("BRepAlgoAPI_Common.BuilderCanWork()? : {answer}"
                  .format(answer=algo_common.BuilderCanWork()))
     _error = {0: '- Ok',
               1: '- The Object is created but Nothing is Done',
@@ -63,8 +64,7 @@ def cut(shape_to_cut_from, cutting_shape):
 
     """
     try:
-        brep_cut = OCC.BRepAlgoAPI.BRepAlgoAPI_Cut(shape_to_cut_from,
-                                                   cutting_shape)
+        brep_cut = BRepAlgoAPI_Cut(shape_to_cut_from, cutting_shape)
         logger.info('Can work ? : %s' % str(brep_cut.BuilderCanWork()))
         _error = {0: '- Ok',
                   1: '- The Object is created but Nothing is Done',
@@ -99,7 +99,7 @@ def fuse(shape_to_cut_from, joining_shape):
     OCC.TopoDS.TopoDS_Shape
 
     """
-    join = OCC.BRepAlgoAPI.BRepAlgoAPI_Fuse(shape_to_cut_from, joining_shape)
+    join = BRepAlgoAPI_Fuse(shape_to_cut_from, joining_shape)
     join.RefineEdges()
     join.FuseEdges()
     shape = join.Shape()
