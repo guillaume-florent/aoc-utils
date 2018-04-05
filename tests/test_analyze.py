@@ -143,14 +143,14 @@ def test_better_bounds_complex_shape():
     # z max has to be replaced by 102.20984 for the test to pass
     tolerance = 0.01
     bbb = BetterBoundingBox(hullshape, tol=tolerance)
-    assert -tolerance <= bbb.x_min <= 0.
-    assert 990. <= bbb.x_max <= 990. + tolerance
+    assert -2 * tolerance <= bbb.x_min <= 0.
+    assert 990. <= bbb.x_max <= 990. + 2 * tolerance
 
-    assert -82.263 - tolerance <= bbb.y_min <= -82.263
-    assert 82.263 <= bbb.y_max <= 82.263 + tolerance
+    assert -82.263 - 2 * tolerance <= bbb.y_min <= -82.263
+    assert 82.263 <= bbb.y_max <= 82.263 + 2 * tolerance
 
-    assert -52.092 - tolerance <= bbb.z_min <= -52.092
-    assert 102.20984 <= bbb.z_max <= 102.210 + tolerance
+    assert -52.092 - 2 * tolerance <= bbb.z_min <= -52.092
+    assert 102.20984 <= bbb.z_max <= 102.210 + 2 * tolerance
 
 
 def test_bounds_sphere_boundingbox_middle():

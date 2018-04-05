@@ -369,9 +369,9 @@ def real_bb_position(axis, side, start_position, shape, increment=0.01):
     # Bug correction : make sure the computed bounding box is wider
     # than the shape by a value between 0 and increment
     if side == "MIN":
-        return position - increment
+        return position - 2 * increment
     elif side == "MAX":
-        return position + increment
+        return position + 2 * increment
 
 
 class BetterBoundingBox(AbstractBoundingBox):
