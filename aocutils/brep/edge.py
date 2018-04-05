@@ -410,7 +410,7 @@ class Edge(BaseObject):
 
         Parameters
         ----------
-        pnt : .gp_Pnt
+        pnt : gp_Pnt
         continuity : int
         after
 
@@ -490,7 +490,7 @@ class Edge(BaseObject):
         -------
         float
             the parameter at the mid point of the curve
-        .gp_Pnt
+        gp_Pnt
             gp_Pnt corresponding to the parameter
         """
         return self.adaptor.Value(self.midpoint_parameter)
@@ -627,7 +627,7 @@ class Edge(BaseObject):
 
         Returns
         -------
-        .gp_Pnt
+        gp_Pnt
 
         """
         self._check_u_in_domain(u)
@@ -715,7 +715,7 @@ class Edge(BaseObject):
 
         Returns
         -------
-        list[.gp_Pnt]
+        list[gp_Pnt]
 
         """
         if isinstance(other, TopoDS_Face):
@@ -736,7 +736,7 @@ class Edge(BaseObject):
 
         Returns
         -------
-        .gp_Pnt
+        gp_Pnt
 
         Raises
         ------
@@ -747,7 +747,7 @@ class Edge(BaseObject):
         self._check_u_in_domain(u)
         # NOT SO SURE IF THIS IS THE SAME THING!!!
         self.brep_local_props.SetParameter(u)
-        pnt = .gp_Pnt()
+        pnt = gp_Pnt()
         try:
             self.brep_local_props.CentreOfCurvature(pnt)
             return pnt
@@ -783,13 +783,13 @@ class Edge(BaseObject):
 
         Returns
         -------
-        .gp_Dir
+        gp_Dir
 
         """
         self._check_u_in_domain(u)
         self.brep_local_props.SetParameter(u)
         if self.brep_local_props.IsTangentDefined():
-            ddd = .gp_Dir()
+            ddd = gp_Dir()
             self.brep_local_props.Tangent(ddd)
             return ddd
         else:
@@ -810,7 +810,7 @@ class Edge(BaseObject):
 
         Returns
         -------
-        .gp_Dir
+        gp_Dir
 
         Raises
         ------
@@ -821,7 +821,7 @@ class Edge(BaseObject):
         self._check_u_in_domain(u)
         try:
             self.brep_local_props.SetParameter(u)
-            a_dir = .gp_Dir()
+            a_dir = gp_Dir()
             self.brep_local_props.Normal(a_dir)
             return a_dir
         except:
