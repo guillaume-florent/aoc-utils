@@ -4,7 +4,7 @@ r"""solid module of aocutils"""
 
 import logging
 
-from OCC.TopoDS import TopoDS_Solid
+from OCC.Core.TopoDS import TopoDS_Solid
 
 from aocutils.topology import Topo
 from aocutils.brep.base import BaseObject

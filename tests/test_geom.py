@@ -8,8 +8,9 @@ import sys
 
 import pytest
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox
-from OCC.Geom import Geom_BSplineCurve, Geom_Curve, Handle_Geom_BSplineCurve
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
+from OCC.Core.Geom import Geom_BSplineCurve, Geom_Curve, \
+    Handle_Geom_BSplineCurve
 
 from aocutils.brep.wire import Wire
 from aocutils.topology import Topo

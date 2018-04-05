@@ -8,12 +8,13 @@ curve resampling
 import logging
 # import ast
 
-from OCC.GCPnts import GCPnts_UniformDeflection
-from OCC.GeomAbs import GeomAbs_C2
-from OCC.GeomAbs import GeomAbs_C0, GeomAbs_C1  # dynamically built code
-from OCC.GeomAPI import GeomAPI_PointsToBSpline
-from OCC.ShapeFix import ShapeFix_ShapeTolerance, ShapeFix_Shape, ShapeFix_Face
-from OCC.ShapeUpgrade import ShapeUpgrade_ShapeDivideContinuity
+from OCC.Core.GCPnts import GCPnts_UniformDeflection
+from OCC.Core.GeomAbs import GeomAbs_C2
+from OCC.Core.GeomAbs import GeomAbs_C0, GeomAbs_C1  # dynamically built code
+from OCC.Core.GeomAPI import GeomAPI_PointsToBSpline
+from OCC.Core.ShapeFix import ShapeFix_ShapeTolerance, ShapeFix_Shape, \
+    ShapeFix_Face
+from OCC.Core.ShapeUpgrade import ShapeUpgrade_ShapeDivideContinuity
 
 from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE, \
     OCCUTILS_FIXING_TOLERANCE

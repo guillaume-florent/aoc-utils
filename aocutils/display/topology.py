@@ -6,7 +6,7 @@ import logging
 import time
 
 # import OCC.Display.SimpleGui
-from OCC.AIS import AIS_Shape
+from OCC.Core.AIS import AIS_Shape
 
 from aocutils.display.color import prism_color_sequence
 from aocutils.topology import Topo

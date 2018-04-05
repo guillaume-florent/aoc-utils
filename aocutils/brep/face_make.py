@@ -5,14 +5,14 @@ r"""Methods to make a face"""
 import logging
 import functools
 
-from OCC.BRepBuilderAPI import BRepBuilderAPI_MakeFace
-from OCC.BRepFill import BRepFill_CurveConstraint, brepfill_Face,\
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
+from OCC.Core.BRepFill import BRepFill_CurveConstraint, brepfill_Face,\
     BRepFill_Filling
-from OCC.Geom import Geom_RectangularTrimmedSurface
-from OCC.GeomAbs import GeomAbs_C0
-from OCC.GeomPlate import GeomPlate_MakeApprox, GeomPlate_BuildPlateSurface
-from OCC.BRepAdaptor import BRepAdaptor_HCurve
-from OCC.gp import gp_Pnt, gp_Vec, gp_Dir, gp_Pln
+from OCC.Core.Geom import Geom_RectangularTrimmedSurface
+from OCC.Core.GeomAbs import GeomAbs_C0
+from OCC.Core.GeomPlate import GeomPlate_MakeApprox, GeomPlate_BuildPlateSurface
+from OCC.Core.BRepAdaptor import BRepAdaptor_HCurve
+from OCC.Core.gp import gp_Pnt, gp_Vec, gp_Dir, gp_Pln
 
 from aocutils.common import AssertIsDone
 from aocutils.brep.wire_make import closed_polygon

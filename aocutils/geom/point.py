@@ -4,7 +4,7 @@ r"""geom point"""
 
 import logging
 
-from OCC.gp import gp_Pnt
+from OCC.Core.gp import gp_Pnt
 
 from aocutils.geom._three_d import ThreeD
 from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE

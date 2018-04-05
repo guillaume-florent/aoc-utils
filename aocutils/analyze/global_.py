@@ -4,8 +4,8 @@ r"""Global analysis properties"""
 
 import logging
 
-from OCC.GProp import GProp_GProps
-from OCC.BRepGProp import brepgprop_LinearProperties, \
+from OCC.Core.GProp import GProp_GProps
+from OCC.Core.BRepGProp import brepgprop_LinearProperties, \
     brepgprop_SurfaceProperties, brepgprop_VolumeProperties
 
 from aocutils.types import topo_lut

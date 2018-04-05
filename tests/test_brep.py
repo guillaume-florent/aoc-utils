@@ -4,16 +4,15 @@
 r"""tests/test_brep.py
 """
 
-
 import sys
 import pytest
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere
-from OCC.Geom import Geom_Curve, Geom_Surface, Geom_BSplineCurve
-from OCC.gp import gp_Pnt, gp_Vec, gp_Dir
-from OCC.TopAbs import TopAbs_FORWARD
-from OCC.Adaptor3d import Adaptor3d_IsoCurve
-from OCC.GeomLProp import GeomLProp_SLProps
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere
+from OCC.Core.Geom import Geom_Curve, Geom_Surface, Geom_BSplineCurve
+from OCC.Core.gp import gp_Pnt, gp_Vec, gp_Dir
+from OCC.Core.TopAbs import TopAbs_FORWARD
+from OCC.Core.Adaptor3d import Adaptor3d_IsoCurve
+from OCC.Core.GeomLProp import GeomLProp_SLProps
 
 from aocutils.topology import Topo
 # import aocutils.tolerance

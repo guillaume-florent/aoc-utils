@@ -9,9 +9,9 @@ import logging
 
 import numpy as np
 
-from OCC.gp import gp_Vec
+from OCC.Core.gp import gp_Vec
 from OCC import Graphic3d
-from OCC.Graphic3d import Graphic3d_MaterialAspect
+from OCC.Core.Graphic3d import Graphic3d_MaterialAspect
 
 from aocutils.display.color import color
 

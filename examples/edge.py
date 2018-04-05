@@ -9,8 +9,8 @@ Box -> Topology -> 1 edge -> edge tolerance
 
 from __future__ import print_function
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere
-from OCC.Display.SimpleGui import init_display()
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere
+from OCC.Core.Display.SimpleGui import init_display()
 
 from aocutils.brep.edge import Edge
 from aocutils.topology import Topo

@@ -6,7 +6,7 @@ r"""Points interpolation examples"""
 import logging
 
 from OCC.Display.SimpleGui import init_display
-from OCC.gp import gp_Pnt, gp_Vec
+from OCC.Core.gp import gp_Pnt, gp_Vec
 
 from aocutils.operations.interpolate import points_to_bspline, points, \
     points_vectors, points_no_tangency

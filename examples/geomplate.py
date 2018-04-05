@@ -17,18 +17,18 @@ try:
 except ImportError:
     HAVE_SCIPY = False
 
-from OCC.gp import gp_Pnt
-from OCC.BRepAdaptor import BRepAdaptor_HCurve
-from OCC.BRep import BRep_Builder, BRep_Tool
-from OCC.ShapeAnalysis import ShapeAnalysis_Surface
-from OCC.GeomLProp import GeomLProp_SLProps
-from OCC.BRepFill import BRepFill_CurveConstraint
-from OCC.GeomPlate import GeomPlate_MakeApprox, GeomPlate_BuildPlateSurface, \
-    GeomPlate_PointConstraint
-from OCC.IGESControl import IGESControl_Reader
-from OCC.IFSelect import IFSelect_ItemsByEntity, IFSelect_RetDone
+from OCC.Core.gp import gp_Pnt
+from OCC.Core.BRepAdaptor import BRepAdaptor_HCurve
+from OCC.Core.BRep import BRep_Builder, BRep_Tool
+from OCC.Core.ShapeAnalysis import ShapeAnalysis_Surface
+from OCC.Core.GeomLProp import GeomLProp_SLProps
+from OCC.Core.BRepFill import BRepFill_CurveConstraint
+from OCC.Core.GeomPlate import GeomPlate_MakeApprox, \
+    GeomPlate_BuildPlateSurface, GeomPlate_PointConstraint
+from OCC.Core.IGESControl import IGESControl_Reader
+from OCC.Core.IFSelect import IFSelect_ItemsByEntity, IFSelect_RetDone
 from OCC.Display.SimpleGui import init_display
-from OCC.TopoDS import TopoDS_Compound
+from OCC.Core.TopoDS import TopoDS_Compound
 # import OCC.GeomAbs
 
 from aocutils.brep.wire_make import closed_polygon

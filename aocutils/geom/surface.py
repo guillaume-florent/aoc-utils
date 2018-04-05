@@ -4,7 +4,7 @@ r"""geom surface"""
 
 import logging
 
-from OCC.GeomFill import GeomFill_BSplineCurves, GeomFill_StretchStyle
+from OCC.Core.GeomFill import GeomFill_BSplineCurves, GeomFill_StretchStyle
 
 logger = logging.getLogger(__name__)
 

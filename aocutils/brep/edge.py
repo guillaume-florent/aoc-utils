@@ -6,20 +6,20 @@ from __future__ import print_function
 
 import logging
 
-from OCC.BRepAdaptor import BRepAdaptor_Curve, BRepAdaptor_HCurve
+from OCC.Core.BRepAdaptor import BRepAdaptor_Curve, BRepAdaptor_HCurve
 # import OCC.BRepBuilderAPI
-from OCC.GCPnts import GCPnts_AbscissaPoint, GCPnts_UniformAbscissa
-from OCC.Geom import Geom_TrimmedCurve, Geom_OffsetCurve
-from OCC.TopExp import topexp
-from OCC.TopoDS import TopoDS_Vertex, TopoDS_Edge, TopoDS_Face
-from OCC.gp import gp_Pnt, gp_Vec, gp_Dir
-from OCC.GeomLProp import GeomLProp_CurveTool
-from OCC.BRepLProp import BRepLProp_CLProps
-from OCC.GeomLib import geomlib
-from OCC.GeomAPI import GeomAPI_ProjectPointOnCurve
-from OCC.ShapeAnalysis import ShapeAnalysis_Edge
-from OCC.BRep import BRep_Tool_Curve, BRep_Tool, BRep_Tool_Continuity
-from OCC.BRepIntCurveSurface import BRepIntCurveSurface_Inter
+from OCC.Core.GCPnts import GCPnts_AbscissaPoint, GCPnts_UniformAbscissa
+from OCC.Core.Geom import Geom_TrimmedCurve, Geom_OffsetCurve
+from OCC.Core.TopExp import topexp
+from OCC.Core.TopoDS import TopoDS_Vertex, TopoDS_Edge, TopoDS_Face
+from OCC.Core.gp import gp_Pnt, gp_Vec, gp_Dir
+from OCC.Core.GeomLProp import GeomLProp_CurveTool
+from OCC.Core.BRepLProp import BRepLProp_CLProps
+from OCC.Core.GeomLib import geomlib
+from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnCurve
+from OCC.Core.ShapeAnalysis import ShapeAnalysis_Edge
+from OCC.Core.BRep import BRep_Tool_Curve, BRep_Tool, BRep_Tool_Continuity
+from OCC.Core.BRepIntCurveSurface import BRepIntCurveSurface_Inter
 # import OCC.BRepCheck
 
 from aocutils.analyze.distance import MinimumDistance

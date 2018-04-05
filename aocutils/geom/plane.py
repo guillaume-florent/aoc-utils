@@ -4,10 +4,10 @@ r"""geom plane"""
 
 import logging
 
-from OCC.BRepBuilderAPI import BRepBuilderAPI_FindPlane
-from OCC.GeomPlate import GeomPlate_BuildAveragePlane
-from OCC.gp import gp_Vec
-from OCC.TColgp import TColgp_HArray1OfPnt, TColgp_SequenceOfVec
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_FindPlane
+from OCC.Core.GeomPlate import GeomPlate_BuildAveragePlane
+from OCC.Core.gp import gp_Vec
+from OCC.Core.TColgp import TColgp_HArray1OfPnt, TColgp_SequenceOfVec
 
 from aocutils.exceptions import FindPlaneException
 from aocutils.brep.vertex import Vertex

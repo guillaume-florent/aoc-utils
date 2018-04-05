@@ -6,8 +6,8 @@ r"""
 
 import pytest
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox
-from OCC.TopoDS import TopoDS_Face, TopoDS_Edge, TopoDS_Shape
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
+from OCC.Core.TopoDS import TopoDS_Face, TopoDS_Edge, TopoDS_Shape
 
 from aocutils.fixes import fix_shape, fix_face, fix_tolerance, fix_continuity
 from aocutils.topology import Topo

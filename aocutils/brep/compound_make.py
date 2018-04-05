@@ -2,7 +2,7 @@
 
 r"""core/compound_make.py"""
 
-from OCC.TopoDS import TopoDS_Builder, TopoDS_Compound
+from OCC.Core.TopoDS import TopoDS_Builder, TopoDS_Compound
 
 
 def compound(topo):

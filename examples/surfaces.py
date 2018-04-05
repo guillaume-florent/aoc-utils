@@ -6,7 +6,7 @@ r"""examples/surfaces"""
 import itertools
 
 from OCC.Display.SimpleGui import init_display
-from OCC.gp import gp_Pnt
+from OCC.Core.gp import gp_Pnt
 
 # import aocutils.common
 from aocutils.operations.interpolate import points_to_bspline

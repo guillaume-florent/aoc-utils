@@ -4,8 +4,8 @@ r"""BaseObject is inherited by Vertex, Edge, Face, Shell, Solid"""
 
 import logging
 
-from OCC.BRepBuilderAPI import BRepBuilderAPI_Copy
-from OCC.BRepCheck import BRepCheck_Analyzer
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Copy
+from OCC.Core.BRepCheck import BRepCheck_Analyzer
 # import OCC.BRepGProp
 # import OCC.Display.SimpleGui
 # import OCC.GProp

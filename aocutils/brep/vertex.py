@@ -4,13 +4,9 @@ r"""vertex module of aocutils"""
 
 import logging
 
-from OCC.BRep import BRep_Tool
-# import OCC.BRepBuilderAPI
-from OCC.gp import gp_Pnt2d, gp_Pnt, gp_XYZ, gp_Vec, gp_Dir
-# import OCC.TopoDS
-# import OCC.TopExp
-from OCC.ShapeBuild import ShapeBuild_ReShape
-# import OCC.BRepCheck
+from OCC.Core.BRep import BRep_Tool
+from OCC.Core.gp import gp_Pnt2d, gp_Pnt, gp_XYZ, gp_Vec, gp_Dir
+from OCC.Core.ShapeBuild import ShapeBuild_ReShape
 
 from aocutils.brep.base import BaseObject
 from aocutils.brep.vertex_make import vertex

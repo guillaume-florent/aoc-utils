@@ -6,8 +6,8 @@ import functools
 import logging
 
 from OCC.Display.SimpleGui import init_display
-from OCC.AIS import AIS_Shape
-from OCC.Quantity import Quantity_NOC_AQUAMARINE4
+from OCC.Core.AIS import AIS_Shape
+from OCC.Core.Quantity import Quantity_NOC_AQUAMARINE4
 
 logger = logging.getLogger(__name__)
 

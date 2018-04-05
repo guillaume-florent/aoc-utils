@@ -4,7 +4,7 @@ r"""distance"""
 
 import logging
 
-from OCC.BRepExtrema import BRepExtrema_DistShapeShape
+from OCC.Core.BRepExtrema import BRepExtrema_DistShapeShape
 
 from aocutils.common import AssertIsDone
 

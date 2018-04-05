@@ -10,8 +10,8 @@ import wx.lib.buttons
 import wx.lib.colourselect
 
 from OCC.Display.wxDisplay import wxViewer3d
-from OCC.Quantity import Quantity_NOC_MATRABLUE
-from OCC.AIS import AIS_Shape
+from OCC.Core.Quantity import Quantity_NOC_MATRABLUE
+from OCC.Core.AIS import AIS_Shape
 
 from aocutils.display.color import color
 from aocutils.display.topology import solids, shells, faces, edges, wires

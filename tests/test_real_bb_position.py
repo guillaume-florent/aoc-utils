@@ -3,7 +3,7 @@
 
 r"""Tests for the real_bb_position() function in analyse/bounds.py module"""
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeSphere, BRepPrimAPI_MakeBox
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeSphere, BRepPrimAPI_MakeBox
 from aocutils.analyze.bounds import BoundingBox
 
 from aocutils.analyze.bounds import real_bb_position

@@ -8,9 +8,9 @@ import logging
 import functools
 
 # import OCC.BRepAdaptor
-from OCC.BRepBuilderAPI import BRepBuilderAPI_MakeEdge, \
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge, \
     BRepBuilderAPI_MakeEdge2d
-from OCC.gp import gp_Circ
+from OCC.Core.gp import gp_Circ
 
 from aocutils.common import AssertIsDone
 from aocutils.math_ import smooth_pnts

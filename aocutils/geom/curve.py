@@ -4,12 +4,12 @@ r"""geom curve"""
 
 import logging
 
-from OCC.Geom import Geom_Curve
-from OCC.GeomAdaptor import GeomAdaptor_Curve
+from OCC.Core.Geom import Geom_Curve
+from OCC.Core.GeomAdaptor import GeomAdaptor_Curve
 # import OCC.Approx
 # import OCC.BRepAdaptor
-from OCC.GeomAbs import GeomAbs_C1
-from OCC.GeomConvert import GeomConvert_ApproxCurve
+from OCC.Core.GeomAbs import GeomAbs_C1
+from OCC.Core.GeomConvert import GeomConvert_ApproxCurve
 
 from aocutils.common import AssertIsDone
 from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE

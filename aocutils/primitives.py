@@ -6,7 +6,7 @@ from __future__ import division
 
 import functools
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere, \
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere, \
     BRepPrimAPI_MakeCylinder
 
 from aocutils.common import AssertIsDone

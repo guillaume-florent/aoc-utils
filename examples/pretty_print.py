@@ -8,7 +8,7 @@ from __future__ import print_function
 
 import math
 
-from OCC.gp import gp_Pnt, gp_Vec, gp_Dir, gp_Ax1, gp_Trsf
+from OCC.Core.gp import gp_Pnt, gp_Vec, gp_Dir, gp_Ax1, gp_Trsf
 
 from aocutils.primitives import box
 from aocutils.pretty_print import gp_pnt_print, gp_vec_print, gp_ax1_print, \

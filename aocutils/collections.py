@@ -2,8 +2,8 @@
 
 r"""OCC collections utilities and conversions"""
 
-from OCC.TColgp import TColgp_Array1OfPnt, TColgp_Array1OfPnt2d
-from OCC.TCollection import TCollection_ExtendedString
+from OCC.Core.TColgp import TColgp_Array1OfPnt, TColgp_Array1OfPnt2d
+from OCC.Core.TCollection import TCollection_ExtendedString
 
 
 def to_string(_string):

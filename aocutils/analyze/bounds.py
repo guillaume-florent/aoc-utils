@@ -7,10 +7,10 @@ import logging
 import re
 import struct
 
-from OCC.Bnd import Bnd_Box
-from OCC.BRepBndLib import brepbndlib_Add
-from OCC.gp import gp_Pnt
-from OCC.TopoDS import TopoDS_Shape
+from OCC.Core.Bnd import Bnd_Box
+from OCC.Core.BRepBndLib import brepbndlib_Add
+from OCC.Core.gp import gp_Pnt
+from OCC.Core.TopoDS import TopoDS_Shape
 
 from corelib.core.files import is_binary
 

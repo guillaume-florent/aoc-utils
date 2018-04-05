@@ -5,15 +5,12 @@ r"""types.py module of aocutils"""
 import sys
 import itertools
 
-from OCC.BRepCheck import *
-from OCC.GeomAbs import *
-from OCC.TopoDS import TopoDS_Vertex, TopoDS_Edge, TopoDS_Face, TopoDS_Wire, \
-    TopoDS_Shell, TopoDS_Solid, TopoDS_Compound, TopoDS_CompSolid, topods
-# from OCC.TopoDS.topods import Vertex, Edge, Face, Wire, Shell, Solid, \
-#     Compound, CompSolid
-# import OCC.BRep
-from OCC.TopAbs import *
-# import OCC.Geom
+from OCC.Core.BRepCheck import *
+from OCC.Core.GeomAbs import *
+from OCC.Core.TopoDS import TopoDS_Vertex, TopoDS_Edge, TopoDS_Face, \
+    TopoDS_Wire, TopoDS_Shell, TopoDS_Solid, TopoDS_Compound, TopoDS_CompSolid,\
+    topods
+from OCC.Core.TopAbs import *
 
 # from aocutils.exceptions import WrongTopologicalType
 

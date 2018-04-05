@@ -4,9 +4,9 @@ r"""shell module of aocutils"""
 
 import logging
 
-from OCC.TopoDS import TopoDS_Shell
-from OCC.ShapeAnalysis import ShapeAnalysis_Shell
-from OCC.BRepCheck import BRepCheck_Shell, BRepCheck_NoError
+from OCC.Core.TopoDS import TopoDS_Shell
+from OCC.Core.ShapeAnalysis import ShapeAnalysis_Shell
+from OCC.Core.BRepCheck import BRepCheck_Shell, BRepCheck_NoError
 
 from aocutils.topology import Topo
 from aocutils.brep.base import BaseObject

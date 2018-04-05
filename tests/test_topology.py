@@ -6,8 +6,8 @@ r"""topology module tests"""
 import sys
 import pytest
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox
-from OCC.TopoDS import TopoDS_Solid, TopoDS_Shape, TopoDS_Compound, \
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
+from OCC.Core.TopoDS import TopoDS_Solid, TopoDS_Shape, TopoDS_Compound, \
     TopoDS_CompSolid, TopoDS_Shell, TopoDS_Face, TopoDS_Edge
 
 from aocutils.topology import Topo, shape_to_topology, WireExplorer

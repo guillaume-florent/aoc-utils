@@ -7,7 +7,7 @@ import pytest
 import math
 import os
 
-from OCC.gp import gp_Pnt
+from OCC.Core.gp import gp_Pnt
 
 from aocutils.primitives import box, sphere
 from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE

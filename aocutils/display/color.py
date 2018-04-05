@@ -8,7 +8,7 @@ RGB to OCC conversion and sequences definition
 
 from __future__ import division
 
-from OCC.Quantity import Quantity_Color, Quantity_TOC_RGB
+from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 
 
 def color(r, g, b):

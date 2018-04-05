@@ -3,7 +3,7 @@
 
 r"""Tests for the operations/intersect.py module"""
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeSphere, BRepPrimAPI_MakeBox
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeSphere, BRepPrimAPI_MakeBox
 
 from aocutils.operations.intersect import intersect_shape_by_half_line
 

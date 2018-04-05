@@ -4,8 +4,8 @@ r"""Inclusion of points in bounding box and in solid"""
 
 import logging
 
-from OCC.BRepClass3d import BRepClass3d_SolidClassifier
-from OCC.TopAbs import TopAbs_ON, TopAbs_OUT, TopAbs_IN
+from OCC.Core.BRepClass3d import BRepClass3d_SolidClassifier
+from OCC.Core.TopAbs import TopAbs_ON, TopAbs_OUT, TopAbs_IN
 
 from aocutils.analyze.bounds import BoundingBox
 from aocutils.types import topo_lut

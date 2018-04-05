@@ -9,7 +9,7 @@ This module helps looping through topology
 
 """
 
-from OCC.BRep import BRep_Tool
+from OCC.Core.BRep import BRep_Tool
 
 from aocutils.topology import Topo, WireExplorer
 from aocutils.brep.edge import Edge

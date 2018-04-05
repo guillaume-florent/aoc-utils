@@ -6,11 +6,11 @@ r"""
 
 import logging
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere
 from OCC.Display.SimpleGui import init_display
-from OCC.gp import gp_Pnt
-from OCC.TopoDS import TopoDS_Compound
-from OCC.BRep import BRep_Builder
+from OCC.Core.gp import gp_Pnt
+from OCC.Core.TopoDS import TopoDS_Compound
+from OCC.Core.BRep import BRep_Builder
 
 from aocutils.display.defaults import backend
 # import aocutils.display.display

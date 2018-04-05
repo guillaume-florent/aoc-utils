@@ -5,8 +5,8 @@ r"""types module tests"""
 
 import pytest
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere
-from OCC.TopAbs import TopAbs_SOLID
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere
+from OCC.Core.TopAbs import TopAbs_SOLID
 
 # import aocutils.topology
 from aocutils.types import BidirDict, topo_lut

@@ -5,8 +5,8 @@ r"""Methods to make a shell"""
 import functools
 import logging
 
-from OCC.BRepBuilderAPI import BRepBuilderAPI_MakeShell
-from OCC.TopoDS import TopoDS_Builder, TopoDS_Shell
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeShell
+from OCC.Core.TopoDS import TopoDS_Builder, TopoDS_Shell
 # import OCC.ShapeAnalysis
 
 from aocutils.common import AssertIsDone

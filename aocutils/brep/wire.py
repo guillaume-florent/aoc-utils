@@ -4,11 +4,11 @@ r"""wire module of aocutils"""
 
 import logging
 
-from OCC.TopoDS import TopoDS_Wire, TopoDS_Face
-from OCC.Approx import Approx_Curve3d
-from OCC.BRepAdaptor import BRepAdaptor_CompCurve, BRepAdaptor_HCompCurve
-from OCC.GeomAbs import GeomAbs_C2
-from OCC.BRepCheck import BRepCheck_Wire, BRepCheck_NoError
+from OCC.Core.TopoDS import TopoDS_Wire, TopoDS_Face
+from OCC.Core.Approx import Approx_Curve3d
+from OCC.Core.BRepAdaptor import BRepAdaptor_CompCurve, BRepAdaptor_HCompCurve
+from OCC.Core.GeomAbs import GeomAbs_C2
+from OCC.Core.BRepCheck import BRepCheck_Wire, BRepCheck_NoError
 
 from aocutils.brep.base import BaseObject
 from aocutils.common import AssertIsDone

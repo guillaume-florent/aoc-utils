@@ -4,10 +4,10 @@ r"""Triangulation"""
 
 from __future__ import print_function
 
-from OCC.BRepMesh import BRepMesh_FastDiscret
-from OCC.Bnd import Bnd_Box
-from OCC.BRepBndLib import brepbndlib_Add
-from OCC.TopTools import TopTools_IndexedDataMapOfShapeListOfShape,\
+from OCC.Core.BRepMesh import BRepMesh_FastDiscret
+from OCC.Core.Bnd import Bnd_Box
+from OCC.Core.BRepBndLib import brepbndlib_Add
+from OCC.Core.TopTools import TopTools_IndexedDataMapOfShapeListOfShape,\
     TopTools_ListOfShape
 
 # import aocutils.common

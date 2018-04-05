@@ -7,7 +7,7 @@ from __future__ import division
 import logging
 
 import numpy as np
-from OCC.gp import gp_Pnt, gp_Vec, gp_Dir
+from OCC.Core.gp import gp_Pnt, gp_Vec, gp_Dir
 
 from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
 from aocutils.exceptions import ZeroNormVectorException

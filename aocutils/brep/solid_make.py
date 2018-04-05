@@ -4,8 +4,8 @@ r"""Methods to make a solid"""
 
 import functools
 
-from OCC.BRepBuilderAPI import BRepBuilderAPI_MakeSolid
-from OCC.BRepOffsetAPI import BRepOffsetAPI_MakePipe
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeSolid
+from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_MakePipe
 # import OCC.TopoDS
 
 from aocutils.common import AssertIsDone

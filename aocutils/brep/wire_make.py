@@ -4,7 +4,7 @@ r"""Methods to make wire"""
 
 import functools
 
-from OCC.BRepBuilderAPI import BRepBuilderAPI_MakeWire,\
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeWire,\
     BRepBuilderAPI_MakePolygon
 
 from aocutils.common import AssertIsDone

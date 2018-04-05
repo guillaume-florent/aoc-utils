@@ -15,7 +15,7 @@ BRepMesh_IncrementalMesh (const TopoDS_Shape &theShape,
 
 import logging
 
-from OCC.BRepMesh import BRepMesh_IncrementalMesh
+from OCC.Core.BRepMesh import BRepMesh_IncrementalMesh
 
 from aocutils.analyze.bounds import BoundingBox
 

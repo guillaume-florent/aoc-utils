@@ -5,9 +5,9 @@ r"""Methods to make a vertex"""
 import functools
 import logging
 
-from OCC.BRepBuilderAPI import BRepBuilderAPI_MakeVertex
-from OCC.TopoDS import TopoDS_Vertex
-from OCC.TopExp import topexp_CommonVertex
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeVertex
+from OCC.Core.TopoDS import TopoDS_Vertex
+from OCC.Core.TopExp import topexp_CommonVertex
 
 from aocutils.common import AssertIsDone
 from aocutils.exceptions import NoCommonVertexException

@@ -4,11 +4,11 @@ r"""Pretty printing of various OCC entities"""
 
 import math
 
-from OCC.gp import gp_Vec, gp_Pnt, gp_Ax1, gp_Trsf, gp_Quaternion
-from OCC.BRep import BRep_Tool
-from OCC.TopoDS import TopoDS_Iterator, topods_Vertex
-from OCC.TopAbs import TopAbs_VERTEX, TopAbs_SOLID, TopAbs_EDGE, TopAbs_FACE, \
-    TopAbs_SHELL, TopAbs_WIRE, TopAbs_COMPOUND, TopAbs_COMPSOLID
+from OCC.Core.gp import gp_Vec, gp_Pnt, gp_Ax1, gp_Trsf, gp_Quaternion
+from OCC.Core.BRep import BRep_Tool
+from OCC.Core.TopoDS import TopoDS_Iterator, topods_Vertex
+from OCC.Core.TopAbs import TopAbs_VERTEX, TopAbs_SOLID, TopAbs_EDGE, \
+    TopAbs_FACE, TopAbs_SHELL, TopAbs_WIRE, TopAbs_COMPOUND, TopAbs_COMPSOLID
 
 
 def add_str_repr():

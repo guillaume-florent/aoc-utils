@@ -5,7 +5,7 @@ r"""face.py module example use"""
 
 from __future__ import print_function
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeSphere
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeSphere
 
 from aocutils.brep.face import Face
 
