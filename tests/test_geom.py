@@ -90,6 +90,7 @@ def test_divide_vector():
     assert v1.y == 5
     assert v1.z == 0
 
+
 def test_divide_vector_by_norm():
     v1 = aocutils.geom.vector.Vector.from_xyz(10, 10, 0)
     v1 /= v1.norm

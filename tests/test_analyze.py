@@ -25,6 +25,7 @@ from aocutils.analyze.global_ import GlobalProperties
 from aocutils.analyze.inclusion import point_in_boundingbox, point_in_solid
 
 from aocxchange.step import StepImporter
+from aocxchange.utils import path_from_file
 
 box_dim_x = 10.
 box_dim_y = 20.
@@ -289,8 +290,10 @@ def test_inclusion():
 
 def test_stl_bounding_box():
     r"""Test the computation of the STL bounding box"""
-    bb_ascii = stl_bounding_box("test_files/board.stl")
-    bb_binary = stl_bounding_box("test_files/board_binary.stl")
+    bb_ascii = stl_bounding_box(path_from_file(__file__,
+                                               "./test_files/board.stl"))
+    bb_binary = stl_bounding_box(path_from_file(__file__,
+                                                "./test_files/board_binary.stl"))
     tolerance = 1e-8
 
     # Known values

@@ -120,7 +120,7 @@ class Vector(ThreeD):
                                self.Y() * scalar,
                                self.Z() * scalar)
 
-    def __div__(self, scalar):
+    def __truediv__(self, scalar):
         r"""Multiply a vector by a scalar
 
         Parameters
@@ -135,6 +135,10 @@ class Vector(ThreeD):
         return Vector.from_xyz(self.X() / scalar,
                                self.Y() / scalar,
                                self.Z() / scalar)
+
+    def __div__(self, scalar):
+        r"""PY2 compatibility"""
+        return self.__truediv__(scalar)
 
     def __eq__(self, other):
         r"""Is self equal to other?
