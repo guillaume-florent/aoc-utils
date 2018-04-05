@@ -10,7 +10,7 @@ import logging
 from OCC.BRepTools import BRepTools_WireExplorer
 from OCC.TopAbs import TopAbs_VERTEX, TopAbs_EDGE, TopAbs_WIRE, TopAbs_FACE, \
     TopAbs_SHELL, TopAbs_SOLID, TopAbs_COMPOUND, TopAbs_COMPSOLID
-from OCC.TopExp import TopExp_Explorer, topexp_MapShapesAndAncestors,
+from OCC.TopExp import TopExp_Explorer, topexp_MapShapesAndAncestors
 from OCC.TopTools import TopTools_ListOfShape, \
     TopTools_ListIteratorOfListOfShape, \
     TopTools_IndexedDataMapOfShapeListOfShape
@@ -430,9 +430,9 @@ class Topo(object):
         topo_set = set()
         _map = TopTools_IndexedDataMapOfShapeListOfShape()
         topexp_MapShapesAndAncestors(self._my_shape,
-                                                topo_type_a,
-                                                topo_type_b,
-                                                _map)
+                                     topo_type_a,
+                                     topo_type_b,
+                                     _map)
         results = _map.FindFromKey(topological_entity)
         if results.IsEmpty():
             yield None
@@ -482,9 +482,9 @@ class Topo(object):
         topo_set = set()
         _map = TopTools_IndexedDataMapOfShapeListOfShape()
         topexp_MapShapesAndAncestors(self._my_shape,
-                                                topo_type_a,
-                                                topo_type_b,
-                                                _map)
+                                     topo_type_a,
+                                     topo_type_b,
+                                     _map)
         results = _map.FindFromKey(topological_entity)
         if results.IsEmpty():
             # left as is on purpose, maybe 0 would be a better return value
