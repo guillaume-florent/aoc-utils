@@ -38,19 +38,19 @@ def test_with_sphere():
     assert abs(bbw_x_min - (-radius)) <= 2 * increment
 
     assert bbw_x_max >= radius
-    assert abs(bbw_x_max - radius) <= increment
+    assert abs(bbw_x_max - radius) <= 2 * increment
 
     assert bbw_y_min <= - radius
-    assert abs(bbw_y_min - (-radius)) <= increment
+    assert abs(bbw_y_min - (-radius)) <= 2 * increment
 
     assert bbw_y_max >= radius
-    assert abs(bbw_y_max - radius) <= increment
+    assert abs(bbw_y_max - radius) <= 2 * increment
 
     assert bbw_z_min <= - radius
-    assert abs(bbw_z_min - (-radius)) <= increment
+    assert abs(bbw_z_min - (-radius)) <= 2 * increment
 
     assert bbw_z_max >= radius
-    assert abs(bbw_z_max - radius) <= increment
+    assert abs(bbw_z_max - radius) <= 2 * increment
 
 
 def test_with_box():
@@ -86,16 +86,16 @@ def test_with_box():
     assert abs(bbw_x_min) <= 2 * increment
 
     assert bbw_x_max >= dx
-    assert abs(bbw_x_max - dx) <= increment
+    assert abs(bbw_x_max - dx) <= 2 * increment
 
     assert bbw_y_min <= 0.
-    assert abs(bbw_y_min) <= increment
+    assert abs(bbw_y_min) <= 2 * increment
 
     assert bbw_y_max >= dy
-    assert abs(bbw_y_max - dy) <= increment
+    assert abs(bbw_y_max - dy) <= 2 * increment
 
     assert bbw_z_min <= 0.
-    assert abs(bbw_z_min) <= increment
+    assert abs(bbw_z_min) <= 2 * increment
 
     assert bbw_z_max >= dz
-    assert abs(bbw_z_max - dz) <= increment
+    assert abs(bbw_z_max - dz) <= 2 * increment
