@@ -279,7 +279,7 @@ class Face(BaseObject):
 
         """
         if self._surface_handle is None:
-            self._surface_handle = OCC.BRep.BRep_Tool_Surface(self._wrapped_instance)
+            self._surface_handle = BRep_Tool_Surface(self._wrapped_instance)
         return self._surface_handle
 
     @property
