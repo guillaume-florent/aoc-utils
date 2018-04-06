@@ -10,6 +10,18 @@ aoc-utils
 .. image:: https://api.codacy.com/project/badge/Grade/ad66c28ad30e46ee8816c561eb19d831
     :target: https://www.codacy.com/app/guillaume-florent/aoc-utils?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=guillaume-florent/aoc-utils&amp;utm_campaign=Badge_Grade
 
+.. image:: https://anaconda.org/gflorent/aocutils/badges/version.svg
+    :target: https://anaconda.org/gflorent/aocutils
+
+.. image:: https://anaconda.org/gflorent/aocutils/badges/latest_release_date.svg
+    :target: https://anaconda.org/gflorent/aocutils
+
+.. image:: https://anaconda.org/gflorent/aocutils/badges/platforms.svg
+    :target: https://anaconda.org/gflorent/aocutils
+
+.. image:: https://anaconda.org/gflorent/aocutils/badges/downloads.svg
+    :target: https://anaconda.org/gflorent/aocutils
+
 .. image:: http://img.shields.io/badge/Python-2.7_3.*-ff3366.svg
     :target: https://www.python.org/downloads/
 
