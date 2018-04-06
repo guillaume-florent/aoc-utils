@@ -35,26 +35,13 @@ install
 
 .. code-block:: shell
 
-  pip install aocutils
+  conda install -c gflorent aocutils
 
 Dependencies
 ~~~~~~~~~~~~
 
-*aocutils* depends on OCC >=0.16 and scipy. The examples require wx>=2.8 (or another backend (minor code modifications required)).
-These requirements cannot be satisfied through pip.
-Please see the table below for instructions on how to satisfy the requirements.
+Please see how the Dockerfile satisfies the requirements.
 
-+---------+----------+----------------------------------------------------------------------------+
-| package | version  | Comment                                                                    |
-+=========+==========+============================================================================+
-| OCC     | >=0.16.  | | See pythonocc.org or github.com.tpaviot/pythonocc-core for instructions  |
-|         |          | | or `conda install -c https://conda.anaconda.org/dlr-sc pythonocc-core`   |
-+---------+----------+----------------------------------------------------------------------------+
-| scipy   | latest   | | Simplest solution is `conda install scipy`                               |
-|         |          | | or a full Anaconda distribution                                          |
-+---------+----------+----------------------------------------------------------------------------+
-| wx      | >=2.8    | See wxpython.org for instructions                                          |
-+---------+----------+----------------------------------------------------------------------------+
 
 Goal
 ----
@@ -69,19 +56,19 @@ aocutils version and target PythonOCC version
 +------------------+-------------------+
 | aocutils version | PythonOCC version |
 +==================+===================+
-| 0.1.*            | 0.16.2            |
+| 18.*.*           | >=0.18.2          |
 +------------------+-------------------+
 
 Examples
 --------
 
-The examples are in the *examples* folder at the Github repository (https://github.com/floatingpointstack/aoc-utils).
+The examples are in the *examples* folder at the Github repository (https://github.com/guillaume-florent/aoc-utils).
 
 The wx backend (wxPython) backend is used for the examples that display a UI.
-You may easily change this behaviour to use pyqt4 or PySide by changing the backend in the call to init_display().
+You may easily change this behaviour to use pyqt or PySide by changing the backend in the call to init_display().
 
-.. image:: https://raw.githubusercontent.com/floatingpointstack/aoc-utils/master/img/geomplate.jpg
-   :alt: geomplate
+.. image:: https://raw.githubusercontent.com/guillaume-florent/aoc-utils/master/img/geomplate.jpg
+    :alt: geomplate
 
-.. image:: https://raw.githubusercontent.com/floatingpointstack/aoc-utils/master/img/surfaces.jpg
-   :alt: surfaces
+.. image:: https://raw.githubusercontent.com/guillaume-florent/aoc-utils/master/img/surfaces.jpg
+    :alt: surfaces
