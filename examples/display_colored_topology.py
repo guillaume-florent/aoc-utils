@@ -22,7 +22,6 @@ logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: %(levelname)6s :: %(module)20s :: '
                            '%(lineno)3d :: %(message)s')
 
-backend = backend
 display, start_display, add_menu, add_function_to_menu = init_display(backend)
 
 box_x_dim = 10.
@@ -78,16 +77,17 @@ def box_wires(event=None):
 def sphere_faces(event=None):
     display.EraseAll()
     # display.GetView().GetObject().SetBackgroundColor(white)
-    faces(display, sphere_shape(),
-                                    color_sequence=spectral_color_sequence)
+    faces(display, sphere_shape(),  color_sequence=spectral_color_sequence)
     display.FitAll()
 
 
 def sphere_edges(event=None):
     display.EraseAll()
     # display.GetView().GetObject().SetBackgroundColor(white)
-    edges(display, sphere_shape(), width=6,
-                                    color_sequence=spectral_color_sequence)
+    edges(display,
+          sphere_shape(),
+          width=6,
+          color_sequence=spectral_color_sequence)
     display.FitAll()
 
 

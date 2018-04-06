@@ -19,7 +19,6 @@ logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: %(levelname)6s :: %(module)20s :: '
                            '%(lineno)3d :: %(message)s')
 
-backend = backend
 display, start_display, add_menu, add_function_to_menu = init_display(backend)
 
 point_1 = gp_Pnt(0, 0, 0)

@@ -14,10 +14,10 @@ from aocutils.brep.face import Face
 # from BRepPrimAPI_MakeOneAxis
 # Face() returns the lateral face of the rotational primitive.
 sphere_face = BRepPrimAPI_MakeSphere(1, 1).Face()
-occutils_wrapped_sphere_face = Face(sphere_face)
+aoutils_wrapped_sphere_face = Face(sphere_face)
 
-print(occutils_wrapped_sphere_face.topo)
-print(occutils_wrapped_sphere_face.topo_type)
-print(occutils_wrapped_sphere_face.is_trimmed)
-print(occutils_wrapped_sphere_face.is_valid)
-print(occutils_wrapped_sphere_face.is_planar())
+print(aoutils_wrapped_sphere_face.topo)
+print(aoutils_wrapped_sphere_face.topo_type)
+print(aoutils_wrapped_sphere_face.is_trimmed)
+print(aoutils_wrapped_sphere_face.is_valid)
+print(aoutils_wrapped_sphere_face.is_planar())

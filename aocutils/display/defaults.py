@@ -6,7 +6,9 @@ from __future__ import division
 
 from aocutils.display.backends import available_backends
 
-backend = "wx"
+# backend = "wx"
+# PythonOCC refuses to use a wx backend if a PyQT5 backend is also present
+backend = "qt-pyqt5"
 
 if backend not in available_backends():
     msg = "%s backend is not available" % backend

@@ -31,13 +31,14 @@ from OCC.Display.SimpleGui import init_display
 from OCC.Core.TopoDS import TopoDS_Compound
 # import OCC.GeomAbs
 
+from corelib.core.files import path_from_file
+
 from aocutils.brep.wire_make import closed_polygon
 from aocutils.brep.face_make import n_sided, face
 from aocutils.brep.vertex_make import vertex
 from aocutils.topology import Topo, WireExplorer
 from aocutils.display.defaults import backend
 
-backend = backend
 display, start_display, add_menu, add_function_to_menu = init_display(backend)
 
 
@@ -353,7 +354,7 @@ def build_curve_network(event=None):
 
     """
     print('Importing IGES file...', end='')
-    iges = IGESImporter('./curve_geom_plate.igs')
+    iges = IGESImporter(path_from_file(__file__, './curve_geom_plate.igs'))
     iges.read_file()
     iges_cpd = iges.get_compound()
     print('done.')

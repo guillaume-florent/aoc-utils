@@ -17,7 +17,6 @@ from aocutils.brep.vertex_make import vertex
 from aocutils.display.defaults import backend
 from aocutils.display.color import fp_dark_blue, gray
 
-backend = backend
 display, start_display, add_menu, add_function_to_menu = init_display(backend)
 
 

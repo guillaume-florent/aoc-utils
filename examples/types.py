@@ -18,7 +18,7 @@ sphere = sphere(10)
 print(type(box))
 print(topo_lut[box.ShapeType()])
 
-solid = Topo(box).solids[0]
+solid = list(Topo(box).solids)[0]
 print(type(solid))
 wrapped_solid = Solid(solid)
 print(type(wrapped_solid))
