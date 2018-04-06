@@ -43,7 +43,7 @@ setup(
               'aocutils.display',
               'aocutils.geom',
               'aocutils.operations'],
-    install_requires=['OCC', 'numpy', 'scipy', 'corelib', 'wx'],
+    install_requires=[],
     extras_require={
         'dev': [],
         'test': ['pytest', 'coverage'],
