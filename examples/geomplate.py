@@ -37,9 +37,8 @@ from aocutils.brep.wire_make import closed_polygon
 from aocutils.brep.face_make import n_sided, face
 from aocutils.brep.vertex_make import vertex
 from aocutils.topology import Topo, WireExplorer
-from aocutils.display.defaults import backend
 
-display, start_display, add_menu, add_function_to_menu = init_display(backend)
+display, start_display, add_menu, add_function_to_menu = init_display()
 
 
 class IGESImporter(object):
@@ -306,9 +305,13 @@ def solve_radius(event=None):
     p5 = gp_Pnt(5, 5, 5)
     poly = closed_polygon([p1, p2, p3, p4])
     for i in scipy.arange(0.1, 3., 0.2).tolist():
-        radius_constrained_surface = RadiusConstrainedSurface(display, poly, p5, i)
+        radius_constrained_surface = RadiusConstrainedSurface(display,
+                                                              poly,
+                                                              p5,
+                                                              i)
         _ = radius_constrained_surface.solve()
-        print('Goal: %s radius: %s' % (i, radius_constrained_surface.curr_radius))
+        print('Goal: %s radius: %s' % (i,
+                                       radius_constrained_surface.curr_radius))
         time.sleep(0.5)
 
 

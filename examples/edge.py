@@ -14,10 +14,8 @@ from OCC.Display.SimpleGui import init_display
 
 from aocutils.brep.edge import Edge
 from aocutils.topology import Topo
-from aocutils.display.defaults import backend
-# import aocutils.display.display
 
-display, start_display, add_menu, add_function_to_menu = init_display(backend)
+display, start_display, add_menu, add_function_to_menu = init_display()
 
 
 if __name__ == '__main__':

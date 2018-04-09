@@ -8,16 +8,13 @@ import itertools
 from OCC.Display.SimpleGui import init_display
 from OCC.Core.gp import gp_Pnt
 
-# import aocutils.common
 from aocutils.operations.interpolate import points_to_bspline
 from aocutils.brep.face_make import n_sided
 from aocutils.brep.edge_make import edge
 from aocutils.brep.vertex_make import vertex
-# import aocutils.brep.wire_make
-from aocutils.display.defaults import backend
 from aocutils.display.color import fp_dark_blue, gray
 
-display, start_display, add_menu, add_function_to_menu = init_display(backend)
+display, start_display, add_menu, add_function_to_menu = init_display()
 
 
 def n_sided_patch():

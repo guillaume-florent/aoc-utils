@@ -11,15 +11,12 @@ from OCC.Core.gp import gp_Pnt, gp_Vec
 from aocutils.operations.interpolate import points_to_bspline, points, \
     points_vectors, points_no_tangency
 from aocutils.geom.curve import Curve
-# import aocutils.operations.interpolate
-# import aocutils.geom.curve
-from aocutils.display.defaults import backend
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: %(levelname)6s :: %(module)20s :: '
                            '%(lineno)3d :: %(message)s')
 
-display, start_display, add_menu, add_function_to_menu = init_display(backend)
+display, start_display, add_menu, add_function_to_menu = init_display()
 
 point_1 = gp_Pnt(0, 0, 0)
 point_2 = gp_Pnt(10, 0, 0)

@@ -12,8 +12,6 @@ from OCC.Core.gp import gp_Pnt
 from OCC.Core.TopoDS import TopoDS_Compound
 from OCC.Core.BRep import BRep_Builder
 
-from aocutils.display.defaults import backend
-# import aocutils.display.display
 from aocutils.display.color import spectral_color_sequence
 from aocutils.display.topology import faces, edges, wires, solids
 from aocutils.mesh import mesh
@@ -22,7 +20,7 @@ logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: %(levelname)6s :: %(module)20s :: '
                            '%(lineno)3d :: %(message)s')
 
-display, start_display, add_menu, add_function_to_menu = init_display(backend)
+display, start_display, add_menu, add_function_to_menu = init_display()
 
 box_x_dim = 10.
 box_y_dim = 20.
