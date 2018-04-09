@@ -18,15 +18,9 @@ EVOLUTIONS & ENHANCEMENTS
 
 General
 -------
--> pypi (see http://peterdowns.com/posts/first-time-with-pypi.html)
-    DELETE FROM PYPI -> MOVE TO ANACONDA (make sure all dependencies are included in the recipe)
--> CI
+DELETE FROM PYPI
 -> Coverage
 it is a library, easy on logging (debug for almost everything, info if very important)
-
-Get rid of asserts
-
-OCC imports
 
 Tolerance management.
 
