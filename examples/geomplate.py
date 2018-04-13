@@ -3,7 +3,6 @@
 
 r""""""
 
-
 from __future__ import print_function
 
 import os
@@ -136,12 +135,12 @@ def geom_plate(event=None):
     edges = [edge for edge in Topo(poly).edges]
 
     # C1 and C2 fail (C0 (default) works) - face is a TopoDS_Face
-    face = n_sided(edges, [p5])
+    face_ = n_sided(edges, [p5])
 
     display.DisplayShape(edges)
     # display.DisplayShape(occutils.construct.make_vertex(p5))
     display.DisplayShape(p5)
-    display.DisplayShape(face, update=True)
+    display.DisplayShape(face_, update=True)
 
 # ============================================================================
 # Find a surface where the radius at the vertex is n
@@ -188,12 +187,12 @@ def build_plate(polygon, points):
     return face(plate.Surface(), u_min, u_max, v_min, v_max, 1e-4)
 
 
-def radius_at_uv(face, u, v):
+def radius_at_uv(face_, u, v):
     r"""Radius of curvature at u, v
 
     Parameters
     ----------
-    face :
+    face_ :
         surface input
     u :
         u coordinate
@@ -206,7 +205,7 @@ def radius_at_uv(face, u, v):
         The radius of curvature at u, v
 
     """
-    h_srf = BRep_Tool.Surface(face)
+    h_srf = BRep_Tool.Surface(face_)
     # uv_domain = GeomLProp_SurfaceTool().Bounds(h_srf)
     curvature = GeomLProp_SLProps(h_srf, u, v, 1, 1e-6)
     try:
@@ -221,19 +220,19 @@ def radius_at_uv(face, u, v):
     return abs((_crv_min + _crv_max) / 2.)
 
 
-def uv_from_projected_point_on_face(face, pt):
+def uv_from_projected_point_on_face(face_, pt):
     r"""Returns the u, v coordinates of a projected point on a face
 
     Parameters
     ----------
-    face
+    face_
     pt
 
     Returns
     -------
 
     """
-    surface = BRep_Tool.Surface(face)
+    surface = BRep_Tool.Surface(face_)
     surface_shape_analysis = ShapeAnalysis_Surface(surface)
     uv = surface_shape_analysis.ValueOfUV(pt, 1e-2)
     print('distance', surface_shape_analysis.Value(uv).Distance(pt))
@@ -346,8 +345,8 @@ def build_geom_plate(edges):
     plate = GeomPlate_MakeApprox(srf, 1e-04, 100, 9, 1e-03, 0)
 
     u_min, u_max, v_min, v_max = srf.GetObject().Bounds()
-    face = face(plate.Surface(), u_min, u_max, v_min, v_max, 1e-6)
-    return face
+    face_ = face(plate.Surface(), u_min, u_max, v_min, v_max, 1e-6)
+    return face_
 
 
 def build_curve_network(event=None):
@@ -365,11 +364,11 @@ def build_curve_network(event=None):
     print('Building geomplate...', end='')
     topo = Topo(iges_cpd)
     edges_list = list(topo.edges)
-    face = build_geom_plate(edges_list)
+    face_ = build_geom_plate(edges_list)
     print('done.')
     display.EraseAll()
     display.DisplayShape(edges_list)
-    display.DisplayShape(face)
+    display.DisplayShape(face_)
     display.FitAll()
     print('Cutting out of edges...')
     # Make a wire from outer edges

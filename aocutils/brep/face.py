@@ -21,7 +21,7 @@ from OCC.Core.BRepAdaptor import BRepAdaptor_Surface, BRepAdaptor_HSurface
 from OCC.Core.ShapeAnalysis import ShapeAnalysis_Surface
 from OCC.Core.GeomProjLib import geomprojlib
 from OCC.Core.Adaptor3d import Adaptor3d_IsoCurve
-from OCC.Core.gp import gp_Pnt, gp_Pnt2d, gp_Vec, gp_Dir
+from OCC.Core.gp import gp_Pnt2d, gp_Vec, gp_Dir
 from OCC.Core.BRepCheck import BRepCheck_NoError, BRepCheck_Face
 
 from aocutils.brep.base import BaseObject
