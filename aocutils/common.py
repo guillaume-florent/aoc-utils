@@ -2,6 +2,10 @@
 
 r"""functions and classes common to all modules"""
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class AssertIsDone(object):
     r"""Raises an assertion error when IsDone() returns False,
