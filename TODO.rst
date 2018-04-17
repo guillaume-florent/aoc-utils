@@ -1,3 +1,5 @@
+Viewer click on topology results in Can't get WInd Id
+
 Replace G10 by SYSSER in test files
 
 Viewer executable

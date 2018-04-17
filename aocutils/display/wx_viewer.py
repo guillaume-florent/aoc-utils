@@ -474,7 +474,10 @@ def colour_wx_to_occ(wx_colour):
     wx_colour : tuple of 3 ints
 
     """
-    r, g, b = wx_colour  # 255
+    try:
+        r, g, b = wx_colour  # 255
+    except ValueError:
+        r, g, b, a = wx_colour  # 255
     return color(r / 255., g / 255., b / 255.)  # 1
 
 
