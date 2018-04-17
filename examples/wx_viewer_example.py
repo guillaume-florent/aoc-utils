@@ -3,27 +3,14 @@
 
 r"""Wx viewer example"""
 
-import platform
-
 import wx
-
 from aocutils.primitives import box
-from aocutils.display.wx_viewer import Wx3dViewer
+from aocutils.display.wx_viewer import Wx3dViewerFrame
 
-
-class MyFrame(wx.Frame):
-    r"""Frame for testing"""
-
-    def __init__(self):
-        wx.Frame.__init__(self, None, -1)
-        if platform.system() == "Linux":
-            self.Show()
-        self.box = box(100, 50, 25)
-        self.p = Wx3dViewer(self)
-        self.p.display_shape(self.box)
-
+box = box(100, 50, 25)
 
 app = wx.App()
-frame = MyFrame()
+frame = Wx3dViewerFrame()
+frame.wx_3d_viewer.display_shape(box)
 app.SetTopWindow(frame)
 app.MainLoop()

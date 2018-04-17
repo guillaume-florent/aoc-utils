@@ -8,21 +8,8 @@ Topology executable
 
 Bounding box executable
 
-
-BUGS
-====
-
-- 1 test related to analyze/bounds.py BetterBoundingBox not passing ( test_better_bounds_complex_shape())
-
-
 EVOLUTIONS & ENHANCEMENTS
 =========================
-
-General
--------
-DELETE FROM PYPI
--> Coverage
-it is a library, easy on logging (debug for almost everything, info if very important)
 
 Tolerance management.
 
@@ -31,8 +18,6 @@ tests
 *_make.py
 operations
 geom
-
-Python 3 tests
 
 analyze
 -------

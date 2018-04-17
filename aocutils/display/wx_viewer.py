@@ -4,8 +4,11 @@
 r"""3D viewer as a wx Panel"""
 
 import os
+import platform
 
 import wx
+import wx.aui
+import wx.lib.agw.aui
 import wx.lib.buttons
 import wx.lib.colourselect
 
@@ -14,7 +17,35 @@ from OCC.Core.Quantity import Quantity_NOC_MATRABLUE
 from OCC.Core.AIS import AIS_Shape
 
 from aocutils.display.color import color
-from aocutils.display.topology import solids, shells, faces, edges, wires
+# from aocutils.display.topology import solids, shells, faces, edges, wires
+from aocutils.display.topology import solids, shells, faces, edges
+
+
+class Wx3dViewerFrame(wx.Frame):
+    r"""Frame containing a Wx3dViewer"""
+
+    def __init__(self,
+                 viewer_background_color=(50., 50., 50.),
+                 show_topology_menu=True,
+                 title="aocutils 3d viewer"):
+        wx.Frame.__init__(self, None, -1, title=title)
+        if platform.system() == "Linux":
+            self.Show()
+        self._mgr = wx.lib.agw.aui.AuiManager()
+        self._mgr.SetManagedWindow(self)
+        self.wx_3d_viewer = \
+            Wx3dViewer(self,
+                       viewer_background_color=viewer_background_color,
+                       show_topology_menu=show_topology_menu)
+        self._mgr.AddPane(self.wx_3d_viewer,
+                          wx.lib.agw.aui.AuiPaneInfo().CenterPane())
+        self._mgr.Update()
+        self.wx_3d_viewer.Layout()
+
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+
+    def OnSize(self, event):
+        self._mgr.Update()
 
 
 class Wx3dViewer(wx.Panel):
@@ -141,10 +172,10 @@ class Wx3dViewer(wx.Panel):
                 self.tools_panel,
                 "icons/topology_edges-16x16.png",
                 "Topology - Edges")
-            btn_topology_wires = self.create_bitmap_button(
-                self.tools_panel,
-                "icons/topology_wires-16x16.png",
-                "Topology - Wires")
+            # btn_topology_wires = self.create_bitmap_button(
+            #     self.tools_panel,
+            #     "icons/topology_wires-16x16.png",
+            #     "Topology - Wires")
 
             self.Bind(wx.EVT_BUTTON,
                       self.on_topology_solids,
@@ -154,13 +185,13 @@ class Wx3dViewer(wx.Panel):
                       btn_topology_shells)
             self.Bind(wx.EVT_BUTTON, self.on_topology_faces, btn_topology_faces)
             self.Bind(wx.EVT_BUTTON, self.on_topology_edges, btn_topology_edges)
-            self.Bind(wx.EVT_BUTTON, self.on_topology_wires, btn_topology_wires)
+            # self.Bind(wx.EVT_BUTTON, self.on_topology_wires, btn_topology_wires)
 
             tools_sizer.Add(btn_topology_solid, 0, wx.ALL, 0)
             tools_sizer.Add(btn_topology_shells, 0, wx.ALL, 0)
             tools_sizer.Add(btn_topology_faces, 0, wx.ALL, 0)
             tools_sizer.Add(btn_topology_edges, 0, wx.ALL, 0)
-            tools_sizer.Add(btn_topology_wires, 0, wx.ALL, 0)
+            # tools_sizer.Add(btn_topology_wires, 0, wx.ALL, 0)
 
         self.tools_panel.SetSizer(tools_sizer)
 
@@ -405,64 +436,93 @@ class Wx3dViewer(wx.Panel):
 
     def on_topology_solids(self, event):
         r"""Display another viewer with solid topology"""
-        dialog = wx.Dialog(self, title="Topology - Solids")
-        panel = Wx3dViewer(dialog,
-                           viewer_background_color=self.background_color,
-                           show_topology_menu=False)
+        # dialog = wx.Dialog(self, title="Topology - Solids")
+        #
+        # panel = Wx3dViewer(dialog,
+        #                    viewer_background_color=self.background_color,
+        #                    show_topology_menu=False)
+        # for shape in self._shapes:
+        #     solids(panel.viewer_display, shape, transparency=0.5)
+        # dialog.ShowModal()
+
+        frame = Wx3dViewerFrame(title="Topology - Solids",
+                                show_topology_menu=False,
+                                viewer_background_color=self.background_color)
         for shape in self._shapes:
-            solids(panel.viewer_display, shape, transparency=0.5)
-        dialog.ShowModal()
+            solids(frame.wx_3d_viewer.viewer_display, shape, transparency=0.5)
 
     def on_topology_shells(self, event):
         r"""Display another viewer with shells topology"""
-        dialog = wx.Dialog(self, title="Topology - Shells")
-        panel = Wx3dViewer(dialog,
-                           viewer_background_color=self.background_color,
-                           show_topology_menu=False)
+        # dialog = wx.Dialog(self, title="Topology - Shells")
+        # panel = Wx3dViewer(dialog,
+        #                    viewer_background_color=self.background_color,
+        #                    show_topology_menu=False)
+        # for shape in self._shapes:
+        #     shells(panel.viewer_display, shape, transparency=0.5)
+        # dialog.ShowModal()
+        frame = Wx3dViewerFrame(title="Topology - Shells",
+                                show_topology_menu=False,
+                                viewer_background_color=self.background_color)
         for shape in self._shapes:
-            shells(panel.viewer_display, shape, transparency=0.5)
-        dialog.ShowModal()
+            shells(frame.wx_3d_viewer.viewer_display, shape, transparency=0.5)
 
     def on_topology_faces(self, event):
         r"""Display another viewer with faces topology"""
-        dialog = wx.Dialog(self, title="Topology - Faces")
-        panel = Wx3dViewer(dialog,
-                           viewer_background_color=self.background_color,
-                           show_topology_menu=False)
+        # dialog = wx.Dialog(self, title="Topology - Faces")
+        # panel = Wx3dViewer(dialog,
+        #                    viewer_background_color=self.background_color,
+        #                    show_topology_menu=False)
+        # for shape in self._shapes:
+        #     faces(panel.viewer_display, shape, transparency=0.5)
+        # dialog.ShowModal()
+        frame = Wx3dViewerFrame(title="Topology - Faces",
+                                show_topology_menu=False,
+                                viewer_background_color=self.background_color)
         for shape in self._shapes:
-            faces(panel.viewer_display, shape, transparency=0.5)
-        dialog.ShowModal()
+            faces(frame.wx_3d_viewer.viewer_display, shape, transparency=0.5)
 
     def on_topology_edges(self, event):
         r"""Display another viewer with edges topology"""
-        dialog = wx.Dialog(self, title="Topology - Edges")
-        panel = Wx3dViewer(dialog,
-                           viewer_background_color=self.background_color,
-                           show_topology_menu=False)
-
-        for shape in self._shapes:
-            edges(panel.viewer_display, shape)
-        dialog.ShowModal()
-
-    def on_topology_wires(self, event):
-        r"""Display another viewer with wires topology
-
-        This one is trickier because of the way wires
-        are displayed (alternating display)
-        Cannot show modal
-
-        """
-        dialog = wx.Dialog(self, title="Topology - Wires")
-        panel = Wx3dViewer(dialog,
-                           viewer_background_color=self.background_color,
-                           show_topology_menu=False)
-        # display of wires iterates over the wires,
-        # cannot show model after displaying
-        dialog.Show()
-        for shape in self._shapes:
-            wires(panel.viewer_display, shape)
-            self.Refresh()
+        # dialog = wx.Dialog(self, title="Topology - Edges")
+        # panel = Wx3dViewer(dialog,
+        #                    viewer_background_color=self.background_color,
+        #                    show_topology_menu=False)
+        #
+        # for shape in self._shapes:
+        #     edges(panel.viewer_display, shape)
         # dialog.ShowModal()
+        frame = Wx3dViewerFrame(title="Topology - Edges",
+                                show_topology_menu=False,
+                                viewer_background_color=self.background_color)
+        for shape in self._shapes:
+            edges(frame.wx_3d_viewer.viewer_display, shape)
+
+    # def on_topology_wires(self, event):
+    #     r"""Display another viewer with wires topology
+    #
+    #     This one is trickier because of the way wires
+    #     are displayed (alternating display)
+    #     Cannot show modal
+    #
+    #     """
+    #     # dialog = wx.Dialog(self, title="Topology - Wires")
+    #     # panel = Wx3dViewer(dialog,
+    #     #                    viewer_background_color=self.background_color,
+    #     #                    show_topology_menu=False)
+    #     # # display of wires iterates over the wires,
+    #     # # cannot show model after displaying
+    #     # dialog.Show()
+    #     # for shape in self._shapes:
+    #     #     wires(panel.viewer_display, shape)
+    #     #     self.Refresh()
+    #     # # dialog.ShowModal()
+    #     frame = Wx3dViewerFrame(title="Topology - Wires",
+    #                             show_topology_menu=False,
+    #                             viewer_background_color=self.background_color)
+    #
+    #     for shape in self._shapes:
+    #         frame.wx_3d_viewer.display_shape(shape, transparency=0.7)
+    #         wires(frame.wx_3d_viewer.viewer_display, shape)
 
 
 def colour_wx_to_occ(wx_colour):
@@ -477,8 +537,7 @@ def colour_wx_to_occ(wx_colour):
     try:
         r, g, b = wx_colour  # 255
     except ValueError:
-        r, g, b, a = wx_colour  # 255
+        r, g, b, _ = wx_colour  # 255
     return color(r / 255., g / 255., b / 255.)  # 1
-
 
 # see examples for a Wx3dViewer use
