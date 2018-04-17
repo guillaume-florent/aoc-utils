@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends libgl1-mesa-dev
 
 # aoc-utils
 WORKDIR /opt
-ADD https://api.github.com/repos/guillaume-florent/aoc-utils/git/refs/heads/master version.json
+# ADD https://api.github.com/repos/guillaume-florent/aoc-utils/git/refs/heads/master version.json
 RUN git clone --depth=1 https://github.com/guillaume-florent/aoc-utils
 WORKDIR /opt/aoc-utils
 RUN python setup.py install
