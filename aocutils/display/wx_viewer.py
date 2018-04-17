@@ -27,22 +27,24 @@ class Wx3dViewerFrame(wx.Frame):
     def __init__(self,
                  viewer_background_color=(50., 50., 50.),
                  show_topology_menu=True,
-                 title="aocutils 3d viewer"):
+                 title="aocutils 3d viewer",
+                 welcome="Starting aocutils 3d viewer ..."):
         wx.Frame.__init__(self, None, -1, title=title)
-        if platform.system() == "Linux":
-            self.Show()
-        self._mgr = wx.lib.agw.aui.AuiManager()
-        self._mgr.SetManagedWindow(self)
-        self.wx_3d_viewer = \
-            Wx3dViewer(self,
-                       viewer_background_color=viewer_background_color,
-                       show_topology_menu=show_topology_menu)
-        self._mgr.AddPane(self.wx_3d_viewer,
-                          wx.lib.agw.aui.AuiPaneInfo().CenterPane())
-        self._mgr.Update()
-        self.wx_3d_viewer.Layout()
+        with wx.BusyInfo(welcome):
+            if platform.system() == "Linux":
+                self.Show()
+            self._mgr = wx.lib.agw.aui.AuiManager()
+            self._mgr.SetManagedWindow(self)
+            self.wx_3d_viewer = \
+                Wx3dViewer(self,
+                           viewer_background_color=viewer_background_color,
+                           show_topology_menu=show_topology_menu)
+            self._mgr.AddPane(self.wx_3d_viewer,
+                              wx.lib.agw.aui.AuiPaneInfo().CenterPane())
+            self._mgr.Update()
+            self.wx_3d_viewer.Layout()
 
-        self.Bind(wx.EVT_SIZE, self.OnSize)
+            self.Bind(wx.EVT_SIZE, self.OnSize)
 
     def OnSize(self, event):
         self._mgr.Update()
@@ -416,7 +418,8 @@ class Wx3dViewer(wx.Panel):
 
     def on_set_mode_hlr(self, event):
         r"""Hidden Line Removal mode"""
-        self.viewer_display.SetModeHLR()
+        with wx.BusyInfo("Switching to HLR mode ..."):
+            self.viewer_display.SetModeHLR()
 
     def on_set_mode_shaded(self, event):
         r"""Shaded mode"""
@@ -444,12 +447,13 @@ class Wx3dViewer(wx.Panel):
         # for shape in self._shapes:
         #     solids(panel.viewer_display, shape, transparency=0.5)
         # dialog.ShowModal()
-
-        frame = Wx3dViewerFrame(title="Topology - Solids",
-                                show_topology_menu=False,
-                                viewer_background_color=self.background_color)
-        for shape in self._shapes:
-            solids(frame.wx_3d_viewer.viewer_display, shape, transparency=0.5)
+        with wx.BusyInfo("Starting solids topology display ..."):
+            frame = Wx3dViewerFrame(title="Topology - Solids",
+                                    show_topology_menu=False,
+                                    viewer_background_color=self.background_color,
+                                    welcome="Starting solids topology display...")
+            for shape in self._shapes:
+                solids(frame.wx_3d_viewer.viewer_display, shape, transparency=0.5)
 
     def on_topology_shells(self, event):
         r"""Display another viewer with shells topology"""
@@ -460,11 +464,13 @@ class Wx3dViewer(wx.Panel):
         # for shape in self._shapes:
         #     shells(panel.viewer_display, shape, transparency=0.5)
         # dialog.ShowModal()
-        frame = Wx3dViewerFrame(title="Topology - Shells",
-                                show_topology_menu=False,
-                                viewer_background_color=self.background_color)
-        for shape in self._shapes:
-            shells(frame.wx_3d_viewer.viewer_display, shape, transparency=0.5)
+        with wx.BusyInfo("Starting shells topology display ..."):
+            frame = Wx3dViewerFrame(title="Topology - Shells",
+                                    show_topology_menu=False,
+                                    viewer_background_color=self.background_color,
+                                    welcome="Starting shells topology display...")
+            for shape in self._shapes:
+                shells(frame.wx_3d_viewer.viewer_display, shape, transparency=0.5)
 
     def on_topology_faces(self, event):
         r"""Display another viewer with faces topology"""
@@ -475,11 +481,13 @@ class Wx3dViewer(wx.Panel):
         # for shape in self._shapes:
         #     faces(panel.viewer_display, shape, transparency=0.5)
         # dialog.ShowModal()
-        frame = Wx3dViewerFrame(title="Topology - Faces",
-                                show_topology_menu=False,
-                                viewer_background_color=self.background_color)
-        for shape in self._shapes:
-            faces(frame.wx_3d_viewer.viewer_display, shape, transparency=0.5)
+        with wx.BusyInfo("Starting faces topology display ..."):
+            frame = Wx3dViewerFrame(title="Topology - Faces",
+                                    show_topology_menu=False,
+                                    viewer_background_color=self.background_color,
+                                    welcome="Starting faces topology display...")
+            for shape in self._shapes:
+                faces(frame.wx_3d_viewer.viewer_display, shape, transparency=0.5)
 
     def on_topology_edges(self, event):
         r"""Display another viewer with edges topology"""
@@ -493,7 +501,8 @@ class Wx3dViewer(wx.Panel):
         # dialog.ShowModal()
         frame = Wx3dViewerFrame(title="Topology - Edges",
                                 show_topology_menu=False,
-                                viewer_background_color=self.background_color)
+                                viewer_background_color=self.background_color,
+                                welcome="Starting edges topology display...")
         for shape in self._shapes:
             edges(frame.wx_3d_viewer.viewer_display, shape)
 

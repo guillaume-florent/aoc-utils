@@ -1,12 +1,12 @@
 package:
   name: aocutils
-  version: "18.2.3"
+  version: "18.2.4"
 
 source:
   path: ../aoc-utils
 
 build:
-  number: 3
+  number: 0
   noarch: python
   # removing the options gets the icons files defined in setup.py
   script: python setup.py install

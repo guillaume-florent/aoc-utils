@@ -1,4 +1,4 @@
-Viewer click on topology results in Can't get WInd Id
+BusyDialogs for long topology displays + limit to a maximum number of faces, edges etc ...
 
 Replace G10 by SYSSER in test files
 
