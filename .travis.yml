@@ -7,10 +7,12 @@ services:
   - docker
 
 install:
-  - docker build --tag guillaume-florent/aocutils:latest .
+  - docker build --file Dockerfile.py3 --tag guillaume-florent/aocutils-py3:latest .
+  - docker build --file Dockerfile.py2 --tag guillaume-florent/aocutils-py2:latest .
 
 script:
-  - docker run --name aocutils guillaume-florent/aocutils:latest /bin/bash -c "cd /opt/aoc-utils;pytest tests/"
+  - docker run guillaume-florent/aocutils-py3:latest /bin/bash -c "cd /opt/aoc-utils;pytest tests/"
+  - docker run guillaume-florent/aocutils-py2:latest /bin/bash -c "cd /opt/aoc-utils;pytest tests/"
 
 after_script:
   - docker images
