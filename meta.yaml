@@ -1,6 +1,6 @@
 package:
   name: aocutils
-  version: "18.2.4"
+  version: "18.3.0"
 
 source:
   path: ../aoc-utils
