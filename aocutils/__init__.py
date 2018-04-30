@@ -13,7 +13,7 @@ from __future__ import unicode_literals
 __name__ = "aocutils"
 __description__ = "High level API for PythonOCC "
 
-__version__ = "18.3.0"
+__version__ = "18.3.1"
 __author__ = "Guillaume Florent, Adam Lange, Jelle Feringa, Thomas Paviot"
 __author_email__ = "guillaume.florent@tutanota.com"
 __license__ = 'GPL v3'

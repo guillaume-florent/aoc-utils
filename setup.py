@@ -86,4 +86,5 @@ setup(
                   'aocutils/display/icons/topology_wires-32x32.png',
                   'aocutils/display/icons/wireframe-16x16.png',
                   'aocutils/display/icons/wireframe-32x32.png'])],
-    entry_points={})
+    entry_points={},
+    scripts=['bin/aocviewer'])
