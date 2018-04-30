@@ -47,18 +47,18 @@ extension = extract_file_extension(cadfile)
 
 if extension.lower() in step_extensions:
     type_ = "step"
-    shapes = StepImporter(path).shapes
+    shapes = StepImporter(cadfile).shapes
 elif extension.lower() in iges_extensions:
     type_ = "iges"
-    shapes = IgesImporter(path).shapes
+    shapes = IgesImporter(cadfile).shapes
 elif extension.lower() in stl_extensions:
     type_ = "stl"
     shapes = list()
-    shapes.append(StlImporter(path).shape)
+    shapes.append(StlImporter(cadfile).shape)
 elif extension.lower() in brep_extensions:
     type_ = "brep"
     shapes = list()
-    shapes.append(BrepImporter(path).shape)
+    shapes.append(BrepImporter(cadfile).shape)
 else:
     raise ValueError("File extension indicates a file type that "
                      "is not supported")
