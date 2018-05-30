@@ -9,7 +9,7 @@ from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere
 from OCC.Core.TopAbs import TopAbs_SOLID
 
 # import aocutils.topology
-from aocutils.types import BidirDict, topo_lut
+from aocutils.types_ import BidirDict, topo_lut
 
 box_x_dim = 10.
 box_y_dim = 20.

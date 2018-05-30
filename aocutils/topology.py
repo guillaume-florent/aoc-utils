@@ -18,7 +18,7 @@ from OCC.Core.TopoDS import topods_Edge, topods_Vertex, TopoDS_Shape, \
     TopoDS_Wire
 
 from aocutils.exceptions import WrongTopologicalType
-from aocutils.types import topo_factory, topo_type_class
+from aocutils.types_ import topo_factory, topo_type_class
 
 logger = logging.getLogger(__name__)
 

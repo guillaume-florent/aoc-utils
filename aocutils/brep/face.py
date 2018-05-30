@@ -30,7 +30,7 @@ from aocutils.topology import WireExplorer
 from aocutils.exceptions import WrongTopologicalType, \
     ParameterOutOfDomainException, TangentException
 from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
-from aocutils.types import surface_lut
+from aocutils.types_ import surface_lut
 
 logger = logging.getLogger(__name__)
 

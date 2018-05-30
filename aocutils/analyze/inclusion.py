@@ -8,7 +8,7 @@ from OCC.Core.BRepClass3d import BRepClass3d_SolidClassifier
 from OCC.Core.TopAbs import TopAbs_ON, TopAbs_OUT, TopAbs_IN
 
 from aocutils.analyze.bounds import BoundingBox
-from aocutils.types import topo_lut
+from aocutils.types_ import topo_lut
 from aocutils.exceptions import WrongTopologicalType
 from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE
 

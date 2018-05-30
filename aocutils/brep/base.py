@@ -11,7 +11,7 @@ from OCC.Core.BRepCheck import BRepCheck_Analyzer
 # import OCC.GProp
 # import OCC.TopoDS
 
-from aocutils.types import topo_types_dict
+from aocutils.types_ import topo_types_dict
 from aocutils.topology import Topo, shape_to_topology
 from aocutils.analyze.distance import MinimumDistance
 from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE

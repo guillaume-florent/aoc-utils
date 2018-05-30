@@ -1,6 +1,6 @@
 # coding: utf-8
 
-r"""types.py module of aocutils"""
+r"""types_.py module of aocutils"""
 
 import sys
 import itertools

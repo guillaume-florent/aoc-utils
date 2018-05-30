@@ -6,7 +6,7 @@ r"""Types example"""
 from __future__ import print_function
 
 from aocutils.primitives import box, sphere
-from aocutils.types import topo_lut
+from aocutils.types_ import topo_lut
 from aocutils.brep.solid import Solid
 # import aocutils.brep.solid_make
 from aocutils.topology import Topo

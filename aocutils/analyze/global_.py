@@ -8,7 +8,7 @@ from OCC.Core.GProp import GProp_GProps
 from OCC.Core.BRepGProp import brepgprop_LinearProperties, \
     brepgprop_SurfaceProperties, brepgprop_VolumeProperties
 
-from aocutils.types import topo_lut
+from aocutils.types_ import topo_lut
 from aocutils.exceptions import WrongTopologicalType
 
 logger = logging.getLogger(__name__)

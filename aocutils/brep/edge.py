@@ -27,7 +27,7 @@ from aocutils.brep.base import BaseObject
 from aocutils.brep.edge_make import edge
 from aocutils.common import AssertIsDone
 from aocutils.brep.vertex import Vertex
-from aocutils.types import geom_lut
+from aocutils.types_ import geom_lut
 from aocutils.exceptions import WrongTopologicalType,\
     ParameterOutOfDomainException, UniformAbscissaException, \
     UndefinedPropertyException
@@ -275,7 +275,7 @@ class Edge(BaseObject):
         Returns
         -------
         str
-            One of the possible values in types.py/geom_types_dict
+            One of the possible values in types_.py/geom_types_dict
 
 
         """
