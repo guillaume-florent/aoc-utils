@@ -103,5 +103,5 @@ def fuse(shape_to_cut_from, joining_shape):
     join.RefineEdges()
     join.FuseEdges()
     shape = join.Shape()
-    join.Destroy()
+    # join.Destroy()
     return shape
