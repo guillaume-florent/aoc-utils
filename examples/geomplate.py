@@ -30,7 +30,8 @@ from OCC.Display.SimpleGui import init_display
 from OCC.Core.TopoDS import TopoDS_Compound
 # import OCC.GeomAbs
 
-from corelib.core.files import path_from_file
+# from corelib.core.files import path_from_file
+from corelibpy import path_from_file
 
 from aocutils.brep.wire_make import closed_polygon
 from aocutils.brep.face_make import n_sided, face

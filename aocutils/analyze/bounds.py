@@ -12,7 +12,8 @@ from OCC.Core.BRepBndLib import brepbndlib_Add
 from OCC.Core.gp import gp_Pnt
 from OCC.Core.TopoDS import TopoDS_Shape
 
-from corelib.core.files import is_binary
+# from corelib.core.files import is_binary
+from corelibpy import is_binary
 
 from aocutils.brep.face_make import from_points
 from aocutils.geom.point import Point
