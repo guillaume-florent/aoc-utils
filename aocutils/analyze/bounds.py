@@ -6,14 +6,12 @@ import abc
 import logging
 import re
 import struct
+import sys
 
 from OCC.Core.Bnd import Bnd_Box
 from OCC.Core.BRepBndLib import brepbndlib_Add
 from OCC.Core.gp import gp_Pnt
 from OCC.Core.TopoDS import TopoDS_Shape
-
-# from corelib.core.files import is_binary
-from corelibpy import is_binary
 
 from aocutils.brep.face_make import from_points
 from aocutils.geom.point import Point
@@ -22,8 +20,47 @@ from aocutils.exceptions import WrongTopologicalType
 from aocutils.operations.boolean import common
 from aocutils.topology import Topo
 
+if sys.version_info > (3, 0):
+    PY3 = True
+else:
+    PY3 = False
 
 logger = logging.getLogger(__name__)
+
+
+def is_binary(filename):
+    """
+    Return True if the given filename is binary, False otherwise.
+    Parameters
+    ----------
+    filename : str
+        Path to the file
+    Raises
+    ------
+    EnvironmentError    if the file does not exist or cannot be accessed.
+    Reference
+    ---------
+    http://bytes.com/topic/python/answers/21222-determine-file-type-binary-text
+    on 6/08/2010
+    """
+    fin = open(filename, 'rb')
+    try:
+        CHUNKSIZE = 1024
+        while 1:
+            chunk = fin.read(CHUNKSIZE)
+
+            if PY3:
+                backslash_zero = '\0'.encode()
+            else:
+                backslash_zero = '\0'
+
+            if backslash_zero in chunk:  # found null byte
+                return True
+            if len(chunk) < CHUNKSIZE:
+                break  # done
+    finally:
+        fin.close()
+    return False
 
 
 class AbstractBoundingBox(object):
