@@ -2,9 +2,9 @@
 
 r"""Intersections"""
 
-from OCC.gp import gp_Pnt, gp_Lin, gp_Dir
-from OCC.IntAna import IntAna_Int3Pln
-from OCC.IntCurvesFace import IntCurvesFace_ShapeIntersector
+from OCC.Core.gp import gp_Pnt, gp_Lin, gp_Dir
+from OCC.Core.IntAna import IntAna_Int3Pln
+from OCC.Core.IntCurvesFace import IntCurvesFace_ShapeIntersector
 
 from aocutils.common import AssertIsDone
 from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE

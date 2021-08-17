@@ -37,9 +37,9 @@ and if required:
 
 import logging
 
-from OCC.GeomAPI import GeomAPI_Interpolate, GeomAPI_PointsToBSpline
-from OCC.TColgp import TColgp_HArray1OfPnt, TColgp_Array1OfVec
-from OCC.TColStd import TColStd_HArray1OfBoolean
+from OCC.Core.GeomAPI import GeomAPI_Interpolate, GeomAPI_PointsToBSpline
+from OCC.Core.TColgp import TColgp_HArray1OfPnt, TColgp_Array1OfVec
+from OCC.Core.TColStd import TColStd_HArray1OfBoolean
 
 from aocutils.exceptions import InterpolationException
 from aocutils.tolerance import OCCUTILS_DEFAULT_TOLERANCE

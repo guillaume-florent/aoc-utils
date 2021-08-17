@@ -4,7 +4,7 @@ r"""Boolean operations"""
 
 import logging
 
-from OCC.BRepAlgoAPI import BRepAlgoAPI_Common, BRepAlgoAPI_Cut, \
+from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Common, BRepAlgoAPI_Cut, \
     BRepAlgoAPI_Fuse
 
 from aocutils.exceptions import BooleanCommonException, BooleanCutException
