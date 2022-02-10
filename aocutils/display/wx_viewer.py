@@ -12,8 +12,9 @@ import wx.lib.agw.aui
 import wx.lib.buttons
 import wx.lib.colourselect
 
+import OCC
 from OCC.Display.wxDisplay import wxViewer3d
-from OCC.Core.Quantity import Quantity_NOC_MATRABLUE
+from OCC.Core.Quantity import Quantity_NOC_MATRABLUE, Quantity_Color
 from OCC.Core.AIS import AIS_Shape
 
 from aocutils.display.color import color
@@ -312,9 +313,14 @@ class Wx3dViewer(wx.Panel):
         def display_ais(shape_):
             ais_shp = AIS_Shape(shape_)
             ais_shp.SetTransparency(transparency)
-            ais_shp.SetColor(color_)
-            ais_context = self.viewer_display.GetContext().GetObject()
-            ais_context.Display(ais_shp.GetHandle())
+            if OCC.VERSION[0] != '7':
+                ais_shp.SetColor(color_)
+                ais_context = self.viewer_display.GetContext().GetObject()
+                ais_context.Display(ais_shp.GetHandle())
+            else:
+                ais_shp.SetColor(Quantity_Color(color_))
+                ais_context = self.viewer_display.GetContext()
+                ais_context.Display(ais_shp, True)
 
         if isinstance(shapes, list):
             for shape in shapes:

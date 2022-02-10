@@ -4,6 +4,7 @@ r"""Methods to make a solid"""
 
 import functools
 
+import OCC
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeSolid
 from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_MakePipe
 # import OCC.TopoDS
@@ -44,7 +45,8 @@ def solid(*args):
     sld = BRepBuilderAPI_MakeSolid(*args)
     with AssertIsDone(sld, 'failed to produce solid'):
         result = sld.Solid()
-        sld.Delete()
+        if OCC.VERSION[0] != '7':
+            sld.Delete()
         return result
 
 

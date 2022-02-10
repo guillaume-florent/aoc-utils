@@ -4,11 +4,15 @@ r"""face.py module of aocutils"""
 
 import logging
 
+import OCC
 # import OCC.BRepBuilderAPI
 from OCC.Core.BRep import BRep_Tool, BRep_Tool_Surface
 from OCC.Core.BRepTopAdaptor import BRepTopAdaptor_FClass2d
 # import OCC.BRepFill
-from OCC.Core.Geom import Geom_Curve, Handle_Geom_Plane
+if OCC.VERSION[0] == '7':
+    from OCC.Core.Geom import Geom_Curve, Handle_Geom_Plane_Create
+else:
+    from OCC.Core.Geom import Geom_Curve, Handle_Geom_Plane
 # import OCC.GeomAbs
 from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnSurf
 from OCC.Core.GeomLib import GeomLib_IsPlanarSurface
@@ -354,7 +358,10 @@ class Face(BaseObject):
         """
 
         hs = BRep_Tool_Surface(self._wrapped_instance)
-        downcast_result = Handle_Geom_Plane().DownCast(hs)
+        if OCC.VERSION[0] == '7':
+            downcast_result = Handle_Geom_Plane_Create().DownCast(hs)
+        else:
+            downcast_result = Handle_Geom_Plane().DownCast(hs)
         # the handle is null if downcast failed or is not possible,
         # that is to say the face is not a plane
         if downcast_result.IsNull():

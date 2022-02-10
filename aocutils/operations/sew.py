@@ -4,7 +4,10 @@ r"""Sewing operation"""
 
 import logging
 
-from OCC.BRepBuilderAPI import BRepBuilderAPI_Sewing
+try:
+    from OCC.BRepBuilderAPI import BRepBuilderAPI_Sewing
+except (ImportError, ModuleNotFoundError):
+    from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Sewing
 
 from aocutils.topology import shape_to_topology
 

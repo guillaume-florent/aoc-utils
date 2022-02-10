@@ -8,6 +8,7 @@ import logging
 import functools
 
 # import OCC.BRepAdaptor
+import OCC
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge, \
     BRepBuilderAPI_MakeEdge2d
 from OCC.Core.gp import gp_Circ
@@ -55,7 +56,8 @@ def edge(*args):
     an_edge = BRepBuilderAPI_MakeEdge(*args)
     with AssertIsDone(an_edge, 'failed to produce edge'):
         result = an_edge.Edge()
-        an_edge.Delete()
+        if OCC.VERSION[0] != '7':
+            an_edge.Delete()
         return result
 
 
