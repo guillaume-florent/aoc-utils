@@ -5,6 +5,7 @@ r"""Methods to make a face"""
 import logging
 import functools
 
+import OCC
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
 from OCC.Core.BRepFill import BRepFill_CurveConstraint, brepfill_Face,\
     BRepFill_Filling
@@ -36,7 +37,8 @@ def face(*args):
     a_face = BRepBuilderAPI_MakeFace(*args)
     with AssertIsDone(a_face, 'failed to produce face'):
         result = a_face.Face()
-        a_face.Delete()
+        if OCC.VERSION[0] != '7':
+            a_face.Delete()
         return result
 
 
