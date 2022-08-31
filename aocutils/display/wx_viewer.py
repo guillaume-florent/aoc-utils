@@ -313,12 +313,12 @@ class Wx3dViewer(wx.Panel):
         def display_ais(shape_):
             ais_shp = AIS_Shape(shape_)
             ais_shp.SetTransparency(transparency)
+            ais_shp.SetColor(color_)
             if OCC.VERSION[0] != '7':
-                ais_shp.SetColor(color_)
                 ais_context = self.viewer_display.GetContext().GetObject()
                 ais_context.Display(ais_shp.GetHandle())
             else:
-                ais_shp.SetColor(Quantity_Color(color_))
+                # ais_shp.SetColor(Quantity_Color(color_))
                 ais_context = self.viewer_display.GetContext()
                 ais_context.Display(ais_shp, True)
 

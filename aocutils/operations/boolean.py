@@ -30,8 +30,7 @@ def common(shape_1, shape_2):
 
     # BuilderCanWork() does not exist in v7.*.*
     if OCC.VERSION[0] != '7':
-        logger.debug("BRepAlgoAPI_Common.BuilderCanWork()? : {answer}"
-                     .format(answer=algo_common.BuilderCanWork()))
+        logger.debug(f"BRepAlgoAPI_Common.BuilderCanWork()? : {algo_common.BuilderCanWork()}")
 
     if OCC.VERSION[0] != '7':
         _error = {0: '- Ok',
@@ -47,11 +46,11 @@ def common(shape_1, shape_2):
             try:
                 msg = _error[algo_common.ErrorStatus()]
             except KeyError:
-                msg = "Unknown error : %s" % str(algo_common.ErrorStatus())
+                msg = f"Unknown error : %s" % str(algo_common.ErrorStatus())
             logger.error(msg)
             raise BooleanCommonException()
         else:
-            logger.debug('BRepAlgoAPI_Common status: {status}'.format(status=_error[algo_common.ErrorStatus()]))
+            logger.debug(f"BRepAlgoAPI_Common status: {_error[algo_common.ErrorStatus()]}")
 
     return algo_common.Shape()
 
@@ -106,8 +105,9 @@ def fuse(shape_to_cut_from, joining_shape):
 
     """
     join = BRepAlgoAPI_Fuse(shape_to_cut_from, joining_shape)
-    join.RefineEdges()
-    join.FuseEdges()
+    if OCC.VERSION[0] != '7':
+        join.RefineEdges()
+        join.FuseEdges()
     shape = join.Shape()
     # join.Destroy()
     return shape

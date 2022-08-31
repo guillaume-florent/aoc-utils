@@ -5,6 +5,7 @@ r"""Display related utility functions"""
 import functools
 import logging
 
+import OCC
 from OCC.Display.SimpleGui import init_display
 from OCC.Core.AIS import AIS_Shape
 from OCC.Core.Quantity import Quantity_NOC_AQUAMARINE4
@@ -33,8 +34,13 @@ def colored_and_transparent(display,
     ais_shp.SetTransparency(transparency)
     ais_shp.SetColor(color)
     ais_shp.SetWidth(width)
-    ais_context = display.GetContext().GetObject()
-    ais_context.Display(ais_shp.GetHandle())
+    if OCC.VERSION[0] != '7':
+        ais_context = display.GetContext().GetObject()
+        ais_context.Display(ais_shp.GetHandle())
+    else:
+        ais_context = display.GetContext()
+        ais_context.Display(ais_shp, True)
+
 
 
 def show(shape, backend=None):
