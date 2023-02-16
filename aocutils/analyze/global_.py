@@ -5,9 +5,13 @@ r"""Global analysis properties"""
 import logging
 
 from OCC.Core.GProp import GProp_GProps
-from OCC.Core.BRepGProp import brepgprop_LinearProperties, \
-    brepgprop_SurfaceProperties, brepgprop_VolumeProperties
+from OCC.Core.BRepGProp import (
+    brepgprop_LinearProperties,
+    brepgprop_SurfaceProperties,
+    brepgprop_VolumeProperties,
+)
 
+import aocutils.topology
 from aocutils.types_ import topo_lut
 from aocutils.exceptions import WrongTopologicalType
 
@@ -59,8 +63,12 @@ class GlobalProperties(object):
         elif self._topo_type in GlobalProperties.volumic_types:
             brepgprop_VolumeProperties(self.shape, self._system)
         else:
-            msg = "ShapeType is not linear, surfacic or volumic"
+            msg = f"ShapeType [{self._topo_type}] is not linear, surfacic or volumic"
             logger.error(msg)
+            if self._topo_type == "compound":
+                compound_solids = list(aocutils.topology.Topo(self.shape).solids)
+                msg = f"Shape is a compound that contains {len(compound_solids)} solids"
+                logger.info(msg)
             raise WrongTopologicalType(msg)
         return self._system
 
@@ -107,7 +115,6 @@ class GlobalProperties(object):
                 logger.error(msg)
                 raise WrongTopologicalType(msg)
             else:
-                import aocutils.topology
                 faces = aocutils.topology.Topo(self.shape).faces
                 return sum([GlobalProperties(face).area for face in faces])
         return self._mass()
@@ -121,7 +128,6 @@ class GlobalProperties(object):
                 logger.error(msg)
                 raise WrongTopologicalType(msg)
             else:
-                import aocutils.topology
                 solids = aocutils.topology.Topo(self.shape).solids
                 return sum([GlobalProperties(solid).volume for solid in solids])
         return self._mass()
